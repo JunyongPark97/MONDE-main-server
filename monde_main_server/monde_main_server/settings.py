@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from monde_main_server.loader import load_credential
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -37,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'monde_main_server'
+    'monde_main_server',
+    'accounts'
 ]
 
 MIDDLEWARE = [
@@ -76,8 +79,14 @@ WSGI_APPLICATION = 'monde_main_server.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'choco',
+        'HOST': 'choco-database.ckanfuynig82.ap-northeast-2.rds.amazonaws.com',
+        'USER': load_credential("DATABASE_USERNAME",""),
+        'PASSWORD': load_credential("DATABASE_PASSWORD",""),
+        'OPTIONS':{
+            'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
+            }
     }
 }
 
