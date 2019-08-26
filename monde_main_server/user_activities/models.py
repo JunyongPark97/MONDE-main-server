@@ -3,6 +3,8 @@ from django.db import models
 from products.models import Bag
 from shopping_malls.models import ShoppingMall
 # Create your models here.
+
+
 class UserFavoriteItem(models.Model): #TODO : ADD CATEGORY INFO
     item = models.ForeignKey(Bag, related_name="favorited_lists", on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="favorite_items", on_delete=models.CASCADE)
