@@ -7,8 +7,6 @@ from django.db import models
 
 # Create your models here.
 
-
-
 class UserManager(BaseUserManager):
     def create_user(self, password=None):
         user = self.model()
@@ -36,7 +34,7 @@ class UserManager(BaseUserManager):
 # User models
 class User(AbstractBaseUser, PermissionsMixin):
     """
-        user입니다. django base user를 extends하여 만들었으며 3가지 가입 형태(이메일, 페이스북, 메가스터디)에 따라서 구분합니다.
+        user입니다. django base user를 extends하여 만들었으며 3가지 가입 형태(이메일, 페이스북, 구글)에 따라서 구분합니다.
     """
     LOGIN_TYPE_EMAIL = 1
     LOGIN_TYPE_GOOGLE = 2
