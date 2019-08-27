@@ -5,6 +5,9 @@ from categories.models import Category
 
 
 class CategorySearchRequest(models.Model):
+    """
+    User가 검색을 시도할때 사용한 데이터를 저장합니다.
+    """
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='category_search_requests', on_delete=models.CASCADE)
     category_search_version = models.IntegerField()
     # categories = models.OneToOneField(Category, related_name="category_search_request", on_delete=models.CASCADE)
@@ -15,6 +18,10 @@ class CategorySearchRequest(models.Model):
 
 
 class CategorySearchResultLog(models.Model):
+    """
+    User가 검색후 logic에 의해 검색된 상품의 카테고리정보와 상품정보를 저장해서 client에게 보여주는 모델입니다. *매우중요
+    question : 매번 검색할때마다 데이터를 저장하는게 좋을까?
+    """
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="category_result_logs", on_delete=models.CASCADE)
     search_request = models.ForeignKey(CategorySearchRequest, related_name="category_result_logs", on_delete=models.CASCADE)
     matched_categories = jsonfield.JSONField(default=dict, help_text="상품이 검색될 때 사용된(matched) 카테고리를 저장합니다.") #matching된 모든 카테고리 정보를 저장합니다.??
@@ -28,7 +35,7 @@ class CategorySearchMatchData(models.Model):
     """
     result_log = models.ForeignKey(CategorySearchResultLog, related_name="datas", on_delete=models.CASCADE)
     match_category = jsonfield.JSONField(default=dict, help_text="검색된 상품의 각 카테고리들의 labeling accuracy를 저장합니다.")
-    similarity = models.FloatField()
+    similarity = models.FloatField() #TODO : How to measure similarity?
 
 
 class CategorySearchUserReview(models.Model):
@@ -46,8 +53,8 @@ class CategorySearchUserReview(models.Model):
 
 
 class CategorySearchViewTimeLog(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='view_time_logs', null=True)
-    searched_question_log = models.ForeignKey(CategorySearchResultLog, related_name='view_time_logs')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='view_time_logs', null=True, on_delete=models.SET_NULL)
+    searched_question_log = models.ForeignKey(CategorySearchResultLog, related_name='view_time_logs', on_delete=models.CASCADE)
     elapsed = models.IntegerField(help_text='검색결과를 보면서 경과한 시간 (milliseconds)')
     state = models.CharField(max_length=30, help_text='검색결과를 볼 때 화면의 상태')
     created_at = models.DateTimeField(auto_now_add=True, db_index=True, null=True)
