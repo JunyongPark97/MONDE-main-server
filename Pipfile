@@ -7,6 +7,9 @@ verify_ssl = true
 
 [packages]
 django = "*"
+django-ajax-selects = "*"
+mysqlclient = "*"
+django-rest-framework = "*"
 
 [requires]
 python_version = "3.6"

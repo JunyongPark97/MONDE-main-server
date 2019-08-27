@@ -32,16 +32,40 @@ ALLOWED_HOSTS = ['15.164.215.85']
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+)
+
+THIRD_PARTY_APPS = (
+    'rest_framework',
+    'rest_framework.authtoken',
+    'ajax_select',
+    'ckeditor',
+    'ckeditor_uploader',
+
+)
+
+LOCAL_APPS = (
     'monde_main_server',
     'accounts',
-]
+    'categories',
+    'logs',
+    'notices',
+    'products',
+    'search',
+    'shopping_malls',
+    'support',
+    'user_activities',
+    'versions'
+)
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
