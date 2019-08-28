@@ -1,13 +1,15 @@
 from rest_framework import viewsets, mixins, status
+from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from search.category_search.models import CategorySearchResultLog, CategorySearchRequest
 from search.category_search.serializers import CategorySearchRequestSerializer
 from search.category_search.tools import category_search_v1
 
 
-class SearchResultListAPIView(viewsets.ReadOnlyModelViewSet, mixins.CreateModelMixin):
+class SearchResultListAPIView(GenericAPIView):
     serializer_class = CategorySearchRequestSerializer
     permission_classes = [IsAuthenticated, ]
     queryset = CategorySearchResultLog.objects.all()
@@ -20,26 +22,29 @@ class SearchResultListAPIView(viewsets.ReadOnlyModelViewSet, mixins.CreateModelM
         """
         version = 1
         user = request.user
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=request.data) #context 넘겨줌 : request 등
         if serializer.is_valid():
-            categories = serializer.validated_data
-            category_search_request = CategorySearchRequest.objects.create(user=user,
-                                                 category_search_version=version,
-                                                 categories=categories)
+            category_search_request = serializer.save()
+            categories = category_search_request.categories
+            # category_search_request = CategorySearchRequest.objects.create(user=user,
+            #                                      category_search_version=version,
+            #                                      categories=categories)
             #TODO : func fix
-            result_list = category_search_v1(categories)
-            objs = CategorySearchResultLog(search_request=category_search_request
-                                           (matched_categories=product.matched_categories,
-                                           product_id=product.id,
-                                           invalid=product.invalid) for product in result_list)
+            result_list = category_search_v1(categories) #이 안에서 pagination 구현. 자동으로 django가 api 생성
+            objs = [CategorySearchResultLog(search_request=category_search_request,
+                                            user=user,
+                                            matched_categories=product.matched_categories,
+                                            product_id=product.id,
+                                            invalid=product.invalid) for product in result_list]
+            #100개는 너무 많다. 10개만 저장?
             #TODO : Make me async
-            CategorySearchResultLog.objects.bulk_create(objs, user)
+            CategorySearchResultLog.objects.bulk_create(objs)
             return Response(result_list, status=status.HTTP_201_CREATED)
         CategorySearchRequest.objects.create(user=user,
                                              category_search_version=version,
                                              categories=request.data,
                                              code=0)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 

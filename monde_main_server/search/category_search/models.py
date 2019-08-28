@@ -25,7 +25,7 @@ class CategorySearchResultLog(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="category_result_logs", on_delete=models.CASCADE)
     search_request = models.ForeignKey(CategorySearchRequest, related_name="category_result_logs", on_delete=models.CASCADE)
     matched_categories = jsonfield.JSONField(default=dict, help_text="상품이 검색될 때 사용된(matched) 카테고리를 저장합니다.") #matching된 모든 카테고리 정보를 저장합니다.??
-    product_id = models.PositiveIntegerField(blank=True, null=True, help_text="검색된 가방의 id")
+    product_id = jsonfield.JSONField(blank=True, null=True, help_text="검색된 가방의 id")
     invalid = models.BooleanField(default=False, help_text="이 가방이 더이상 팔리지 않거나 재고가 없는 경우 invalid=True")
 
 

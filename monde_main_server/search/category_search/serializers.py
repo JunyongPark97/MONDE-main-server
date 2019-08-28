@@ -8,7 +8,10 @@ class SearchResultListSerializer(serializers.ModelSerializer):
 
 
 class CategorySearchRequestSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault)
+    category_search_version = serializers.IntegerField(default=1)
 
     class Meta:
         Model = CategorySearchRequest
-        fields = ['categories']
+        fields = ['user', 'categories', 'category_search_version']
+

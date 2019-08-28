@@ -81,8 +81,8 @@ class TargetPopupNoticeReceiver(models.Model):
     """
     팝업 대상과 읽음 여부를 저장하는 모델입니다.
     """
-    notice = models.ForeignKey(TargetPopupNotice, related_name='receivers')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='target_popup_notice_receivers')
+    # notice = models.ForeignKey(TargetPopupNotice, related_name='receivers')
+    # user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='target_popup_notice_receivers')
     created_at = models.DateTimeField(auto_now_add=True)
     read_at = models.DateTimeField(blank=True, null=True,
                                    help_text='사용자가 팝업을 확인한 시간입니다.')

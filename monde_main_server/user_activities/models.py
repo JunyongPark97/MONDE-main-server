@@ -14,7 +14,7 @@ class ActivityItem(models.Model): #TODO : sync to web crawler db
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     class Meta:
-        Abstract = True
+        abstract = True
 
 
 class UserFavoriteItem(ActivityItem): #TODO : ADD CATEGORY INFO

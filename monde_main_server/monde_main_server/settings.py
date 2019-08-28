@@ -39,15 +39,20 @@ DJANGO_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites'
 )
 
 THIRD_PARTY_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'ajax_select',
-    'ckeditor',
-    'ckeditor_uploader',
-
+    # 'ckeditor',
+    # 'ckeditor_uploader',
+    'allauth', #rest auth추가해야함
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google'
 )
 
 LOCAL_APPS = (
@@ -90,6 +95,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # 'django.template.context_processors.request',
             ],
         },
     },
@@ -111,7 +117,7 @@ DATABASES = {
         'OPTIONS':{
             'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
             }
-    }
+    }# 같은 db쓰면 장고 마이그레이션 겹쳐서 에러나므로 같은 인스턴스에 대해 create db해서 다른 db로 씀
 }
 
 
@@ -156,5 +162,14 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 DATABASE_ROUTERS = [
-
+    #다른 db(rds)면 db name 추가. 추가한 후 라우터로 언제 어떤 데이터베이스 쓸건지 명시.
+    #product class 선언 후 사용. db_table = "~~: app 이름이 다를때 참고,", app_label = x
+    # managed = False (검색필요)
 ]
+
+# AUTHENTICATION_BACKENDS = (
+#     'django.contrib.auth.backends.ModelBackend',  # <- 디폴트 모델 백엔드
+#     'allauth.account.auth_backends.AuthenticationBackend', # <- 추가
+# )
+
+SITE_ID = 1
