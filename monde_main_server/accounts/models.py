@@ -79,9 +79,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_home_name(self):
         if self.social_default_nickname != "":
-            return self.social_default_nickname + _('name_suffix')
+            return self.social_default_nickname + ('name_suffix')
         else:
-            return _('member')
+            return ('member')
 
     def get_full_name(self):
         if self.social_default_nickname is not "":

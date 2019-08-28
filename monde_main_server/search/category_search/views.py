@@ -1,24 +1,10 @@
-import json
-
 from rest_framework import viewsets, mixins, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from search.category_search.models import CategorySearchResultLog, CategorySearchRequest
 from search.category_search.serializers import CategorySearchRequestSerializer
-
-
-def is_json(myjson):
-  try:
-    json_object = json.loads(myjson)
-  except ValueError as e:
-    return False
-  return True
-
-
-def category_search_v1(categories):
-    if not is_json(categories):
-        return (None)
+from search.category_search.tools import category_search_v1
 
 
 class SearchResultListAPIView(viewsets.ReadOnlyModelViewSet, mixins.CreateModelMixin):

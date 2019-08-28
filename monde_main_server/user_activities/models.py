@@ -7,7 +7,7 @@ from shopping_malls.models import ShoppingMall
 # Create your models here.
 
 
-class ActivityItem(models.Model):
+class ActivityItem(models.Model): #TODO : sync to web crawler db
     product_id = models.PositiveIntegerField(help_text="crwaling db에 저장된 product의 id를 저장합니다.")
     product_url = models.URLField()
     bag_images = jsonfield.JSONField(help_text="image url from S3 를 key=order, value=url로 저장합니다.")
