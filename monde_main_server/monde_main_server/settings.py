@@ -117,7 +117,14 @@ DATABASES = {
         'OPTIONS':{
             'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
             }
-    }# 같은 db쓰면 장고 마이그레이션 겹쳐서 에러나므로 같은 인스턴스에 대해 create db해서 다른 db로 씀
+    },# 같은 db쓰면 장고 마이그레이션 겹쳐서 에러나므로 같은 인스턴스에 대해 create db해서 다른 db로 씀
+    'web_crawler': {
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': 'choco-database.ckanfuynig82.ap-northeast-2.rds.amazonaws.com',
+        'NAME': 'web_crawler',
+        'USER': load_credential("WEB_CRAWLER_DATABASE_USERNAME",""),
+        'PASSWORD': load_credential('WEB_CRAWLER_DATABASE_PASSWORD'),
+    },
 }
 
 
