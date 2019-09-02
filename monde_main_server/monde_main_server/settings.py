@@ -39,20 +39,21 @@ DJANGO_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites'
 )
 
 THIRD_PARTY_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_auth',
     'ajax_select',
-    # 'ckeditor',
-    # 'ckeditor_uploader',
-    'allauth', #rest auth추가해야함
+    'django.contrib.sites',
+    'allauth',
     'allauth.account',
+    'rest_auth.registration',
+
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.google'
+    'allauth.socialaccount.providers.google',
 )
 
 LOCAL_APPS = (
@@ -95,7 +96,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'django.template.context_processors.request',
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -146,8 +147,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 AUTH_USER_MODEL = 'accounts.User'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -174,9 +175,23 @@ DATABASE_ROUTERS = [
     # managed = False (검색필요)
 ]
 
-# AUTHENTICATION_BACKENDS = (
-#     'django.contrib.auth.backends.ModelBackend',  # <- 디폴트 모델 백엔드
-#     'allauth.account.auth_backends.AuthenticationBackend', # <- 추가
-# )
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USERNAME_REQUIRED = False
+
+REST_SESSION_LOGIN = False
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
 
 SITE_ID = 1
