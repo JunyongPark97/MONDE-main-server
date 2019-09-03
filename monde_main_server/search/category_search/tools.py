@@ -12,3 +12,7 @@ def is_json(myjson):
 def category_search_v1(categories):
     if not is_json(categories):
         return (None)
+    shape = categories.shape
+    strap = categories.strap
+    ...
+

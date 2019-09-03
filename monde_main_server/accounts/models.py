@@ -9,6 +9,8 @@ from django.db import models
 
 class UserManager(BaseUserManager):
     def create_user(self, password=None):
+        # if not username:
+        #     raise ValueError('Users must have name.')
         user = self.model()
         user.is_superuser = False
         user.is_staff = False
@@ -19,7 +21,7 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, password):
         user = self.create_user(
-            password=password
+            password = password
         )
         user.is_superuser = True
         user.is_staff = True
@@ -36,6 +38,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
         user입니다. django base user를 extends하여 만들었으며 3가지 가입 형태(이메일, 페이스북, 구글)에 따라서 구분합니다.
     """
+
+    objects = UserManager()
+
     LOGIN_TYPE_EMAIL = 1
     LOGIN_TYPE_GOOGLE = 2
     LOGIN_TYPE_FACEBOOK = 3
@@ -50,7 +55,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True, help_text='수정한 날짜', db_index=True, null=True)
 
-    objects = UserManager()
+    username = models.CharField(max_length=120, verbose_name='아이디', blank=True,null=True)
 
     temporary_password = models.CharField(max_length=128, blank=True,
                                           help_text='원래 비밀번호와 다르게 임시로 사용할 수 있는 비밀번호입니다.')
@@ -111,3 +116,5 @@ class CommonProfile(models.Model):
 
     def __unicode__(self):
         return self.user.__unicode__()
+
+

@@ -17,6 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 
+# from accounts.social import FacebookLogin
 from accounts.social import FacebookLogin
 
 urlpatterns = [

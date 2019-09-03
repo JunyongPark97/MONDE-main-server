@@ -27,7 +27,7 @@ SECRET_KEY = '^)jhyu%cp7u5#wi=^33fnk=)6e*0cvz)4#rwyv+7gpemnmt&ln'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['15.164.215.85']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -111,10 +111,10 @@ WSGI_APPLICATION = 'monde_main_server.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'choco',
+        'NAME': 'monde',
         'HOST': 'choco-database.ckanfuynig82.ap-northeast-2.rds.amazonaws.com',
-        'USER': load_credential("DATABASE_USERNAME",""),
-        'PASSWORD': load_credential("DATABASE_PASSWORD",""),
+        'USER': load_credential("MONDE_DATABASE_USERNAME",""),
+        'PASSWORD': load_credential("MONDE_DATABASE_PASSWORD",""),
         'OPTIONS':{
             'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
             }
@@ -174,17 +174,25 @@ DATABASE_ROUTERS = [
     #product class 선언 후 사용. db_table = "~~: app 이름이 다를때 참고,", app_label = x
     # managed = False (검색필요)
 ]
-
+#
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USERNAME_REQUIRED = False
+
+SOCIALACCOUNT_PROVIDERS = {'facebook':
+                           {'SCOPE': ['email', 'public_profile', 'user_friends'],
+                            'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+                            'METHOD': 'js_sdk',
+                            'VERIFIED_EMAIL': False,
+                            'VERSION': 'v2.12'}}
 
 REST_SESSION_LOGIN = False
 
