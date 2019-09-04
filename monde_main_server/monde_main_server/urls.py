@@ -19,12 +19,22 @@ from django.urls import path, include
 
 # from accounts.social import FacebookLogin
 from accounts.social import FacebookLogin
+from accounts.views import LoginView
+
+#test
+from test.views import home
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     url(r'^accounts/',include('allauth.urls')),
-    url(r'^rest-auth/', include('rest_auth.urls')),
-    url(r'^rest-auth/registration/',include('rest_auth.registration.urls')),
+
+    url(r'^api/v1/rest-auth/login/$', LoginView.as_view(), name='rest_auth_login_v2'),
+
+    url(r'^api/v1/rest-auth/', include('rest_auth.urls')),
+    url(r'^api/v1/rest-auth/registration/',include('rest_auth.registration.urls')),
     url(r'^api/v1/rest-auth/facebook/$', FacebookLogin.as_view(), name='fb_login'),
+
+    #test
+    path('', home, name="home")
 ]

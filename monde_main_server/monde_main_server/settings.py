@@ -53,7 +53,7 @@ THIRD_PARTY_APPS = (
 
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.google',
+    # 'allauth.socialaccount.providers.google',
 )
 
 LOCAL_APPS = (
@@ -67,7 +67,8 @@ LOCAL_APPS = (
     'shopping_malls',
     'support',
     'user_activities',
-    'versions'
+    'versions',
+    'test',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -88,7 +89,7 @@ ROOT_URLCONF = 'monde_main_server.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -153,9 +154,11 @@ AUTH_USER_MODEL = 'accounts.User'
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'Asia/Seoul'
 
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'ko-KR'
+
+SITE_ID = 2
 
 USE_I18N = True
 
@@ -187,12 +190,29 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USERNAME_REQUIRED = False
 
-SOCIALACCOUNT_PROVIDERS = {'facebook':
-                           {'SCOPE': ['email', 'public_profile', 'user_friends'],
-                            'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
-                            'METHOD': 'js_sdk',
-                            'VERIFIED_EMAIL': False,
-                            'VERSION': 'v2.12'}}
+SOCIALACCOUNT_PROVIDERS = {
+    'facebook': {
+        'METHOD': 'oauth2',
+        'SCOPE': ['email', 'public_profile', 'user_friends'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'FIELDS': [
+            'id',
+            'email',
+            'name',
+            'first_name',
+            'last_name',
+            'verified',
+            'locale',
+            'timezone',
+            'link',
+            'gender',
+            'updated_time'],
+        'EXCHANGE_TOKEN': True,
+        'LOCALE_FUNC': lambda request: 'kr_KR',
+        'VERIFIED_EMAIL': False,
+        'VERSION': 'v2.8'
+    }
+}
 
 REST_SESSION_LOGIN = False
 
@@ -201,5 +221,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     )
 }
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
+LOGIN_REDIRECT_URL = "/"
+ACCOUNT_AUTHENTICATED_LOGOUT_REDIRECTS = True
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 
-SITE_ID = 1
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

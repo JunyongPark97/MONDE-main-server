@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime, timedelta, time
 
 from django.conf import settings
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
@@ -6,6 +7,10 @@ from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
 # Create your models here.
+from django.utils import timezone
+
+from tools.utils import create_random_string
+
 
 class UserManager(BaseUserManager):
     def create_user(self, password=None):
@@ -70,6 +75,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     def is_admin(self):
         return self.is_staff
 
+    def __str__(self):
+        return str(self.uid)
+
     def __unicode__(self):
         if self.email is not None:
             return '{id}] {mail}'.format(mail=self.email, id=self.id)
@@ -118,3 +126,38 @@ class CommonProfile(models.Model):
         return self.user.__unicode__()
 
 
+class DeviceInfo(models.Model):
+    """
+    device 정보를 저장하는 모델입니다.
+    """
+    DEVICES = [
+        (1, 'ANDROID'),
+        (2, 'IOS'),
+        (3, 'CHROME'),
+    ]
+    device_type = models.IntegerField(choices=DEVICES)
+    device_id = models.CharField(max_length=50, unique=True, db_index=True)
+
+    def __unicode__(self):
+        return '{}] {}-{}'.format(self.id, self.device_type, self.device_id)
+
+
+class EmailVerificationStringManager(models.Manager):
+    def create(self, **kwargs):
+        random_string = create_random_string(8)
+        kwargs.update(expire_at=timezone.now() + timedelta(hours=3), verification_string=random_string)
+        return super(EmailVerificationStringManager, self).create(**kwargs)
+
+
+class EmailVerificationString(models.Model):
+    """
+    email 인증을 위해 사용자에게 임시 인증 번호를 생성하고 저장하는 모델입니다.
+    """
+    email = models.CharField(max_length=255)
+    verification_string = models.CharField(max_length=8)
+    expire_at = models.DateTimeField()
+
+    objects = EmailVerificationStringManager()
+
+    def __unicode__(self):
+        return '[{email}] {string}'.format(email=self.email, string=self.verification_string)
