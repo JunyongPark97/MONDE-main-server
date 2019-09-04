@@ -1,0 +1,99 @@
+{"1":{
+     "imgsrc" : "http://www.luzzibag.com/web/product/tiny/201906/f20ed95cecd718f7f323d8556b654511.jpg",
+     "price" : 28000,
+     "name" : "가방1",
+     "colorNum" : 3,
+     "favorite" : true,
+     "pageurl" : "http://www.luzzibag.com"
+   },
+ "2":{
+   "imgsrc" : "http://www.luzzibag.com/web/product/tiny/201906/a4c24a13ccab356169b398ed4ed9c3b2.jpg",
+   "price" : 12500,
+   "name" : "가방2",
+   "colorNum" : 3,
+   "favorite" : false,
+   "pageurl" : "http://www.luzzibag.com"
+ },
+"3":{
+ "imgsrc" : "http://www.luzzibag.com/web/product/tiny/201907/7dcd1bc577ada1908b2b94500721210e.jpg",
+   "price" : 30000,
+   "name" : "가방3",
+   "colorNum" : 3,
+   "favorite" : false,
+   "pageurl" : "http://www.luzzibag.com"
+},
+"4":{
+ "imgsrc" : "http://www.luzzibag.com/web/product/tiny/201907/277151962f325b59ba6d278aa5ff7775.jpg",
+   "price" : 10000,
+   "name" : "가방4",
+   "colorNum" : 3,
+   "favorite" : false,
+   "pageurl" : "http://www.luzzibag.com"
+},
+"5":{
+ "imgsrc" : "http://www.luzzibag.com/web/product/tiny/201904/950c70f8093c7d88a917ec9e813e4c84.jpg",
+   "price" : 24000,
+   "name" : "가방5",
+   "colorNum" : 3,
+   "favorite" : false,
+   "pageurl" : "http://www.luzzibag.com"
+},
+"6":{
+ "imgsrc" : "http://www.luzzibag.com/web/product/tiny/201906/d78f101abbf331cdee8fe472ddae1519.jpg",
+   "price" : 12500,
+   "name" : "가방6",
+   "colorNum" : 3,
+   "favorite" : false,
+   "pageurl" : "http://www.luzzibag.com"
+},
+"7":{
+ "imgsrc" : "http://www.luzzibag.com/web/product/tiny/201904/8302bc35c9be73aae2b288e84235a5d2.jpg",
+   "price" : 12500,
+   "name" : "가방6",
+   "colorNum" : 3,
+   "favorite" : false,
+   "pageurl" : "http://www.luzzibag.com"
+}
+,
+"8":{
+ "imgsrc" : "http://www.luzzibag.com/web/product/tiny/201907/a2eb8cd9eff3ea39e1c562d974c79930.jpg",
+   "price" : 12500,
+   "name" : "가방6",
+   "colorNum" : 3,
+   "favorite" : false,
+   "pageurl" : "http://www.luzzibag.com"
+}
+,
+"9":{
+ "imgsrc" : "http://www.luzzibag.com/web/product/tiny/201906/7a324afff71e2ab7f3fa62293ecfa362.jpg",
+   "price" : 12500,
+   "name" : "가방6",
+   "colorNum" : 3,
+   "favorite" : false,
+   "pageurl" : "http://www.luzzibag.com"
+}
+,
+"10":{
+ "imgsrc" : "http://www.luzzibag.com/web/product/tiny/201903/86d268d9d09c71a1c963119942364af0.jpg",
+   "price" : 12500,
+   "name" : "가방6",
+   "colorNum" : 3,
+   "favorite" : false,
+   "pageurl" : "http://www.luzzibag.com"
+},
+"11":{
+ "imgsrc" : "http://www.luzzibag.com/web/product/tiny/201906/a5df0823ab6223f981f381d43d69db20.jpg",
+   "price" : 12500,
+   "name" : "가방6",
+   "colorNum" : 3,
+   "favorite" : false,
+   "pageurl" : "http://www.luzzibag.com"
+},
+"12":{
+ "imgsrc" : "http://www.luzzibag.com/web/product/tiny/201907/462f36b59d6a5af34ced80c3fceaabc4.jpg",
+   "price" : 12500,
+   "name" : "가방6",
+   "colorNum" : 3,
+   "favorite" : false,
+   "pageurl" : "http://www.luzzibag.com"
+}}

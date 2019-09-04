@@ -36,5 +36,8 @@ urlpatterns = [
     url(r'^api/v1/rest-auth/facebook/$', FacebookLogin.as_view(), name='fb_login'),
 
     #test
-    path('', home, name="home")
+    path('', home, name="home"),
+
+    #client test
+    url(r'^',include('test.urls')),
 ]
