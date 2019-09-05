@@ -173,9 +173,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 DATABASE_ROUTERS = [
-    #다른 db(rds)면 db name 추가. 추가한 후 라우터로 언제 어떤 데이터베이스 쓸건지 명시.
-    #product class 선언 후 사용. db_table = "~~: app 이름이 다를때 참고,", app_label = x
-    # managed = False (검색필요)
+    'monde_main_server.routers.MondeRouter'
 ]
 #
 AUTHENTICATION_BACKENDS = (
