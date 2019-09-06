@@ -1,17 +1,19 @@
 from rest_framework import viewsets, mixins, status
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from products.models import CrawlerProduct
 from search.category_search.models import CategorySearchResultLog, CategorySearchRequest
-from search.category_search.serializers import CategorySearchRequestSerializer
+from search.category_search.pagination import StandardResultsSetPagination
+from search.category_search.serializers import CategorySearchRequestSerializer, SampleListSerializer
 from search.category_search.tools import category_search_v1
 
 
 class SearchResultListAPIView(GenericAPIView):
     serializer_class = CategorySearchRequestSerializer
-    permission_classes = [IsAuthenticated, ]
+    # permission_classes = [IsAuthenticated, ]
     queryset = CategorySearchResultLog.objects.all()
 
     def post(self, request, *args, **kwargs):
@@ -20,8 +22,10 @@ class SearchResultListAPIView(GenericAPIView):
         data를 받아 CategorySearchRequest 모델을 생성하고 CategorySearchResultLog모델에 저장 후
         list형식으로 검색된 데이터를 return합니다.
         """
+        print('ok')
         version = 1
         user = request.user
+        print(user)
         serializer = self.get_serializer(data=request.data) #context 넘겨줌 : request 등
         if serializer.is_valid():
             category_search_request = serializer.save()
@@ -47,4 +51,17 @@ class SearchResultListAPIView(GenericAPIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
+class SampleListAPIView(GenericAPIView):
+    serializer_class = SampleListSerializer
+    # permission_classes = [IsAuthenticated, ]
+    queryset = CrawlerProduct.objects.all()
+    pagination_class = StandardResultsSetPagination
 
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        print(data)
+        #TODO : fix logic
+
+        print('--')
+        serializer = self.serializer_class(self.get_queryset(), many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

@@ -13,24 +13,25 @@ from tools.utils import create_random_string
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, password=None):
+    def create_user(self,  username, password=None):
         # if not username:
         #     raise ValueError('Users must have name.')
-        user = self.model()
+        user = self.model(username=username)
         user.is_superuser = False
         user.is_staff = False
 
         user.set_password(password)
-        user.save()
+        user.save(using=self._db)
         return user
 
-    def create_superuser(self, password):
+    def create_superuser(self, username, password):
         user = self.create_user(
+            username,
             password = password
         )
         user.is_superuser = True
         user.is_staff = True
-        user.save()
+        user.save(using=self._db)
         return user
 
     def get_queryset(self, *args, **kwargs):
@@ -60,12 +61,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True, help_text='수정한 날짜', db_index=True, null=True)
 
-    username = models.CharField(max_length=120, verbose_name='아이디', blank=True,null=True)
+    username = models.CharField(max_length=120, verbose_name='아이디', blank=True,null=True, unique=True)
 
     temporary_password = models.CharField(max_length=128, blank=True,
                                           help_text='원래 비밀번호와 다르게 임시로 사용할 수 있는 비밀번호입니다.')
 
-    USERNAME_FIELD = 'uid'
+    USERNAME_FIELD = 'username'
 
     def save(self, *args, **kwargs):
         if self.uid is None:

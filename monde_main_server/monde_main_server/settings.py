@@ -217,7 +217,9 @@ REST_SESSION_LOGIN = False
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'search.category_search.pagination.StandardResultsSetPagination',
+    'PAGE_SIZE': 100
 }
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
 LOGIN_REDIRECT_URL = "/"

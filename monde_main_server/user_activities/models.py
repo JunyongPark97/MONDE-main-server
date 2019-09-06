@@ -1,7 +1,6 @@
 import jsonfield
 from django.conf import settings
 from django.db import models
-from products.models import Bag
 from search.category_search.models import CategorySearchResultLog
 from shopping_malls.models import ShoppingMall
 # Create your models here.

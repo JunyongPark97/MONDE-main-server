@@ -35,9 +35,13 @@ urlpatterns = [
     url(r'^api/v1/rest-auth/registration/',include('rest_auth.registration.urls')),
     url(r'^api/v1/rest-auth/facebook/$', FacebookLogin.as_view(), name='fb_login'),
 
-    #test
+    #social login test
     path('', home, name="home"),
 
     #client test
     url(r'^',include('test.urls')),
+
+    #searchresults
+    url(r'^api/v1/category/', include('search.category_search.urls')),
+
 ]

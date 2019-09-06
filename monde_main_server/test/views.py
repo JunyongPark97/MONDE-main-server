@@ -6,6 +6,8 @@ from rest_framework import status
 from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.response import Response
 
+from products.models import CrawlerProduct
+
 
 def home(request):
     return render(request, 'home.html')
@@ -32,3 +34,6 @@ class ZIGZAGListTestAPIView(GenericAPIView):
                 print('====')
                 zigzagdata = json.loads(f.read())
         return Response(zigzagdata,status=status.HTTP_200_OK)
+
+
+
