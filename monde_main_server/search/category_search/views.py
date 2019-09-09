@@ -66,14 +66,10 @@ class SampleListAPIView(GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         data = request.data
-        print(data)
         paginator = Paginator(self.get_queryset(), 3)
         page = request.GET.get('page')
         post = paginator.get_page(page)
-        print(post)
-        print('--')
         # data = serializers.serialize('json', post)
-        print(data)
         serializer = self.serializer_class(post, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

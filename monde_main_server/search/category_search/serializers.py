@@ -19,13 +19,19 @@ class CategorySearchRequestSerializer(serializers.ModelSerializer):
 
 class SampleListSerializer(serializers.ModelSerializer):
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault)
-    colors = serializers.SerializerMethodField()
     on_sale = serializers.SerializerMethodField()
     color_tab = serializers.SerializerMethodField()
 
     class Meta:
         model = CrawlerProduct
-        fields = ['id','shopping_mall', 'image_url', 'product_name','bag_url','price','color_tab', 'colors', 'on_sale']
+        fields = ['id',
+                  'shopping_mall',
+                  'image_url',
+                  'product_name',
+                  'bag_url',
+                  'price',
+                  'color_tab',
+                  'on_sale']
 
     def get_color_tab(self, instance):
         tab_list = []
