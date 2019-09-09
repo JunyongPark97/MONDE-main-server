@@ -10,6 +10,9 @@ django = "*"
 pillow = "*"
 django-rest-auth = "*"
 django-allauth = "*"
+django-jsonfield = "*"
+pymysql = "*"
+django-ckeditor = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"

@@ -40,20 +40,19 @@ DJANGO_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 )
-
 THIRD_PARTY_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
-    'ajax_select',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
     'rest_auth.registration',
 
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.facebook',
     # 'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
+
 )
 
 LOCAL_APPS = (
@@ -72,7 +71,6 @@ LOCAL_APPS = (
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -219,7 +217,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PAGINATION_CLASS': 'search.category_search.pagination.StandardResultsSetPagination',
-    'PAGE_SIZE': 100
+    'PAGE_SIZE': 7
 }
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
 LOGIN_REDIRECT_URL = "/"

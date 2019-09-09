@@ -27,7 +27,6 @@ class SampleListSerializer(serializers.ModelSerializer):
         model = CrawlerProduct
         fields = ['id','shopping_mall', 'image_url', 'product_name','bag_url','price','color_tab', 'colors', 'on_sale']
 
-
     def get_color_tab(self, instance):
         tab_list = []
         for color_tab in instance.color_tabs.all():
@@ -44,9 +43,29 @@ class SampleListSerializer(serializers.ModelSerializer):
     def get_on_sale(self, instance):
         sale_list = []
         for color_tab in instance.color_tabs.all():
-            print(color_tab.on_sale)
             sale_list.append(color_tab.on_sale)
         if False in sale_list:
             return False
         return True
 
+
+class CursorTestSerializer(serializers.ModelSerializer):
+    data = serializers.SerializerMethodField()
+    cursor_next = serializers.SerializerMethodField()
+    cursor_prev = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CrawlerProduct
+        fields = ['cursor_next', 'cursor_prev', 'data']
+
+    def get_cursor_next(self, instance):
+        paginated_response = self.context['paginated_response']
+        return paginated_response['cursor-next']
+
+    def get_cursor_prev(self, instance):
+        paginated_response = self.context['paginated_response']
+        return paginated_response['cursor-prev']
+
+    def get_data(self, instance):
+        serializer = SampleListSerializer(instance)
+        return serializer.data

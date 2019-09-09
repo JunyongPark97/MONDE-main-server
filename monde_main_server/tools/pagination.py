@@ -1,12 +1,13 @@
+from urllib import parse
+
 from rest_framework.pagination import CursorPagination
 from rest_framework.response import Response
-from django.utils.six.moves.urllib import parse as urlparse
 from base64 import b64decode, b64encode
 
 
 class CursorPagination(CursorPagination):
     # page_size = ...
-    # ordering = ...
+    ordering = 'crawled_date'
 
     def get_paginated_response(self, data):
         response = Response(data)
@@ -26,7 +27,7 @@ class CursorPagination(CursorPagination):
         if cursor.position is not None:
             tokens['p'] = cursor.position
 
-        querystring = urlparse.urlencode(tokens, doseq=True)
+        querystring = parse.urlencode(tokens, doseq=True)
         encoded = b64encode(querystring.encode('ascii')).decode('ascii')
         return encoded
 
