@@ -156,8 +156,6 @@ TIME_ZONE = 'Asia/Seoul'
 
 LANGUAGE_CODE = 'ko-KR'
 
-SITE_ID = 2
-
 USE_I18N = True
 
 USE_L10N = True
@@ -225,3 +223,5 @@ ACCOUNT_AUTHENTICATED_LOGOUT_REDIRECTS = True
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+SITE_ID = 2

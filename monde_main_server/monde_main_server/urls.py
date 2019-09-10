@@ -19,7 +19,7 @@ from django.urls import path, include
 
 # from accounts.social import FacebookLogin
 from accounts.social import FacebookLogin
-from accounts.views import LoginView
+from accounts.views import LoginView, index, login
 
 #test
 from test.views import home
@@ -36,7 +36,9 @@ urlpatterns = [
     url(r'^api/v1/rest-auth/facebook/$', FacebookLogin.as_view(), name='fb_login'),
 
     #social login test
-    path('', home, name="home"),
+    url(r'^$', index, name='index'),
+    # 인증 후 리다이렉트 될 주소. {% url 'login' %} 에서 호출한다.
+    url(r'^fb-login/$', login, name='login'),
 
     #client test
     url(r'^',include('test.urls')),
