@@ -18,20 +18,33 @@ class CategorySearchRequestSerializer(serializers.ModelSerializer):
 
 
 class SampleListSerializer(serializers.ModelSerializer):
-    # user = serializers.HiddenField(default=serializers.CurrentUserDefault)
     on_sale = serializers.SerializerMethodField()
     color_tab = serializers.SerializerMethodField()
+    image_url = serializers.SerializerMethodField()
+    shape_result = serializers.SerializerMethodField()
 
     class Meta:
         model = CrawlerProduct
         fields = ['id',
                   'shopping_mall',
-                  'image_url',
                   'product_name',
                   'bag_url',
+                  'image_url',
                   'price',
                   'color_tab',
-                  'on_sale']
+                  'on_sale',
+                  'shape_result']
+
+    def get_shape_result(self, product):
+        return product.bag_images.first().categories.shape_result
+
+    def get_image_url(self, product):
+        image = product.bag_images.all().last()
+        url = image.bag_image.url
+        #TODO : Why bag_image.url isn't url?
+        main_url = 'https://monde-web-crawler.s3.amazonaws.com/'
+        added_url = main_url + url
+        return added_url
 
     def get_color_tab(self, instance):
         tab_list = []
@@ -40,10 +53,10 @@ class SampleListSerializer(serializers.ModelSerializer):
         return tab_list
 
     def get_colors(self, instance):
-        color_list=[]
+        color_list = []
         for color_tab in instance.color_tabs.all():
-            for color in color_tab.color_tags.all():
-                color_list.append(color.color)
+            #실제 판매중인 상품 색상명
+            color_list.append(color_tab.colors)
         return color_list
 
     def get_on_sale(self, instance):
