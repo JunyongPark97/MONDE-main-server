@@ -52,7 +52,7 @@ THIRD_PARTY_APPS = (
     'allauth.socialaccount',
     # 'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
-
+    'knox',
 )
 
 LOCAL_APPS = (
@@ -211,9 +211,7 @@ SOCIALACCOUNT_PROVIDERS = {
 REST_SESSION_LOGIN = False
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
     'DEFAULT_PAGINATION_CLASS': 'search.category_search.pagination.StandardResultsSetPagination',
     'PAGE_SIZE': 7
 }

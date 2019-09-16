@@ -19,7 +19,7 @@ from django.urls import path, include
 
 # from accounts.social import FacebookLogin
 from accounts.social import FacebookLogin
-from accounts.views import LoginView, index, login
+from accounts.views import  index, login
 
 #test
 from test.views import home
@@ -29,15 +29,17 @@ urlpatterns = [
 
     url(r'^accounts/',include('allauth.urls')),
 
-    url(r'^api/v1/rest-auth/login/$', LoginView.as_view(), name='rest_auth_login_v2'),
+    # url(r'^api/v1/rest-auth/login/$', LoginView.as_view(), name='rest_auth_login_v2'),
 
     url(r'^api/v1/rest-auth/', include('rest_auth.urls')),
     url(r'^api/v1/rest-auth/registration/',include('rest_auth.registration.urls')),
     url(r'^api/v1/rest-auth/facebook/$', FacebookLogin.as_view(), name='fb_login'),
 
+    #knox token login
+    url(r'^api/auth/', include('accounts.urls')),
+
     #social login test
     url(r'^$', index, name='index'),
-    # 인증 후 리다이렉트 될 주소. {% url 'login' %} 에서 호출한다.
     url(r'^fb-login/$', login, name='login'),
 
     #client test
@@ -45,5 +47,4 @@ urlpatterns = [
 
     #searchresults
     url(r'^api/v1/category/', include('search.category_search.urls')),
-
 ]
