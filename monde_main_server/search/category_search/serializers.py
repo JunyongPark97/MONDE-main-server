@@ -21,7 +21,6 @@ class SampleListSerializer(serializers.ModelSerializer):
     on_sale = serializers.SerializerMethodField()
     color_tab = serializers.SerializerMethodField()
     image_url = serializers.SerializerMethodField()
-    shape_result = serializers.SerializerMethodField()
 
     class Meta:
         model = CrawlerProduct
@@ -32,11 +31,8 @@ class SampleListSerializer(serializers.ModelSerializer):
                   'image_url',
                   'price',
                   'color_tab',
-                  'on_sale',
-                  'shape_result']
+                  'on_sale']
 
-    def get_shape_result(self, product):
-        return product.bag_images.first().categories.shape_result
 
     def get_image_url(self, product):
         image = product.bag_images.all().last()

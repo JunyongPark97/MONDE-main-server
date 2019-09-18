@@ -5,11 +5,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.core.paginator import Paginator
 
-from products.models import CrawlerProduct
+from products.models import CrawlerProduct, CategoryCategories
 from search.category_search.models import CategorySearchResultLog, CategorySearchRequest
 from search.category_search.pagination import StandardResultsSetPagination
 from search.category_search.serializers import CategorySearchRequestSerializer, SampleListSerializer
-from search.category_search.tools import category_search_v1
+from search.category_search.tools import get_searched_data
 from tools.pagination import CursorPagination
 
 
@@ -67,24 +67,24 @@ class SampleListAPIView(GenericAPIView):
 
 class CursorListAPIView(GenericAPIView):
     serializer_class = SampleListSerializer
-    queryset = CrawlerProduct.objects.all()
+    queryset = CategoryCategories.objects.all()
     permission_classes = [IsAuthenticated, ]
     pagination_class = CursorPagination
 
     def post(self, request, *args, **kwargs):
-        data = request.data
-        print(data)
-        temp_product = category_search_v1(data)
-        print(request.data)
+        user_input = request.data
+        print(user_input)
+        #TODO : MAKE queryset ,not list to pagination ordering
+        searched_list = get_searched_data(self.get_queryset(), user_input)
         paginator = self.pagination_class()
-        paginator_q = paginator.paginate_queryset(temp_product, self.request)
-        paginator_r = paginator.get_paginated_response(temp_product)
+        paginator_q = paginator.paginate_queryset(searched_list, self.request)
+        paginator_r = paginator.get_paginated_response(searched_list)
         serializer = self.serializer_class(paginator_q, many=True)
-        data['bags'] = serializer.data
-        data['prev'] = paginator_r['cursor-prev']
-        data['next'] = paginator_r['cursor-next']
+        searched_list['bags'] = serializer.data
+        searched_list['prev'] = paginator_r['cursor-prev']
+        searched_list['next'] = paginator_r['cursor-next']
 
-        return Response(data, status=status.HTTP_200_OK)
+        return Response(searched_list, status=status.HTTP_200_OK)
 
 
 class MyListTestAPIView(generics.ListAPIView):
