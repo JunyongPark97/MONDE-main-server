@@ -94,10 +94,9 @@ def get_searched_data(queryset, user_input):
 
     for instance in queryset:
         result_dict = filtered_data(instance, user_input, result_dict)
-
     sorted_category_result_list = sorted(result_dict, key=lambda kv: result_dict[kv], reverse=True)
-    sorted_product_result_list = list(map(lambda x: x.bag_image.product, sorted_category_result_list))
-    return sorted_product_result_list
+    sorted_product_result_id = list(map(lambda x: x.bag_image.product.id, sorted_category_result_list))
+    return sorted_product_result_id
 
 
 

@@ -9,6 +9,7 @@ from django.db import models
 # Create your models here.
 from django.utils import timezone
 
+from products.models import CrawlerProduct
 from tools.utils import create_random_string
 
 

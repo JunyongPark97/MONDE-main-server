@@ -46,5 +46,5 @@ urlpatterns = [
     url(r'^',include('test.urls')),
 
     #searchresults
-    url(r'^api/v1/category/', include('search.category_search.urls')),
+    url(r'^api/v1/', include('search.category_search.urls')),
 ]

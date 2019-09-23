@@ -16,7 +16,7 @@ class MondeRouter(object):
 
     def allow_relation(self, obj1, obj2, **hints):
         # print(obj1, obj2)
-        return None
+        return True
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
         # print(app_label, db, model_name)

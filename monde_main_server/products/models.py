@@ -40,7 +40,6 @@ class CrawlerColortag(models.Model):
 class CrawlerProduct(models.Model):
     shopping_mall = models.IntegerField()
     is_banned = models.IntegerField()
-    # image_url = models.CharField(max_length=200)
     product_name = models.CharField(max_length=100, blank=True, null=True)
     bag_url = models.CharField(max_length=200)
     is_best = models.IntegerField()
