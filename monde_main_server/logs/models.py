@@ -41,3 +41,14 @@ class ProductViewCount(models.Model):
     def product(self):
         product = CrawlerProduct.objects.filter(pk=self.product_id).last()
         return product
+
+
+class ProductFavoriteCount(models.Model):
+    product_id = models.PositiveIntegerField(help_text='crawling server 의 product id')
+    favorite_count = models.IntegerField(default=1)
+    description = models.CharField(max_length=500)
+
+    @property
+    def product(self):
+        product = CrawlerProduct.objects.filter(pk=self.product_id).last()
+        return product
