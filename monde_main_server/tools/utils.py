@@ -32,3 +32,14 @@ def get_seoul_time_now():
 def create_random_string(length):
     c = 'abcdefghjkmnpqrstuvwsyz23456789'
     return ''.join(random.sample(c, length))
+
+def get_product_info(product):
+    info = {}
+    info['shopping_mall'] = product.shopping_mall
+    info['is_banned'] = product.is_banned
+    info['product_name'] = product.product_name
+    info['bag_url'] = product.bag_url
+    info['is_best'] = product.is_best
+    info['price'] = product.price
+    info['crawled_date'] = product.crawled_date
+    return info

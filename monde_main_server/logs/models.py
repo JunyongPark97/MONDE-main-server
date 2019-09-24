@@ -1,6 +1,4 @@
 from django.db import models
-from rest_framework.response import Response
-from rest_framework import status
 from monde_main_server import settings
 from products.models import CrawlerProduct
 

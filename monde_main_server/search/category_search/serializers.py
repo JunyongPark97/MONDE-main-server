@@ -5,10 +5,6 @@ from products.models import CrawlerProduct
 from search.category_search.models import CategorySearchRequest
 
 
-class SearchResultListSerializer(serializers.ModelSerializer):
-    pass
-
-
 class CategorySearchRequestSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     category_search_version = serializers.IntegerField(default=1)
@@ -25,19 +21,33 @@ class ProductResultSerializer(serializers.ModelSerializer):
     on_sale = serializers.SerializerMethodField()
     image_url = serializers.SerializerMethodField()
     colors = serializers.SerializerMethodField()
+    favorite = serializers.SerializerMethodField()
 
     class Meta:
         model = CrawlerProduct
         fields = ['id',
                   'product_name',
+                  'favorite',
                   'bag_url',
                   'image_url',
                   'price',
                   'on_sale',
                   'colors']
 
+    def get_favorite(self, instance):
+        product_id = instance.id
+        user = self.context['request'].user
+        favorite_log = UserProductFavoriteLogs.objects.filter(product_id=product_id, user=user).last()
+        if not favorite_log:
+            return False
+        if favorite_log.is_hidden:
+            return False
+        return True
+
     def get_image_url(self, product):
         image = product.bag_images.all().last()
+        if not image:
+            return None
         url = image.bag_image.url
         # TODO : Why bag_image.url isn't url?
         main_url = 'https://monde-web-crawler.s3.amazonaws.com/'
@@ -58,92 +68,6 @@ class ProductResultSerializer(serializers.ModelSerializer):
         if False in sale_list:
             return False
         return True
-
-
-class ProductVisitLogSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    product_id = serializers.SerializerMethodField()
-    shopping_mall = serializers.SerializerMethodField()
-    bag_url = serializers.SerializerMethodField()
-    price = serializers.SerializerMethodField()
-
-    class Meta:
-        model = UserProductViewLogs
-        fields = '__all__'
-
-
-class ProductRecentViewSerializer(serializers.ModelSerializer):
-    colors = serializers.SerializerMethodField()
-    image_url = serializers.SerializerMethodField()
-
-    class Meta:
-        model = UserProductViewLogs
-        fields = ('id', 'product_id', 'created_at', 'product_name',
-                  'bag_url', 'price', 'colors', 'image_url')
-
-    def get_colors(self, instance):
-        product_id = instance.product_id
-        product = CrawlerProduct.objects.filter(pk=product_id).last()
-        color_list = []
-        for color_tab in product.color_tabs.all():
-            # 실제 판매중인 상품 색상명
-            color_list.append(color_tab.colors)
-        return color_list
-
-    def get_image_url(self, instance):
-        product_id = instance.product_id
-        product = CrawlerProduct.objects.filter(pk=product_id).last()
-        image = product.bag_images.all().last()
-        if not image:
-            return None
-        url = image.bag_image.url
-        # TODO : Why bag_image.url isn't url?
-        main_url = 'https://monde-web-crawler.s3.amazonaws.com/'
-        added_url = main_url + url
-        return added_url
-
-
-class ProductFavoriteSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    product_id = serializers.SerializerMethodField()
-    shopping_mall = serializers.SerializerMethodField()
-    bag_url = serializers.SerializerMethodField()
-    price = serializers.SerializerMethodField()
-
-    class Meta:
-        model = UserProductFavoriteLogs
-        fields = '__all__'
-
-
-class ProductFavoriteLogSerializer(serializers.ModelSerializer):
-    colors = serializers.SerializerMethodField()
-    image_url = serializers.SerializerMethodField()
-
-    class Meta:
-        model = UserProductFavoriteLogs
-        fields = ('id', 'product_id', 'created_at', 'product_name',
-                  'bag_url', 'price', 'colors', 'image_url')
-
-    def get_colors(self, instance):
-        product_id = instance.product_id
-        product = CrawlerProduct.objects.filter(pk=product_id).last()
-        color_list = []
-        for color_tab in product.color_tabs.all():
-            # 실제 판매중인 상품 색상명
-            color_list.append(color_tab.colors)
-        return color_list
-
-    def get_image_url(self, instance):
-        product_id = instance.product_id
-        product = CrawlerProduct.objects.filter(pk=product_id).last()
-        image = product.bag_images.all().last()
-        if not image:
-            return None
-        url = image.bag_image.url
-        # TODO : Why bag_image.url isn't url?
-        main_url = 'https://monde-web-crawler.s3.amazonaws.com/'
-        added_url = main_url + url
-        return added_url
 
 
 class SampleListSerializer(serializers.ModelSerializer):
