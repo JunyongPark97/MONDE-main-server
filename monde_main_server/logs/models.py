@@ -1,7 +1,8 @@
 from django.db import models
-
-# Create your models here.
+from rest_framework.response import Response
+from rest_framework import status
 from monde_main_server import settings
+from products.models import CrawlerProduct
 
 
 class LoginLog(models.Model):
@@ -29,3 +30,14 @@ class LoginLog(models.Model):
     client_user_type = models.IntegerField(null=True, blank=True, db_index=True)
     app_id = models.CharField(max_length=80, null=True, blank=True, db_index=True)
     device = models.ForeignKey('accounts.DeviceInfo', related_name='login_logs', null=True, on_delete=models.SET_NULL)
+
+
+class ProductViewCount(models.Model):
+    product_id = models.PositiveIntegerField(help_text='crawling server 의 product id')
+    view_count = models.IntegerField(default=1)
+    description = models.CharField(max_length=500)
+
+    @property
+    def product(self):
+        product = CrawlerProduct.objects.filter(pk=self.product_id).last()
+        return product

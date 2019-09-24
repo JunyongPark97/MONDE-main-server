@@ -38,6 +38,4 @@ class ProductViewLogs(models.Model):
     @property
     def product(self):
         product = CrawlerProduct.objects.filter(pk=self.product_id).last()
-        if not product:
-            return Response(None, status=status.HTTP_204_NO_CONTENT)
         return product
