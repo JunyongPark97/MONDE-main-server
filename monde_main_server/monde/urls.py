@@ -1,13 +1,9 @@
 from django.conf.urls import url
 from django.urls import path, include
-from rest_framework.routers import SimpleRouter
 
-from monde.views import ProductVisitAPIView
-from search.category_search.views import CategorySearchViewSetV1
-
-router = SimpleRouter()
-router.register('search', CategorySearchViewSetV1, base_name='search')
+from monde.views import ProductVisitAPIView, TabListAPIViewV1
 
 urlpatterns = [
-    path('visit/<int:product_id>/', ProductVisitAPIView.as_view())
+    path('visit/<int:product_id>/', ProductVisitAPIView.as_view()),
+    path('shop/tab/<int:tab_no>/', TabListAPIViewV1.as_view()),
 ]

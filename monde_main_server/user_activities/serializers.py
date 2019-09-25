@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from logs.models import ProductViewCount, ProductFavoriteCount
 from user_activities.models import UserProductViewLogs, UserProductFavoriteLogs
 from products.models import CrawlerProduct
 
@@ -20,11 +21,20 @@ class ProductRecentViewSerializer(serializers.ModelSerializer):
     colors = serializers.SerializerMethodField()
     image_url = serializers.SerializerMethodField()
     favorite = serializers.SerializerMethodField()
+    # view_count = serializers.SerializerMethodField()
 
     class Meta:
         model = UserProductViewLogs
         fields = ('id', 'product_id', 'favorite', 'created_at', 'product_name',
                   'bag_url', 'price', 'colors', 'image_url')
+
+    #TODO : 최근 본 상품이나 찜한 상품에서 인기순 필터는 없다?
+
+    # def get_view_count(self, instance):
+    #     p_id = instance.product_id
+    #     view_count = ProductViewCount.objects.get(product_id=p_id).view_count
+    #     favorite_count = ProductFavoriteCount.objects.get(product_id=p_id).favorite_count
+    #     return view_count
 
     def get_favorite(self, instance):
         user = self.context['request'].user

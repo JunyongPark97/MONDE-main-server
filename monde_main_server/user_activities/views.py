@@ -1,4 +1,5 @@
 from rest_framework import viewsets, status, mixins
+from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -14,7 +15,6 @@ from user_activities.serializers import ProductRecentViewSerializer, \
 
 
 class RecentViewLogViewSet(viewsets.GenericViewSet,
-                           mixins.RetrieveModelMixin,
                            mixins.ListModelMixin,
                            mixins.DestroyModelMixin):
     queryset = UserProductViewLogs.objects.all()
@@ -26,30 +26,32 @@ class RecentViewLogViewSet(viewsets.GenericViewSet,
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @action(methods=['post'], detail=True)
-    def delete(self, request, pk=None):
+    def destroy(self, request, *args, **kwargs):
+        pk = self.kwargs['pk']
         view_log = self.get_queryset().filter(product_id=pk, user=request.user).last()
         view_log.is_hidden = True
         view_log.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ProductFavoriteViewSet(viewsets.GenericViewSet,
-                             mixins.RetrieveModelMixin,
-                             mixins.ListModelMixin):
+class FavoriteLogViewSet(viewsets.ReadOnlyModelViewSet, mixins.ListModelMixin):
+    queryset = UserProductFavoriteLogs.objects.all()
+    permission_classes = [IsAuthenticated, ]
+    serializer_class = ProductFavoriteLogSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset().filter(user=request.user, is_hidden=False).order_by('-created_at')
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ProductFavoriteAPIView(GenericAPIView, mixins.DestroyModelMixin, mixins.CreateModelMixin,):
     queryset = UserProductFavoriteLogs.objects.all()
     permission_classes = [IsAuthenticated,]
     serializer_class = ProductFavoriteSerializer
 
-    def get_serializer_class(self):
-        if self.action == 'heart':
-            return ProductFavoriteSerializer
-        elif self.action == 'list':
-            return ProductFavoriteLogSerializer
-        return super(ProductFavoriteViewSet, self).get_serializer_class()
-
-    @action(methods=['post'], detail=True)
-    def heart(self, request, pk=None):
+    def create(self, request, *args, **kwargs):
+        pk = self.kwargs['product_id']
         product = CrawlerProduct.objects.get(pk=pk)
         serializer = self.get_serializer(data=request.data, context={'request': request})
 
@@ -71,20 +73,15 @@ class ProductFavoriteViewSet(viewsets.GenericViewSet,
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if favorite_log:
-            serializer.update(favorite_log, validated_data={'count': F('count')+1})
+            serializer.update(favorite_log, validated_data={'count': F('count') + 1})
             return Response(status=status.HTTP_206_PARTIAL_CONTENT)
 
         serializer.save(product_id=product.id, **info)
 
         return Response(status=status.HTTP_201_CREATED)
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset().filter(user=request.user, is_hidden=False).order_by('-created_at')
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @action(methods=['post'], detail=True)
-    def delete(self, request, pk=None):
+    def destroy(self, request, *args, **kwargs):
+        pk = self.kwargs['product_id']
         favorite_log = self.get_queryset().filter(product_id=pk, user=request.user).last()
         favorite_log.is_hidden = True
         favorite_log.save()

@@ -67,7 +67,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     temporary_password = models.CharField(max_length=128, blank=True,
                                           help_text='원래 비밀번호와 다르게 임시로 사용할 수 있는 비밀번호입니다.')
 
-    USERNAME_FIELD = 'username'
+    USERNAME_FIELD = 'username' # social login 시 uid 로 유저구분,
 
     def save(self, *args, **kwargs):
         if self.uid is None:

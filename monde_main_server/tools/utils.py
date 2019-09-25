@@ -33,6 +33,7 @@ def create_random_string(length):
     c = 'abcdefghjkmnpqrstuvwsyz23456789'
     return ''.join(random.sample(c, length))
 
+
 def get_product_info(product):
     info = {}
     info['shopping_mall'] = product.shopping_mall

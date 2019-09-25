@@ -2,6 +2,8 @@
 import jsonfield
 from django.db import models
 
+from tools.product.tools import make_integer_price
+
 
 class CrawlerBagimage(models.Model):
     bag_image = models.ImageField(upload_to='crawled-image', blank=True)
@@ -12,7 +14,6 @@ class CrawlerBagimage(models.Model):
     class Meta:
         managed = False
         db_table = 'crawler_bagimage'
-        app_label = 'web_crawler'
 
 
 class CrawlerColortab(models.Model):
@@ -24,7 +25,6 @@ class CrawlerColortab(models.Model):
     class Meta:
         managed = False
         db_table = 'crawler_colortab'
-        app_label = 'web_crawler'
 
 
 class CrawlerColortag(models.Model):
@@ -34,7 +34,6 @@ class CrawlerColortag(models.Model):
     class Meta:
         managed = False
         db_table = 'crawler_colortag'
-        app_label = 'web_crawler'
 
 
 class CrawlerProduct(models.Model):
@@ -45,11 +44,17 @@ class CrawlerProduct(models.Model):
     is_best = models.IntegerField()
     price = models.CharField(max_length=50)
     crawled_date = models.DateTimeField(blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now_add=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'crawler_product'
-        app_label = 'web_crawler'
+        # app_label = 'web_crawler' # router 에서 쓰기 위해
+
+    @property
+    def real_price(self):
+        price = self.price
+        return make_integer_price(price)
 
 
 class CategoryCategories(models.Model):
@@ -64,4 +69,3 @@ class CategoryCategories(models.Model):
     class Meta:
         managed = False
         db_table = 'category_categories'
-        app_label = 'web_crawler'

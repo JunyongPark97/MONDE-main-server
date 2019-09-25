@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from logs.models import ProductViewCount, ProductFavoriteCount
 from user_activities.models import UserProductViewLogs, UserProductFavoriteLogs
 from products.models import CrawlerProduct
 from search.category_search.models import CategorySearchRequest
@@ -16,12 +17,13 @@ class CategorySearchRequestSerializer(serializers.ModelSerializer):
 
 class ProductResultSerializer(serializers.ModelSerializer):
     """
-    category search result 를 list 형태로 보여주기 위한 serializer 입니다.
+    검색 또는 필터링 된 product 를 list 형태로 보여주기 위한 serializer 입니다.
     """
     on_sale = serializers.SerializerMethodField()
     image_url = serializers.SerializerMethodField()
     colors = serializers.SerializerMethodField()
     favorite = serializers.SerializerMethodField()
+    view_count = serializers.SerializerMethodField()
 
     class Meta:
         model = CrawlerProduct
@@ -30,9 +32,18 @@ class ProductResultSerializer(serializers.ModelSerializer):
                   'favorite',
                   'bag_url',
                   'image_url',
-                  'price',
+                  'real_price',
                   'on_sale',
-                  'colors']
+                  'colors',
+                  'view_count']
+
+    def get_view_count(self, instance):
+        p_id = instance.id
+        view_count = ProductViewCount.objects.filter(product_id=p_id).last()
+        if not view_count:
+            return None
+        # favorite_count = ProductFavoriteCount.objects.get(product_id=p_id)
+        return view_count.view_count
 
     def get_favorite(self, instance):
         product_id = instance.id
@@ -68,6 +79,17 @@ class ProductResultSerializer(serializers.ModelSerializer):
         if False in sale_list:
             return False
         return True
+
+
+class CurrentUserDefault:
+    def set_context(self, serializer_field):
+        self.user = serializer_field.context['request'].user
+
+    def __call__(self):
+        return self.user
+
+    def __repr__(self):
+        return '%s()' % self.__class__.__name__
 
 
 class SampleListSerializer(serializers.ModelSerializer):

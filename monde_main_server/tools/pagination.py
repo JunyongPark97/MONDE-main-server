@@ -16,12 +16,10 @@ def _reverse_ordering(ordering_tuple):
 
 
 class CategorySearchResultPagination(PageNumberPagination):
-    page_size = 100  #한페이지에 담기는 개수
+    page_size = 3  #한페이지에 담기는 개수
 
     def get_paginated_response(self, data):
         return Response(OrderedDict([
-             ('lastPage', self.page.paginator.count), #
-             ('countItemsOnPage', self.page_size), #
              ('current', self.page.number),
              ('next', self.get_next_link()),
              ('previous', self.get_previous_link()),

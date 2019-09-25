@@ -1,12 +1,11 @@
-from rest_framework import viewsets, status, mixins
+from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from products.models import CrawlerProduct, CategoryCategories
 from search.category_search.serializers import CategorySearchRequestSerializer, ProductResultSerializer
-from search.category_search.tools import get_searched_data
-from django.db.models import Case, When, F
-from rest_framework.decorators import action
+from tools.search.tools import get_searched_data
+from django.db.models import Case, When
 
 from tools.pagination import CategorySearchResultPagination
 from user_activities.serializers import ProductVisitLogSerializer
@@ -27,7 +26,8 @@ class CategorySearchViewSetV1(viewsets.GenericViewSet):
 
     def create(self, request, *args, **kwargs):
 
-        serializer = self.get_serializer(data=request.data, context={'request': request})
+        serializer = self.get_serializer(data=request.data)
+
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
