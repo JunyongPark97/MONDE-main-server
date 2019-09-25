@@ -45,8 +45,7 @@ def get_bucket_list(queryset):
             pass
         if 'bucket' in shape_data and shape_data['bucket'] > 0.5:
             ids.append(instance.bag_image.product.id)
-            # ids[instance.bag_image.product.id] = shape_data['bucket']
-    # sorted_bucket_list = sorted(ids, key=lambda kv: ids[kv], reverse=True)
+
     return ids
 
 

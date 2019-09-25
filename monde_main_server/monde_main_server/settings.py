@@ -63,7 +63,6 @@ LOCAL_APPS = (
     'notices',
     'products',
     'search',
-    'shopping_malls',
     'support',
     'user_activities',
     'versions',

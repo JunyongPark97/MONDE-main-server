@@ -1,14 +1,14 @@
-from django.db.models import Case, When, F
-from rest_framework import viewsets, status, mixins
+from django.db.models import F
+from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from logs.models import ProductViewCount
-from products.models import CrawlerProduct, CategoryCategories
+from products.models import CrawlerProduct
 from search.category_search.serializers import ProductResultSerializer
 from tools.pagination import CategorySearchResultPagination
-from tools.shop.tools import get_tab_queryset
+from monde.tools import get_tab_queryset
 from tools.utils import get_product_info
 from user_activities.models import UserProductViewLogs
 from user_activities.serializers import ProductVisitLogSerializer

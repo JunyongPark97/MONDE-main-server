@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 from products.models import CrawlerProduct, CategoryCategories
 from search.category_search.serializers import CategorySearchRequestSerializer, ProductResultSerializer
-from tools.search.tools import get_searched_data
+from search.category_search.tools import get_searched_data
 from django.db.models import Case, When
 
 from tools.pagination import CategorySearchResultPagination

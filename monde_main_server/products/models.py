@@ -2,7 +2,7 @@
 import jsonfield
 from django.db import models
 
-from tools.product.tools import make_integer_price
+from products.tools import make_integer_price
 
 
 class CrawlerBagimage(models.Model):
