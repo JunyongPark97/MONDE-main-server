@@ -29,7 +29,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
 # Application definition
 
 DJANGO_APPS = (
@@ -60,6 +59,7 @@ LOCAL_APPS = (
     'accounts',
     'categories',
     'logs',
+    'tools',
     'notices',
     'products',
     'search',
@@ -67,7 +67,7 @@ LOCAL_APPS = (
     'user_activities',
     'versions',
     'test',
-    'monde'
+    'monde',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

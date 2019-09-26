@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from logs.models import ProductViewCount
-from products.models import CrawlerProduct
+from products.models import CrawlerProduct, CategoryCategories
 from search.category_search.serializers import ProductResultSerializer
 from tools.pagination import CategorySearchResultPagination
 from monde.tools import get_tab_queryset
@@ -64,7 +64,8 @@ class TabListAPIViewV1(GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         tab_no = self.kwargs['tab_no']
-        tab_queryset = get_tab_queryset(tab_no, self.get_queryset())
+        category_qs = CategoryCategories.objects.all()
+        tab_queryset = get_tab_queryset(tab_no, self.get_queryset(), category_qs)
         filter_param = int(request.query_params.get('filter', 1)) # filter 있으면 filter, 없으면 1
 
         if filter_param == 1:

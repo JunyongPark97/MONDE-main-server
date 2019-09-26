@@ -9,8 +9,8 @@ from django.db import models
 # Create your models here.
 from django.utils import timezone
 
+from accounts.tools import create_random_string
 from products.models import CrawlerProduct
-from tools.utils import create_random_string
 
 
 class UserManager(BaseUserManager):
@@ -28,7 +28,7 @@ class UserManager(BaseUserManager):
     def create_superuser(self, username, password):
         user = self.create_user(
             username,
-            password = password
+            password=password
         )
         user.is_superuser = True
         user.is_staff = True
@@ -105,9 +105,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.__unicode__()
-
-    # def get_total_searched_count(self):
-    #     return BlaBlaModel.objects.filter(author=self).count()
 
 
 class CommonProfile(models.Model):

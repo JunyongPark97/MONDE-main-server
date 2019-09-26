@@ -1,4 +1,3 @@
-
 import jsonfield
 from django.db import models
 

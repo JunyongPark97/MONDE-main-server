@@ -1,8 +1,6 @@
-from products.models import CategoryCategories
 
-
-def get_tab_queryset(tab_no, queryset):
-    categories_queryset = CategoryCategories.objects.all()
+def get_tab_queryset(tab_no, queryset, category_qs):
+    categories_queryset = category_qs
 
     if tab_no == 1:
         # 버킷백
@@ -95,3 +93,10 @@ def get_tote_list(queryset):
                 'tote_shoulder' in handle_data and handle_data['tote_shoulder'] > 0.4:
             ids.append(instance.bag_image.product.id)
     return ids
+
+
+def get_on_sale(instance):
+    for color_tab in instance.color_tabs.all():
+        if not color_tab.on_sale:
+            return False
+    return True

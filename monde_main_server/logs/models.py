@@ -50,3 +50,38 @@ class ProductFavoriteCount(models.Model):
     def product(self):
         product = CrawlerProduct.objects.filter(pk=self.product_id).last()
         return product
+
+
+class DBProductSyncLogs(models.Model):
+    db_product_id = models.IntegerField()
+    cause = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class DBProductImageSyncLogs(models.Model):
+    db_product_image_id = models.IntegerField()
+    cause = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class DBCategorySyncLogs(models.Model):
+    db_category_id = models.IntegerField()
+    cause = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class DBColorTabSyncLogs(models.Model):
+    db_colortab_id = models.IntegerField()
+    cause = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class DBColorSyncLogs(models.Model):
+    db_color_id = models.IntegerField()
+    cause = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

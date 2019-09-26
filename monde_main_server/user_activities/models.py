@@ -4,7 +4,6 @@ from django.db import models
 from rest_framework import status
 from rest_framework.response import Response
 from products.models import CrawlerProduct
-from shopping_malls.models import ShoppingMall
 # Create your models here.
 
 

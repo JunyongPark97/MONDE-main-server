@@ -1,7 +1,6 @@
 from ckeditor_uploader.fields import RichTextUploadingField
-from django.conf import settings
 from django.db import models
-from tools.aws.fields import GiveRandomFileName
+from notices.tools import GiveRandomFileName
 
 notice_upload_dir = GiveRandomFileName(path='uploads/event_notice')
 news_upload_dir = GiveRandomFileName(path='uploads/news')
@@ -21,7 +20,6 @@ class Notice(models.Model):
 
     def __unicode__(self):
         return self.title
-
 
 
 class HiddenNotice(models.Model):

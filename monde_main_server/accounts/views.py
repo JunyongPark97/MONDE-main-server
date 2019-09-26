@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from django.contrib.auth import login as django_login
 
 from accounts.serializers import  UserSerializer, LoginUserSerializer, CreateUserSerializer
-from accounts.tools import loginlog_on_login
+# from accounts.tools import loginlog_on_login
 
 
 class RegistrationAPI(generics.GenericAPIView):
