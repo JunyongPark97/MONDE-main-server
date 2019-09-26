@@ -1,86 +1,84 @@
 from django.db.models import F
 from rest_framework import status
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
 from logs.models import ProductViewCount
-from products.models import CrawlerProduct, CategoryCategories
+from monde.models import Product, ProductCategories
 from search.category_search.serializers import ProductResultSerializer
-from tools.pagination import CategorySearchResultPagination
-from monde.tools import get_tab_queryset
-from tools.utils import get_product_info
+from tools.pagination import ProductListPagination
+from monde.tools import get_tab_ids
 from user_activities.models import UserProductViewLogs
-from user_activities.serializers import ProductVisitLogSerializer
+from user_activities.serializers import UserProductVisitLogSerializer
 
 
-class ProductVisitAPIView(GenericAPIView):
+class ProductVisitAPIView(CreateAPIView):
     queryset = UserProductViewLogs.objects.all()
     permission_classes = [IsAuthenticated, ]
-    serializer_class = ProductVisitLogSerializer
+    serializer_class = UserProductVisitLogSerializer
 
     def post(self, request, *args, **kwargs):
-        p_id = self.kwargs['product_id']
-        product = CrawlerProduct.objects.get(pk=p_id)
-
-        # TODO : FIX ME! (is not drf style?)
-        serializer = self.get_serializer(data=request.data, context={'request': request}) #datq = dict product_id input
+        product = self.get_product()
+        serializer = self.get_serializer(data={'product': product.id})
 
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         #  product view count + 1
-        product_logs = ProductViewCount.objects.filter(product_id=p_id).last()
+        product_logs = ProductViewCount.objects.filter(product=product).last()
         if product_logs:
             product_logs.view_count = F('view_count') + 1
             product_logs.save()
         else:
-            ProductViewCount.objects.create(product_id=p_id)
+            ProductViewCount.objects.create(product=product)
 
-        info = get_product_info(product)
+        # update user view log
+        user_view_log = self.get_queryset().filter(user=request.user, product=product).last()
 
-        if not info:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        view_log = self.get_queryset().filter(user=request.user, product_id=p_id).last()
-
-        if view_log:
+        if user_view_log:
             # user visit count + 1
-            serializer.update(view_log, validated_data={'count': F('count') + 1})
+            serializer.update(user_view_log, validated_data={'count': F('count') + 1,
+                                                             'is_hidden': False})
             return Response(status=status.HTTP_206_PARTIAL_CONTENT)
 
-        serializer.save(product_id=product.id, **info)
+        serializer.save()
 
         return Response(status=status.HTTP_201_CREATED)
 
+    def get_product(self):
+        pk = self.kwargs['product_id']
+        product = Product.objects.get(pk=pk)
+        return product
+
 
 class TabListAPIViewV1(GenericAPIView):
-    #TODO : db sync 맞추기
-
-    queryset = CrawlerProduct.objects.all()
+    queryset = Product.objects.all().select_related('product_categories', 'favorite_count')
     serializer_class = ProductResultSerializer
     permission_classes = [IsAuthenticated, ]
-    pagination_class = CategorySearchResultPagination
+    pagination_class = ProductListPagination
 
     def get(self, request, *args, **kwargs):
         tab_no = self.kwargs['tab_no']
-        category_qs = CategoryCategories.objects.all()
-        tab_queryset = get_tab_queryset(tab_no, self.get_queryset(), category_qs)
-        filter_param = int(request.query_params.get('filter', 1)) # filter 있으면 filter, 없으면 1
+        categories_queryset = ProductCategories.objects.all()
+        tab_product_ids = get_tab_ids(tab_no, categories_queryset)
+
+        tab_product = self.get_queryset().filter(id__in=tab_product_ids)
+        filter_param = int(request.query_params.get('filter', 1))  # filter 있으면 filter, 없으면 1
 
         if filter_param == 1:
             # 인기순
-
-            pass
+            tab_queryset = tab_product.order_by('favorite_count__favorite_count')
         elif filter_param == 2:
             # 최신순?
-            tab_queryset = tab_queryset.order_by('updated_at')
+            tab_queryset = tab_product.order_by('updated_at')
         elif filter_param == 3:
             # 저가순
-            tab_queryset = sorted(tab_queryset, key=lambda CrawlerProduct: int(CrawlerProduct.real_price))
+            tab_queryset = tab_product.order_by('price')
         elif filter_param == 4:
             # 고가순
-            tab_queryset = sorted(tab_queryset, key=lambda CrawlerProduct: int(CrawlerProduct.real_price), reverse=True)
+            tab_queryset = tab_product.order_by('-price')
+        else:
+            tab_queryset = tab_product
 
         paginator = self.pagination_class()
         paginated_queryset = paginator.paginate_queryset(tab_queryset, request)
@@ -88,7 +86,3 @@ class TabListAPIViewV1(GenericAPIView):
         paginated_response = paginator.get_paginated_response(serializer.data)
 
         return paginated_response
-
-def sort_by_famous(queryset):
-    ids = list(map(lambda x: x.id, queryset))
-

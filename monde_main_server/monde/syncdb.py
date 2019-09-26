@@ -32,6 +32,7 @@ def product_sync():
                                                                    'product_url': c_product.bag_url,
                                                                    'price': price,
                                                                    'is_on_sale': on_sale,
+                                                                   'is_banned': c_product.is_banned,
                                                                    'crawler_created_at': c_product.crawled_date,
                                                                    'crawler_updated_at': c_product.updated_at})
         except Exception as e:

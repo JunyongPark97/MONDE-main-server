@@ -1,4 +1,5 @@
 from django.db import models
+from monde.models import Product
 from monde_main_server import settings
 from products.models import CrawlerProduct
 
@@ -30,28 +31,21 @@ class LoginLog(models.Model):
     device = models.ForeignKey('accounts.DeviceInfo', related_name='login_logs', null=True, on_delete=models.SET_NULL)
 
 
+# product view log
 class ProductViewCount(models.Model):
-    product_id = models.PositiveIntegerField(help_text='crawling server 의 product id')
+    product = models.OneToOneField(Product, related_name='view_count', on_delete=models.CASCADE)
     view_count = models.IntegerField(default=1)
     description = models.CharField(max_length=500)
 
-    @property
-    def product(self):
-        product = CrawlerProduct.objects.filter(pk=self.product_id).last()
-        return product
 
-
+# product favorite log
 class ProductFavoriteCount(models.Model):
-    product_id = models.PositiveIntegerField(help_text='crawling server 의 product id')
+    product = models.OneToOneField(Product, related_name='favorite_count', on_delete=models.CASCADE)
     favorite_count = models.IntegerField(default=1)
     description = models.CharField(max_length=500)
 
-    @property
-    def product(self):
-        product = CrawlerProduct.objects.filter(pk=self.product_id).last()
-        return product
 
-
+# db sync log
 class DBProductSyncLogs(models.Model):
     db_product_id = models.IntegerField()
     cause = models.CharField(max_length=200)

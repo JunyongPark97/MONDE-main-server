@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 from django.utils.safestring import mark_safe
 
-from products.models import CrawlerProduct, CrawlerBagimage, CrawlerColortab, CrawlerColortag
+from monde.models import Product, ProductImage, ProductCategories, ColorTab, Colors
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -14,9 +14,9 @@ class ProductAdmin(admin.ModelAdmin):
         return mark_safe('<img src="%s" width=200px "/>' % image)
 
 
-
-admin.site.register(CrawlerProduct, ProductAdmin)
-admin.site.register(CrawlerBagimage)
-admin.site.register(CrawlerColortab)
-admin.site.register(CrawlerColortag)
+# admin.site.register(Product, ProductAdmin)
+# admin.site.register(ProductImage)
+# admin.site.register(ProductCategories)
+# admin.site.register(ColorTab)
+# admin.site.register(Colors)
 

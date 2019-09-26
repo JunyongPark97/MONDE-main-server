@@ -1,7 +1,5 @@
 from rest_framework import serializers
-
-from logs.models import ProductViewCount, ProductFavoriteCount
-from user_activities.models import UserProductViewLogs, UserProductFavoriteLogs
+from monde.models import Product
 from products.models import CrawlerProduct
 from search.category_search.models import CategorySearchRequest
 
@@ -19,77 +17,69 @@ class ProductResultSerializer(serializers.ModelSerializer):
     """
     검색 또는 필터링 된 product 를 list 형태로 보여주기 위한 serializer 입니다.
     """
-    on_sale = serializers.SerializerMethodField()
     image_url = serializers.SerializerMethodField()
+    color_names = serializers.SerializerMethodField()
     colors = serializers.SerializerMethodField()
-    favorite = serializers.SerializerMethodField()
+    is_favorite = serializers.SerializerMethodField()
     view_count = serializers.SerializerMethodField()
 
     class Meta:
-        model = CrawlerProduct
+        model = Product
         fields = ['id',
-                  'product_name',
-                  'favorite',
-                  'bag_url',
+                  'name',
+                  'is_favorite',
+                  'product_url',
                   'image_url',
-                  'real_price',
-                  'on_sale',
+                  'price',
+                  'is_on_sale',
+                  'color_names',
                   'colors',
                   'view_count']
 
-    def get_view_count(self, instance):
-        p_id = instance.id
-        view_count = ProductViewCount.objects.filter(product_id=p_id).last()
-        if not view_count:
-            return None
-        # favorite_count = ProductFavoriteCount.objects.get(product_id=p_id)
-        return view_count.view_count
 
-    def get_favorite(self, instance):
-        product_id = instance.id
+    def get_is_favorite(self, instance):
         user = self.context['request'].user
-        favorite_log = UserProductFavoriteLogs.objects.filter(product_id=product_id, user=user).last()
+        favorite_log = instance.user_favorite_logs.filter(user=user).last()
         if not favorite_log:
-            return False
+            return None
         if favorite_log.is_hidden:
             return False
         return True
 
     def get_image_url(self, product):
-        image = product.bag_images.all().last()
-        if not image:
+        product_image = product.product_image
+        if not product_image:
             return None
-        url = image.bag_image.url
+        url = product_image.image.url
         # TODO : Why bag_image.url isn't url?
         main_url = 'https://monde-web-crawler.s3.amazonaws.com/'
         added_url = main_url + url
         return added_url
 
+    def get_color_names(self, instance):
+        color_names = []
+        for color_tab in instance.color_tabs.all():
+            # 실제 판매중인 상품 색상명
+            color_names.append(color_tab.color_tab_name)
+        return color_names
+
     def get_colors(self, instance):
         color_list = []
         for color_tab in instance.color_tabs.all():
-            # 실제 판매중인 상품 색상명
-            color_list.append(color_tab.colors)
+            #TODO : 유효성 검증 필요
+            colors = color_tab.colors.all()
+            for color in colors:
+                color_list.append(color.color)
         return color_list
 
-    def get_on_sale(self, instance):
-        sale_list = []
-        for color_tab in instance.color_tabs.all():
-            sale_list.append(color_tab.on_sale)
-        if False in sale_list:
-            return False
-        return True
-
-
-class CurrentUserDefault:
-    def set_context(self, serializer_field):
-        self.user = serializer_field.context['request'].user
-
-    def __call__(self):
-        return self.user
-
-    def __repr__(self):
-        return '%s()' % self.__class__.__name__
+    # Temp
+    def get_view_count(self, instance):
+        try:
+            views = instance.view_count
+            return views.view_count
+        except:
+            pass
+        return None
 
 
 class SampleListSerializer(serializers.ModelSerializer):

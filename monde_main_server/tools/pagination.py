@@ -15,7 +15,7 @@ def _reverse_ordering(ordering_tuple):
     return tuple([invert(item) for item in ordering_tuple])
 
 
-class CategorySearchResultPagination(PageNumberPagination):
+class ProductListPagination(PageNumberPagination):
     page_size = 3  #한페이지에 담기는 개수
 
     def get_paginated_response(self, data):
@@ -23,5 +23,5 @@ class CategorySearchResultPagination(PageNumberPagination):
              ('current', self.page.number),
              ('next', self.get_next_link()),
              ('previous', self.get_previous_link()),
-             ('results', data)
+             ('products', data)
          ]))

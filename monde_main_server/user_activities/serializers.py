@@ -1,117 +1,51 @@
 from rest_framework import serializers
-
-from logs.models import ProductViewCount, ProductFavoriteCount
+from search.category_search.serializers import ProductResultSerializer
 from user_activities.models import UserProductViewLogs, UserProductFavoriteLogs
-from products.models import CrawlerProduct
 
 
-class ProductVisitLogSerializer(serializers.ModelSerializer):
+# 상품 접속시 모델 저장 사용
+class UserProductVisitLogSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    product_id = serializers.SerializerMethodField()
-    shopping_mall = serializers.SerializerMethodField()
-    bag_url = serializers.SerializerMethodField()
-    price = serializers.SerializerMethodField()
 
     class Meta:
         model = UserProductViewLogs
-        fields = '__all__'
+        fields = ['user', 'product', 'is_hidden']
 
 
+# 최근 검색 목록 보여줄때 사용
+# DEPRECATED
 class ProductRecentViewSerializer(serializers.ModelSerializer):
-    colors = serializers.SerializerMethodField()
-    image_url = serializers.SerializerMethodField()
-    favorite = serializers.SerializerMethodField()
-    # view_count = serializers.SerializerMethodField()
+    product_detail = serializers.SerializerMethodField()
 
     class Meta:
         model = UserProductViewLogs
-        fields = ('id', 'product_id', 'favorite', 'created_at', 'product_name',
-                  'bag_url', 'price', 'colors', 'image_url')
+        fields = ['product_detail']
 
-    #TODO : 최근 본 상품이나 찜한 상품에서 인기순 필터는 없다?
-
-    # def get_view_count(self, instance):
-    #     p_id = instance.product_id
-    #     view_count = ProductViewCount.objects.get(product_id=p_id).view_count
-    #     favorite_count = ProductFavoriteCount.objects.get(product_id=p_id).favorite_count
-    #     return view_count
-
-    def get_favorite(self, instance):
-        user = self.context['request'].user
-        product_id = instance.product_id
-        favorite_log = UserProductFavoriteLogs.objects.filter(product_id=product_id, user=user).last()
-        if not favorite_log:
-            return False
-        if favorite_log.is_hidden:
-            return False
-        return True
-
-    def get_colors(self, instance):
-        product_id = instance.product_id
-        product = CrawlerProduct.objects.filter(pk=product_id).last()
-        color_list = []
-        for color_tab in product.color_tabs.all():
-            # 실제 판매중인 상품 색상명
-            color_list.append(color_tab.colors)
-        return color_list
-
-    def get_image_url(self, instance):
-        product_id = instance.product_id
-        product = CrawlerProduct.objects.filter(pk=product_id).last()
-        image = product.bag_images.all().last()
-        if not image:
-            return None
-        url = image.bag_image.url
-        # TODO : Why bag_image.url isn't url?
-        main_url = 'https://monde-web-crawler.s3.amazonaws.com/'
-        added_url = main_url + url
-        return added_url
+    def get_product_detail(self, view_log):
+        product = view_log.product
+        serializer = ProductResultSerializer(product)
+        return serializer.data
 
 
-class ProductFavoriteSerializer(serializers.ModelSerializer):
+# 상품 찜할 때 모델 저장 사용
+class UserProductFavoriteLogSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    product_id = serializers.SerializerMethodField()
-    shopping_mall = serializers.SerializerMethodField()
-    bag_url = serializers.SerializerMethodField()
-    price = serializers.SerializerMethodField()
 
     class Meta:
         model = UserProductFavoriteLogs
-        fields = '__all__'
+        fields = ['user', 'product']
 
 
+# 찜한 상품 목록 보여줄 때 사용
+# DEPRECATED
 class ProductFavoriteLogSerializer(serializers.ModelSerializer):
-    colors = serializers.SerializerMethodField()
-    image_url = serializers.SerializerMethodField()
-    favorite = serializers.SerializerMethodField()
+    product_detail = serializers.SerializerMethodField()
 
     class Meta:
         model = UserProductFavoriteLogs
-        fields = ('id', 'product_id', 'favorite', 'created_at', 'product_name',
-                  'bag_url', 'price', 'colors', 'image_url')
+        fields = ['product_detail']
 
-    def get_favorite(self, instance):
-        if instance.is_hidden:
-            return False
-        return True
-
-    def get_colors(self, instance):
-        product_id = instance.product_id
-        product = CrawlerProduct.objects.filter(pk=product_id).last()
-        color_list = []
-        for color_tab in product.color_tabs.all():
-            # 실제 판매중인 상품 색상명
-            color_list.append(color_tab.colors)
-        return color_list
-
-    def get_image_url(self, instance):
-        product_id = instance.product_id
-        product = CrawlerProduct.objects.filter(pk=product_id).last()
-        image = product.bag_images.all().last()
-        if not image:
-            return None
-        url = image.bag_image.url
-        # TODO : Why bag_image.url isn't url?
-        main_url = 'https://monde-web-crawler.s3.amazonaws.com/'
-        added_url = main_url + url
-        return added_url
+    def get_product_detail(self, favorite_log):
+        product = favorite_log.product
+        serializer = ProductResultSerializer(product)
+        return serializer.data

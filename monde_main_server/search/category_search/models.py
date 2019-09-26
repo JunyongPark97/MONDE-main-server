@@ -9,7 +9,6 @@ class CategorySearchRequest(models.Model):
     """
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='category_search_requests', on_delete=models.CASCADE)
     category_search_version = models.IntegerField()
-    # categories = models.OneToOneField(Category, related_name="category_search_request", on_delete=models.CASCADE)
     categories = jsonfield.JSONField(help_text="유저가 검색시 사용했던 카테고리 정보를 json형태로 저장합니다.")
     code = models.IntegerField(default=-1)
     created_at = models.DateTimeField(auto_now_add=True)
