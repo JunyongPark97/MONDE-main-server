@@ -1,10 +1,12 @@
-from tools.pagination import CursorPagination
+from tools.pagination import MondeCursorPagination
 
 
-class NoticePagination(CursorPagination):
+class NoticePagination(MondeCursorPagination):
     page_size = 15
     ordering = ('-important', '-created_at')
 
-class EventNoticePagination(CursorPagination):
+
+class EventNoticePagination(MondeCursorPagination):
     page_size = 15
-    ordering = ('-created_at')
+    ordering = ('-created_at', )
+

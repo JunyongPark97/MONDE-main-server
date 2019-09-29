@@ -1,4 +1,6 @@
+from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
+# from djrichtextfield.models import RichTextField
 from django.db import models
 from notices.tools import GiveRandomFileName
 

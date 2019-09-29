@@ -15,6 +15,10 @@ pymysql = "*"
 django-ckeditor = "*"
 django-rest-knox = "*"
 django-filter = "*"
+django-cors-headers = "*"
+django-storages = "*"
+boto3 = "*"
+django-ajax-selects = "*"
 
 [requires]
 python_version = "3.7"

@@ -10,9 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os
+import os, sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from os.path import abspath, basename, dirname, join, normpath
+
+from corsheaders.defaults import default_headers
+
 from monde_main_server.loader import load_credential
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,9 +29,25 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '^)jhyu%cp7u5#wi=^33fnk=)6e*0cvz)4#rwyv+7gpemnmt&ln'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
+
+########## PATH CONFIGURATION
+# Absolute filesystem path to the Django project directory:
+DJANGO_ROOT = dirname(dirname(abspath(__file__)))
+
+# Absolute filesystem path to the top-level project folder:
+SITE_ROOT = dirname(DJANGO_ROOT)
+
+# Site name:
+SITE_NAME = basename(DJANGO_ROOT)
+
+# Add our project to our pythonpath, this way we don't need to type our project
+# name in our dotted import paths:
+sys.path.append(DJANGO_ROOT)
+########## END PATH CONFIGURATION
+
 
 # Application definition
 
@@ -47,11 +67,16 @@ THIRD_PARTY_APPS = (
     'allauth',
     'allauth.account',
     'rest_auth.registration',
-
     'allauth.socialaccount',
     # 'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
     'knox',
+    'storages',
+    'ajax_select',
+    'ckeditor',
+    'ckeditor_uploader',
+
+    'djrichtextfield'
 )
 
 LOCAL_APPS = (
@@ -163,11 +188,6 @@ USE_L10N = True
 USE_TZ = False
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
-STATIC_URL = '/static/'
-
 DATABASE_ROUTERS = [
     'monde_main_server.routers.MondeRouter'
 ]
@@ -221,3 +241,82 @@ ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 SITE_ID = 2
+
+
+########## CKEDITOR CONFIGURATION
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
+
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline', 'Source', '-', 'Image'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Link', 'Unlink'],
+            ['RemoveFormat', 'Source']
+        ]
+    }
+}
+########## END CKEDITOR CONFIGURATION
+
+
+########## STATIC & MEDIA SETTINGS
+if DEBUG:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage' # Local, 즉 DEBUG=True 일 경우 pipeline 사용
+
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+else:
+    # AWS Setting
+    AWS_REGION = 'ap-northeast-2'
+    AWS_STORAGE_BUCKET_NAME = 'monde-server-storages'
+    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_HOST = 's3.%s.amazonaws.com' % AWS_REGION
+    AWS_ACCESS_KEY_ID = load_credential('AWS_ACCESS_KEY_ID',"")
+    AWS_SECRET_ACCESS_KEY = load_credential('AWS_SECRET_ACCESS_KEY',"")
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+    AWS_S3_SECURE_URLS = True  # https
+
+    # Static Setting
+    STATICFILES_LOCATION = 'static'
+    STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
+    STATICFILES_STORAGE = 'monde_main_server.storages.StaticStorage'
+
+    # Media Setting
+    MEDIAFIELS_LOCATION = 'media'
+    MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFIELS_LOCATION)
+    MEDIAFILES_LOCATION = 'media'
+    DEFAULT_FILE_STORAGE = 'monde_main_server.storages.MediaStorage'
+
+
+# See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
+
+# See: http://django-compressor.readthedocs.io/en/latest/
+# COMPRESS_ENABLED = False
+# COMPRESS_URL = STATIC_URL
+########## END STATIC % MEDIA CONFIGURATION
+
+
+########## CORS SETTINGS
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_HEADERS = default_headers + (
+    'Cursor-Prev',
+    'Cursor-Next',
+)
+CORS_EXPOSE_HEADERS = [
+    'Cursor-Prev',
+    'Cursor-Next',
+]
+########## END CORS SETTINGS
