@@ -1,54 +1,20 @@
 # -*- encoding: utf-8 -*-
 from django.contrib import admin
-from tools.manage.sites import staff_panel
-from tools.manage.tools import superadmin_register
-from notices.models import (
-    Notice,
-    HiddenNotice, PopupNotice, EventNotice,
-    TargetPopupNotice, TargetPopupNoticeReceiver)
 
-# superadmin
-superadmin_register(Notice, list_display=['id', 'title',])
-superadmin_register(HiddenNotice, list_display=['id', 'title',])
-superadmin_register(PopupNotice, list_display=['id', 'title',])
-superadmin_register(EventNotice, list_display=['id', 'title',])
+from categories.models import Shape, BagIllustration, Color, Handle, Deco, Charm, Pattern
 
+admin.site.register(Shape)
+admin.site.register(Color)
+admin.site.register(Handle)
+admin.site.register(Deco)
+admin.site.register(Charm)
+admin.site.register(Pattern)
+admin.site.register(BagIllustration)
 
-# staff
-staff_panel.register(Notice)
-
-
-class HiddenNoticeAdmin(admin.ModelAdmin):
-    list_display = ['key', 'title']
-
-class BasePopupNoticeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'active', ]
-
-class EventNoticeAdmin(admin.ModelAdmin):
-    list_display = ['title', 'due_date', ]
-
-class IndexNewsAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'link', 'created_at', ]
-
-# class TargetPopupNoticeAdmin(admin.ModelAdmin):
-#     list_display = ['id', 'key', 'title']
-
-class TargetPopupNoticeReceiverAdmin(admin.ModelAdmin):
-    list_display = ['id', '_notice_id', 'user', 'read_at']
-    raw_id_fields = ['user', 'notice']
-
-    def _notice_id(self, obj):
-        return obj.notice_id
-
-# staff_panel.register(HiddenNotice, HiddenNoticeAdmin)
-# staff_panel.register(PopupNotice, BasePopupNoticeAdmin)
-# staff_panel.register(EventNotice, EventNoticeAdmin)
-# staff_panel.register(TargetPopupNotice, TargetPopupNoticeAdmin)
-# staff_panel.register(TargetPopupNoticeReceiver, TargetPopupNoticeReceiverAdmin)
-# admin.site.register(Product, ProductAdmin)
-# admin.site.register(ProductImage)
-# admin.site.register(ProductCategories)
-# admin.site.register(ColorTab)
-admin.site.register(EventNotice, EventNoticeAdmin)
-admin.site.register(Notice)
-admin.site.register(HiddenNotice)
+# class ShapeInline(admin.TabularInline):
+#     model = BagIllustration
+#
+# @admin.register(Shape)
+# class QuestionAdmin(admin.ModelAdmin):
+#     inlines = [
+#         ShapeInline,]

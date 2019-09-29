@@ -1,7 +1,4 @@
-import json
 import math
-
-from products.models import CategoryCategories
 
 
 def is_include(value, data):
@@ -90,8 +87,3 @@ def get_searched_data(queryset, user_input):
     sorted_category_result_list = sorted(result_dict, key=lambda kv: result_dict[kv], reverse=True)
     sorted_product = list(map(lambda x: x.product, sorted_category_result_list))
     return sorted_product
-
-
-
-
-
