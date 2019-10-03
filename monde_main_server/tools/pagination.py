@@ -19,7 +19,7 @@ def _reverse_ordering(ordering_tuple):
 
 
 class ProductListPagination(PageNumberPagination):
-    page_size = 3  # 한페이지에 담기는 개수
+    page_size = 7  # 한페이지에 담기는 개수
 
     def get_paginated_response(self, data):
         return Response(OrderedDict([
