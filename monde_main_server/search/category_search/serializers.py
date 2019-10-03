@@ -50,12 +50,10 @@ class ProductResultSerializer(serializers.ModelSerializer):
         product_image = product.product_image
         if not product_image:
             return None
-        url = product_image.image.url
-        url_a= url.split('/')[-2]
-        url_b= url.split('/')[-1]
+        url_tail = product_image.image.name
         # TODO : Why bag_image.url isn't url?
         main_url = 'https://monde-web-crawler.s3.amazonaws.com/'
-        added_url = main_url + url_a + '/' + url_b
+        added_url = main_url + url_tail
         return added_url
 
     def get_color_names(self, instance):
