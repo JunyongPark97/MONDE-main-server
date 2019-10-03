@@ -5,11 +5,11 @@ from rest_framework import viewsets, mixins, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from notices.models import Notice, HiddenNotice, PopupNotice, EventNotice, TargetPopupNotice
+from notices.models import Notice, HiddenNotice, PopupNotice, EventNotice, TargetPopupNotice, FAQ
 from notices.pagination import NoticePagination, EventNoticePagination
 from notices.serializers import (
     NoticeSerializer, HiddenNoticeSerializer, PopupNoticeSerializer,
-    EventNoticeSerializer, TargetPopupNoticeSerializer)
+    EventNoticeSerializer, TargetPopupNoticeSerializer, FAQSerializer)
 
 
 class NoticeViewSet(viewsets.ReadOnlyModelViewSet):
@@ -34,6 +34,24 @@ class NoticeViewSet(viewsets.ReadOnlyModelViewSet):
         공지사항 상세 API입니다.
         """
         return super(NoticeViewSet, self).retrieve(request, *args, **kwargs)
+
+
+class FAQViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = FAQ.objects.all()
+    serializer_class = FAQSerializer
+
+    def list(self, request, *args, **kwargs):
+        print('---')
+        """
+        FAQ list API입니다.
+        """
+        return super(FAQViewSet, self).list(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        """
+        FAQ 상세 API입니다.
+        """
+        return super(FAQViewSet, self).retrieve(request, *args, **kwargs)
 
 
 class HiddenNoticeViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):

@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
 
-from notices.models import (Notice, PopupNotice, EventNotice, TargetPopupNotice)
+from notices.models import (Notice, PopupNotice, EventNotice, TargetPopupNotice, FAQ)
 
 User = get_user_model()
 
@@ -22,6 +22,14 @@ class NoticeSerializer(serializers.ModelSerializer):
         if request.user is not None and hasattr(request.user, 'auth_token'):
             token = request.user.auth_token.pk
         return obj.content.replace('##USER_TOKEN##', token)
+
+
+class FAQSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FAQ
+        fields = ('id', 'title', 'content', 'created_at', 'updated_at')
+        read_only_field = ('title', 'content', 'created_at', 'updated_at')
 
 
 class HiddenNoticeSerializer(serializers.ModelSerializer):
@@ -47,7 +55,6 @@ class PopupNoticeSerializer(serializers.ModelSerializer):
         if request.user is not None and hasattr(request.user, 'auth_token'):
             token = request.user.auth_token.pk
         return obj.content.replace('##USER_TOKEN##', token)
-
 
 
 class EventNoticeSerializer(serializers.ModelSerializer):

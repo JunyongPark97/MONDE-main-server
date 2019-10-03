@@ -24,6 +24,19 @@ class Notice(models.Model):
         return self.title
 
 
+class FAQ(models.Model):
+    """
+    자주 묻는 질문/답변입니다.
+    """
+    title = models.CharField(max_length=40)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        return self.title
+
+
 class HiddenNotice(models.Model):
     """
     공지사항 리스트에 뜨지는 않지만 특정 행동시 같은 ui로 보여주는 팝업 등을 정의해놓은 모델입니다.
