@@ -8,9 +8,9 @@ from monde.models import Product
 from django.db.models import F
 
 from search.category_search.serializers import ProductResultSerializer
+from tools.pagination import ProductListPagination
 from user_activities.models import UserProductViewLogs, UserProductFavoriteLogs
-from user_activities.serializers import ProductRecentViewSerializer, \
-    ProductFavoriteLogSerializer, UserProductFavoriteLogSerializer
+from user_activities.serializers import UserProductFavoriteLogSerializer
 
 
 class RecentViewLogViewSet(viewsets.GenericViewSet,
@@ -19,6 +19,7 @@ class RecentViewLogViewSet(viewsets.GenericViewSet,
     queryset = Product.objects.all().prefetch_related('user_view_logs')
     permission_classes = [IsAuthenticated, ]
     serializer_class = ProductResultSerializer
+    pagination_class = ProductListPagination
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset().filter(user_view_logs__user=request.user,
@@ -27,8 +28,13 @@ class RecentViewLogViewSet(viewsets.GenericViewSet,
         # #queryset 이 UserProductViewLogs일 때 : 이때는 애초에 queryset 선언시 order_by()[:10]처럼 선언할 수 있는 장점.
         # #하지만 Product queryset 을 만들려면 작업이 한번 더 필요
         # queryset = self.get_queryset().filter(user=request.user, is_hidden=False).order_by('-created_at')
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+
+        paginator = self.pagination_class()
+        paginated_queryset = paginator.paginate_queryset(queryset, request)
+        serializer = self.get_serializer(paginated_queryset, many=True)
+        paginated_response = paginator.get_paginated_response(serializer.data)
+
+        return paginated_response
 
     def destroy(self, request, *args, **kwargs):
         pk = self.kwargs['pk']
@@ -49,13 +55,18 @@ class FavoriteLogViewSet(viewsets.ReadOnlyModelViewSet, mixins.ListModelMixin):
     queryset = Product.objects.all().prefetch_related('user_favorite_logs')
     permission_classes = [IsAuthenticated, ]
     serializer_class = ProductResultSerializer
+    pagination_class = ProductListPagination
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset().filter(user_favorite_logs__user=request.user,
                                               user_favorite_logs__is_hidden=False)\
                                               .order_by('-user_favorite_logs__updated_at')
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        paginator = self.pagination_class()
+        paginated_queryset = paginator.paginate_queryset(queryset, request)
+        serializer = self.get_serializer(paginated_queryset, many=True)
+        paginated_response = paginator.get_paginated_response(serializer.data)
+
+        return paginated_response
 
 
 class ProductFavoriteAPIView(GenericAPIView, mixins.DestroyModelMixin,):
@@ -88,7 +99,6 @@ class ProductFavoriteAPIView(GenericAPIView, mixins.DestroyModelMixin,):
             return Response(status=status.HTTP_206_PARTIAL_CONTENT)
 
         serializer.save()
-
         return Response(status=status.HTTP_201_CREATED)
 
     def delete(self, request, *args, **kwargs):
