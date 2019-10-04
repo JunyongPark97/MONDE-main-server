@@ -1,4 +1,5 @@
 from rest_framework import viewsets, status, mixins
+from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -14,8 +15,7 @@ from user_activities.serializers import UserProductFavoriteLogSerializer
 
 
 class RecentViewLogViewSet(viewsets.GenericViewSet,
-                           mixins.ListModelMixin,
-                           mixins.DestroyModelMixin):
+                           mixins.ListModelMixin):
     queryset = Product.objects.all().prefetch_related('user_view_logs')
     permission_classes = [IsAuthenticated, ]
     serializer_class = ProductResultSerializer
@@ -36,17 +36,16 @@ class RecentViewLogViewSet(viewsets.GenericViewSet,
 
         return paginated_response
 
-    def destroy(self, request, *args, **kwargs):
-        pk = self.kwargs['pk']
-
-        # get Product
-        product = self.get_queryset().filter(pk=pk).last()
-        if not product:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        view_log = UserProductViewLogs.objects.filter(product=product, user=request.user).last()
-        view_log.is_hidden = True
-        view_log.save()
+    @action(detail=False, methods=['delete'])
+    def delete(self, request, *args, **kwargs):
+        """
+        여러개를 한번에 삭제하기 위해 @action으로 사용.
+        """
+        selected_ids = request.data['ids']
+        view_log = UserProductViewLogs.objects.filter(product_id__in=selected_ids, user=request.user)
+        for log in view_log:
+            log.is_hidden = True
+            log.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
