@@ -21,11 +21,24 @@ def _reverse_ordering(ordering_tuple):
 class ProductListPagination(PageNumberPagination):
     page_size = 7  # 한페이지에 담기는 개수
 
+    def get_next_page_num(self):
+        if not self.page.has_next():
+            return None
+        page_number = self.page.next_page_number()
+        return page_number
+
+    def get_prev_page_num(self):
+        if not self.page.has_previous():
+            return None
+        page_number = self.page.previous_page_number()
+        return page_number
+
     def get_paginated_response(self, data):
+
         return Response(OrderedDict([
              ('current', self.page.number),
-             ('next', self.get_next_link()),
-             ('previous', self.get_previous_link()),
+             ('next', self.get_next_page_num()),
+             ('previous', self.get_prev_page_num()),
              ('products', data)
          ]))
 
