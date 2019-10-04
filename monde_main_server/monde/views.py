@@ -1,7 +1,8 @@
 from django.db.models import F
+from knox.auth import TokenAuthentication
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, CreateAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from logs.models import ProductViewCount
 from monde.models import Product, ProductCategories
@@ -14,7 +15,7 @@ from user_activities.serializers import UserProductVisitLogSerializer
 
 class ProductVisitAPIView(CreateAPIView):
     queryset = UserProductViewLogs.objects.all()
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [TokenAuthentication, ]
     serializer_class = UserProductVisitLogSerializer
 
     def post(self, request, *args, **kwargs):
@@ -54,17 +55,15 @@ class ProductVisitAPIView(CreateAPIView):
 class TabListAPIViewV1(GenericAPIView):
     queryset = Product.objects.all().select_related('product_categories', 'favorite_count')
     serializer_class = ProductResultSerializer
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [AllowAny, ]
     pagination_class = ProductListPagination
 
     def get(self, request, *args, **kwargs):
         tab_no = self.kwargs['tab_no']
         categories_queryset = ProductCategories.objects.all()
         tab_product_ids = get_tab_ids(tab_no, categories_queryset)
-
         tab_product = self.get_queryset().filter(id__in=tab_product_ids)
         filter_param = int(request.query_params.get('filter', 1))  # filter 있으면 filter, 없으면 1
-
         if filter_param == 1:
             # 인기순
             tab_queryset = tab_product.order_by('favorite_count__favorite_count')

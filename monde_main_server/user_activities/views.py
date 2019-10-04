@@ -36,7 +36,7 @@ class RecentViewLogViewSet(viewsets.GenericViewSet,
 
         return paginated_response
 
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['delete'])
     def delete(self, request, *args, **kwargs):
         """
         여러개를 한번에 삭제하기 위해 @action으로 사용.

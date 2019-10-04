@@ -39,6 +39,8 @@ class ProductResultSerializer(serializers.ModelSerializer):
 
     def get_is_favorite(self, instance):
         user = self.context['request'].user
+        if user.is_anonymous:
+            return None
         favorite_log = instance.user_favorite_logs.filter(user=user).last()
         if not favorite_log:
             return None
