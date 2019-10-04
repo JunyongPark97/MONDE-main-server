@@ -44,6 +44,10 @@ urlpatterns = [
     # recent view, favorite
     url(r'^api/v1/', include('user_activities.urls')),
     # visit
-    url(r'^api/v1/', include('monde.urls')),]
+    url(r'^api/v1/', include('monde.urls')),
+
+    # category search select list
+    url(r'^api/v1/select-list/', include('categories.urls'))
+]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -3,16 +3,6 @@ from tools.manage.sites import staff_panel
 from tools.manage.tools import superadmin_register
 from notices.models import Notice,  HiddenNotice, EventNotice, FAQ
 
-# # superadmin
-# superadmin_register(Notice, list_display=['id', 'title',])
-# superadmin_register(HiddenNotice, list_display=['id', 'title',])
-# superadmin_register(PopupNotice, list_display=['id', 'title',])
-# superadmin_register(EventNotice, list_display=['id', 'title',])
-#
-#
-# # staff
-# staff_panel.register(Notice)
-
 
 class HiddenNoticeAdmin(admin.ModelAdmin):
     list_display = ['key', 'title']

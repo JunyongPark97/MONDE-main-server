@@ -15,7 +15,7 @@ from user_activities.serializers import UserProductVisitLogSerializer
 
 class ProductVisitAPIView(CreateAPIView):
     queryset = UserProductViewLogs.objects.all()
-    permission_classes = [TokenAuthentication, ]
+    permission_classes = [IsAuthenticated, ]
     serializer_class = UserProductVisitLogSerializer
 
     def post(self, request, *args, **kwargs):
