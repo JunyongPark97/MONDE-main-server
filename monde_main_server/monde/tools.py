@@ -1,6 +1,5 @@
 
-def get_tab_ids(tab_no, category_qs):
-    categories_queryset = category_qs
+def get_tab_ids(tab_no, categories_queryset):
 
     if tab_no == 1:
         # 버킷백
@@ -33,6 +32,10 @@ def get_tab_ids(tab_no, category_qs):
         tote_ids = get_tote_ids(categories_queryset)
         # tote_products = queryset.filter(pk__in=tote_ids)
         return tote_ids
+
+    else:
+        return other_ids(categories_queryset)
+
 
 
 def get_bucket_ids(queryset):
@@ -85,5 +88,12 @@ def get_tote_ids(queryset):
         if 'tote' in handle_data and handle_data['tote'] > 0.4 or \
                 'tote_shoulder' in handle_data and handle_data['tote_shoulder'] > 0.4:
             ids.append(instance.product.id)
+    return ids
+
+
+def other_ids(queryset):
+    ids = []
+    for instance in queryset:
+        ids.append(instance.product.id)
     return ids
 
