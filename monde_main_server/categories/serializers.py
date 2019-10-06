@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from categories.models import Shape, Color, Handle, Charm, Deco, Pattern
+from categories.models import Shape, Color, Handle, Charm, Deco, Pattern, BagIllustration
 
 
 class ShapeSelectListSerializer(serializers.ModelSerializer):
@@ -49,3 +49,11 @@ class PatternSelectListSerializer(serializers.ModelSerializer):
         model = Pattern
         fields = ['id', 'image', 'name']
         read_only_fields = ['image', 'name']
+
+
+class BagIllustCombineSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BagIllustration
+        fields = ['id', 'image']
+        read_only_fields = ['image']

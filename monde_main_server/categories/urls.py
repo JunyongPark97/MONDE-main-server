@@ -1,7 +1,7 @@
 from django.urls import path
 
 from categories.views import ShapeSelectListAPIView, ColorSelectListAPIView, HandleSelectListAPIView, \
-    CharmSelectListAPIView, DecoSelectListAPIView, PatternSelectListAPIView
+    CharmSelectListAPIView, DecoSelectListAPIView, PatternSelectListAPIView, BagIllustCombineAPIView
 
 urlpatterns = [
     path('shape/', ShapeSelectListAPIView.as_view()),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('charm/', CharmSelectListAPIView.as_view()),
     path('deco/', DecoSelectListAPIView.as_view()),
     path('pattern/', PatternSelectListAPIView.as_view()),
+    path('result/',BagIllustCombineAPIView.as_view())
 ]

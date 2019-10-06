@@ -47,7 +47,7 @@ urlpatterns = [
     url(r'^api/v1/', include('monde.urls')),
 
     # category search select list
-    url(r'^api/v1/select-list/', include('categories.urls'))
+    url(r'^api/v1/category/', include('categories.urls'))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
