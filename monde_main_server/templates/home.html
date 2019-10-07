@@ -4,45 +4,46 @@
     <meta charset="UTF-8">
     <title>HOME</title>
 </head>
-<body>
-{% load socialaccount %}
-    {% if user.is_authenticated %}
-    <span>{{ user.username }}님이 로그인중입니다.</span>
-
-    {% for account in user.socialaccount_set.all %}
-
-     {% comment %} show avatar from url {% endcomment %}
-     <h2 style="text-transform:capitalize;">{{ account.provider }} account data</h2>
-
-     <p><img width="50" height="50" src="{{ account.get_avatar_url }}"/></p>
-
-     <p>UID: <a href="{{ account.extra_data.link }}">{{ account.uid }}</a></p>
-
-     <p>Username: {{ account.extra_data.username }}</p>
-      <p>First Name: {{ account.extra_data.first_name }}</p>
-      <p>Last Name: {{ account.extra_data.last_name }}</p>
-
-      <p>Dashboard Link:
-      <a href="{{ account.extra_data.link }}">{{ account.extra_data.link }}</a></p>
-      {% empty %}
-      <p>you haven't any social account please</p>
-    {% endfor %}
-    <h2><a href="/accounts/logout">로그아웃</a></h2>
-    <a href="{% provider_login_url "facebook" method="oauth2" %}" class="btn btn-block btn-social btn-facebook" style="background-color:#3b5998;text-align:center">
-  <span class="fa fa-facebook"></span>
-               Sign in with Facebook
- </a>
-
-
-    {% else %}
-    <h2><a href="/accounts/login">로그인</a></h2>
-  <a href="{% provider_login_url "facebook" method="oauth2" %}" class="btn btn-block btn-social btn-facebook" style="background-color:#3b5998;text-align:center">
-  <span class="fa fa-facebook"></span>
-               Sign in with Facebook
- </a>
+{#<body>#}
+{#{% load socialaccount %}#}
+{#    {% if user.is_authenticated %}#}
+{#    <span>{{ user.username }}님이 로그인중입니다.</span>#}
+{##}
+{#    {% for account in user.socialaccount_set.all %}#}
+{##}
+{#     {% comment %} show avatar from url {% endcomment %}#}
+{#     <h2 style="text-transform:capitalize;">{{ account.provider }} account data</h2>#}
+{##}
+{#     <p><img width="50" height="50" src="{{ account.get_avatar_url }}"/></p>#}
+{##}
+{#     <p>UID: <a href="{{ account.extra_data.link }}">{{ account.uid }}</a></p>#}
+{##}
+{#     <p>Username: {{ account.extra_data.username }}</p>#}
+{#      <p>First Name: {{ account.extra_data.first_name }}</p>#}
+{#      <p>Last Name: {{ account.extra_data.last_name }}</p>#}
+{##}
+{#      <p>Dashboard Link:#}
+{#      <a href="{{ account.extra_data.link }}">{{ account.extra_data.link }}</a></p>#}
+{#      {% empty %}#}
+{#      <p>you haven't any social account please</p>#}
+{#    {% endfor %}#}
+{#    <h2><a href="/accounts/logout">로그아웃</a></h2>#}
+{#    <a href="{% provider_login_url "facebook" method="oauth2" %}" class="btn btn-block btn-social btn-facebook" style="background-color:#3b5998;text-align:center">#}
+{#  <span class="fa fa-facebook"></span>#}
+{#               Sign in with Facebook#}
+{# </a>#}
+{##}
+{##}
+{#    {% else %}#}
+{#    <h2><a href="/accounts/login">로그인</a></h2>#}
+{#  <a href="{% provider_login_url "facebook" method="oauth2" %}" class="btn btn-block btn-social btn-facebook" style="background-color:#3b5998;text-align:center">#}
+{#  <span class="fa fa-facebook"></span>#}
+{#               Sign in with Facebook#}
+{# </a>#}
 {#    <h2><a href="{% url 'fb_login' %}">페이스북 로그인</a></h2>#}
-    <h2><a href="/accounts/signup">회원가입</a></h2>
-    {% endif %}
+{#    <h2><a href="/accounts/signup">회원가입</a></h2>#}
+{#    {% endif %}#}
+<p>hello</p>
 </body>
 
 

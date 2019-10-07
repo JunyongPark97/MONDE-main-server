@@ -19,6 +19,8 @@ django-cors-headers = "*"
 django-storages = "*"
 boto3 = "*"
 django-ajax-selects = "*"
+environment = "*"
+djangorestframework-jwt = "*"
 
 [requires]
 python_version = "3.7"
