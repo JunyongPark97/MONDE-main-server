@@ -51,13 +51,30 @@ class BagIllustCombineAPIView(GenericAPIView):
     serializer_class = BagIllustCombineSerializer
 
     def post(self, request, *args, **kwargs):
-        categories = request.data['categories']
         queryset = self.get_queryset()
-        for key, value in categories.items():
+
+        # categories update by input
+        temp = self._whole_categories()
+        categories = request.data['categories']
+        temp.update(categories)
+
+        for key, value in temp.items():
             queryset = get_filtered_queryset(queryset, key, value)
+
         bag_illust = queryset.last()
         if not bag_illust:
             return Response(status=status.HTTP_204_NO_CONTENT)
+
         serializer = self.get_serializer(bag_illust)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def _whole_categories(self):
+        categories = {}
+        categories['shape'] = None
+        categories['color'] = None
+        categories['handle'] = None
+        categories['charm'] = None
+        categories['deco'] = None
+        categories['pattern'] = None
+        return categories
