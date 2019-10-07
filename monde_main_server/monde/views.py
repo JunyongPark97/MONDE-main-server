@@ -67,13 +67,13 @@ class TabListAPIViewV1(GenericAPIView):
         if filter_param == 1:
             # 인기순
             tab_queryset = tab_product.order_by('favorite_count__favorite_count')
+        # elif filter_param == 2:
+        #     # 최신순 DEPRECATED
+        #     tab_queryset = tab_product.order_by('updated_at')
         elif filter_param == 2:
-            # 최신순?
-            tab_queryset = tab_product.order_by('updated_at')
-        elif filter_param == 3:
             # 저가순
             tab_queryset = tab_product.order_by('price')
-        elif filter_param == 4:
+        elif filter_param == 3:
             # 고가순
             tab_queryset = tab_product.order_by('-price')
         else:
