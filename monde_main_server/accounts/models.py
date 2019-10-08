@@ -120,6 +120,7 @@ class CommonProfile(models.Model):
     gender = models.IntegerField(choices=GENDER, help_text="1=여자, 2=남자",
                                  blank=True, null=True)
     birthday = models.DateField(blank=True, null=True)
+    age = models.PositiveIntegerField(blank=True, null=True, help_text="나이대")
 
     def __unicode__(self):
         return self.user.__unicode__()
