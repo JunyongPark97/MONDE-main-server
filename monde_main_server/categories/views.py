@@ -69,7 +69,8 @@ class BagIllustCombineAPIView(GenericAPIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def _whole_categories(self):
+    @staticmethod
+    def _whole_categories():
         categories = {}
         categories['shape'] = None
         categories['color'] = None

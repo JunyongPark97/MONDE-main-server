@@ -9,7 +9,7 @@ from monde.models import Product
 from django.db.models import F
 
 from search.category_search.serializers import ProductResultSerializer
-from tools.pagination import ProductListPagination
+from tools.pagination import ProductListPagination, FavoriteLogPagination
 from user_activities.models import UserProductViewLogs, UserProductFavoriteLogs
 from user_activities.serializers import UserProductFavoriteLogSerializer
 
@@ -54,7 +54,7 @@ class FavoriteLogViewSet(viewsets.ReadOnlyModelViewSet, mixins.ListModelMixin):
     queryset = Product.objects.all().prefetch_related('user_favorite_logs')
     permission_classes = [IsAuthenticated, ]
     serializer_class = ProductResultSerializer
-    pagination_class = ProductListPagination
+    pagination_class = FavoriteLogPagination
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset().filter(user_favorite_logs__user=request.user,

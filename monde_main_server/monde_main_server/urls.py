@@ -1,6 +1,8 @@
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
+
 from accounts.social import FacebookLogin, GoogleLogin
 from accounts.views import index, login, LoginView
 from django.conf import settings
@@ -13,6 +15,11 @@ urlpatterns = [
 
     # all auth
     url(r'^accounts/',include('allauth.urls')),
+
+    # jwt url
+    url(r'^api/token/',obtain_jwt_token),
+    url(r'^api/token/verify/',verify_jwt_token),
+    url(r'^api/refresh/',refresh_jwt_token),
 
     # jwt login
     url(r'^api/v1/rest-auth/login/$', LoginView.as_view(), name='rest_auth_login'),

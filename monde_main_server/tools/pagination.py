@@ -43,6 +43,10 @@ class ProductListPagination(PageNumberPagination):
          ]))
 
 
+class FavoriteLogPagination(ProductListPagination):
+    page_size = 100
+
+
 class MondeCursorPagination(CursorPagination):
     # page_size = ...
     # ordering = ...

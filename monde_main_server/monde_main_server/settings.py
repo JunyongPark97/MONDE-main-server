@@ -270,6 +270,7 @@ REST_AUTH_SERIALIZERS = {
 JWT_AUTH = {
     'JWT_SECRET_KEY': SECRET_KEY,
     'JWT_ALGORITHM': 'HS256', # JWT 암호화에 사용하는 알고리즘 저장
+    'JWT_VERIFY': True,
     'JWT_ALLOW_REFRESH': True, # JWT 토큰을 갱신할 수 있게 할지 여부 결정
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7), # JWT 토큰의 유효기간
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28), # JWT 토큰 갱신 유효기간
