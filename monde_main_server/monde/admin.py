@@ -1,22 +1,37 @@
 from django.contrib import admin
-
-# Register your models here.
 from django.utils.safestring import mark_safe
-
-from monde.models import Product, ProductImage, ProductCategories, ColorTab, Colors
+from django.utils.html import format_html
+from monde.models import Product
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['shopping_mall', 'get_product_image_url', 'price', 'product_name']
+    list_display = ['shopping_mall', 'get_product_image', 'price', 'name', 'get_color_names', 'shop_url']
 
-    def get_product_image_url(self, bag):
-        image = bag.image_url
-        return mark_safe('<img src="%s" width=200px "/>' % image)
+    @staticmethod
+    def get_product_image(product):
+        product_image = product.product_image
+        if not product_image:
+            return None
+        url_tail = product_image.image.name
+        main_url = 'https://monde-web-crawler.s3.amazonaws.com/'
+        added_url = main_url + url_tail
+        return mark_safe('<img src="%s" width=200px "/>' % added_url)
+
+    @staticmethod
+    def get_color_names(product):
+        color_names = []
+        for color_tab in product.color_tabs.all():
+            # 실제 판매중인 상품 색상명
+            color_names.append(color_tab.color_tab_name)
+        return color_names
+
+    @staticmethod
+    def shop_url(obj):
+        return format_html("<a href='{url}'>{url}</a>", url=obj.product_url)
+
+    shop_url.short_description = "Firm URL"
 
 
-# admin.site.register(Product, ProductAdmin)
-# admin.site.register(ProductImage)
-# admin.site.register(ProductCategories)
-# admin.site.register(ColorTab)
-# admin.site.register(Colors)
+admin.site.register(Product, ProductAdmin)
+
 
