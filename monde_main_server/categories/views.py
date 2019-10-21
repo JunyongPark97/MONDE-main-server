@@ -1,18 +1,60 @@
-from rest_framework import status
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView, GenericAPIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from categories.models import Shape, Color, Handle, Charm, Deco, Pattern, BagIllustration
+from categories.models import Shape, Color, Type, CharmDeco, Pattern, BagIllustration, TypeTag
 from categories.serializers import ShapeSelectListSerializer, ColorSelectListSerializer, HandleSelectListSerializer, \
-    CharmSelectListSerializer, DecoSelectListSerializer, PatternSelectListSerializer, BagIllustCombineSerializer
+    CharmDecoSelectListSerializer, PatternSelectListSerializer, BagIllustCombineSerializer
 from categories.tools import get_filtered_queryset
 
 
-class ShapeSelectListAPIView(ListAPIView):
-    serializer_class = ShapeSelectListSerializer
+class TypeSelectListAPIView(ListAPIView):
+    """
+    처음 검색 페이지 클릭시 호출되는 API입니다.
+    Type(Handle) 선택시 사용하는 일러스트와 이름을 return합니다.
+    """
+    serializer_class = HandleSelectListSerializer
     permission_classes = [AllowAny, ]
-    queryset = Shape.objects.all()
+    queryset = Type.objects.all()
+
+
+class HandBagCategoriesViewSetV1(viewsets.GenericViewSet):
+    # queryset = TypeTag.objects.filter(is_handbag=True)
+    permission_classes = [AllowAny, ]
+    # serializer_class = ShapeSelectListSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'shape':
+            print('---')
+            return ShapeSelectListSerializer
+        elif self.action == 'charmdeco':
+            return CharmDecoSelectListSerializer
+        return super(HandBagCategoriesViewSetV1, self).get_serializer_class()
+
+    @action(detail=False, methods=['GET'])
+    def shape(self, request):
+        print('---')
+        queryset = Shape.objects.filter(type__is_handbag=True)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['GET'])
+    def charmdeco(self, request):
+        queryset = CharmDeco.objects.filter(type__is_handbag=True)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class BigShoulderCategoriesViewSet(viewsets.GenericViewSet):
+    pass
+
+
+# class ShapeSelectListAPIView(ListAPIView):
+#     serializer_class = ShapeSelectListSerializer
+#     permission_classes = [AllowAny, ]
+#     queryset = Shape.objects.all()
 
 
 class ColorSelectListAPIView(ListAPIView):
@@ -21,22 +63,16 @@ class ColorSelectListAPIView(ListAPIView):
     queryset = Color.objects.all()
 
 
-class HandleSelectListAPIView(ListAPIView):
-    serializer_class = HandleSelectListSerializer
-    permission_classes = [AllowAny, ]
-    queryset = Handle.objects.all()
+# class CharmDecoSelectListAPIView(ListAPIView):
+#     serializer_class = CharmDecoSelectListSerializer
+#     permission_classes = [AllowAny, ]
+#     queryset = CharmDeco.objects.all()
 
 
-class CharmSelectListAPIView(ListAPIView):
-    serializer_class = CharmSelectListSerializer
-    permission_classes = [AllowAny, ]
-    queryset = Charm.objects.all()
-
-
-class DecoSelectListAPIView(ListAPIView):
-    serializer_class = DecoSelectListSerializer
-    permission_classes = [AllowAny, ]
-    queryset = Deco.objects.all()
+# class DecoSelectListAPIView(ListAPIView):
+#     serializer_class = DecoSelectListSerializer
+#     permission_classes = [AllowAny, ]
+#     queryset = Deco.objects.all()
 
 
 class PatternSelectListAPIView(ListAPIView):
