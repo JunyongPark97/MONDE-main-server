@@ -53,9 +53,6 @@ class CharmDeco(models.Model):
 
 
 class Color(models.Model):
-    """
-    [DEPRECATED]
-    """
     image = models.ImageField(upload_to=category_upload_dir)
     name = models.CharField(max_length=100)
     active = models.BooleanField(default=False)

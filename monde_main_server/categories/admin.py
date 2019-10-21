@@ -11,7 +11,11 @@ class TypeTagInline(admin.ModelAdmin):
 
 
 class ShapeInline(admin.ModelAdmin):
-    list_display = ['id', 'name', 'description', 'active']
+    list_display = ['id', 'name', 'description', 'get_shape_tagname','active']
+
+    @staticmethod
+    def get_shape_tagname(shape):
+        return shape.type.description
 
 
 admin.site.register(Shape, ShapeInline)

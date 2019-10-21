@@ -89,31 +89,91 @@ class CrossBagCategoriesViewSet(viewsets.GenericViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ColorSelectListAPIView(ListAPIView):
-    serializer_class = ColorSelectListSerializer
+class BigShoulderCategoriesViewSet(viewsets.GenericViewSet):
     permission_classes = [AllowAny, ]
+
+    def get_serializer_class(self):
+        if self.action == 'shape':
+            return ShapeSelectListSerializer
+        elif self.action == 'charmdeco':
+            return CharmDecoSelectListSerializer
+        return super(BigShoulderCategoriesViewSet, self).get_serializer_class()
+
+    @action(detail=False, methods=['GET'])
+    def shape(self, request):
+        queryset = Shape.objects.filter(type__is_big_shoulder=True)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['GET'])
+    def charmdeco(self, request):
+        queryset = CharmDeco.objects.filter(type__is_big_shoulder=True)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ClutchBagCategoriesViewSet(viewsets.GenericViewSet):
+    permission_classes = [AllowAny, ]
+
+    def get_serializer_class(self):
+        if self.action == 'shape':
+            return ShapeSelectListSerializer
+        elif self.action == 'charmdeco':
+            return CharmDecoSelectListSerializer
+        return super(ClutchBagCategoriesViewSet, self).get_serializer_class()
+
+    @action(detail=False, methods=['GET'])
+    def shape(self, request):
+        queryset = Shape.objects.filter(type__is_clutch=True)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['GET'])
+    def charmdeco(self, request):
+        queryset = CharmDeco.objects.filter(type__is_clutch=True)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class BackPackCategoriesViewSet(viewsets.GenericViewSet):
+    permission_classes = [AllowAny, ]
+
+    def get_serializer_class(self):
+        if self.action == 'shape':
+            return ShapeSelectListSerializer
+        elif self.action == 'charmdeco':
+            return CharmDecoSelectListSerializer
+        return super(BackPackCategoriesViewSet, self).get_serializer_class()
+
+    @action(detail=False, methods=['GET'])
+    def shape(self, request):
+        queryset = Shape.objects.filter(type__is_backpack=True)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['GET'])
+    def charmdeco(self, request):
+        queryset = CharmDeco.objects.filter(type__is_backpack=True)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ColorSelectListAPIView(ListAPIView):
+    permission_classes = [AllowAny, ]
+    serializer_class = ColorSelectListSerializer
     queryset = Color.objects.all()
 
 
-# class CharmDecoSelectListAPIView(ListAPIView):
-#     serializer_class = CharmDecoSelectListSerializer
-#     permission_classes = [AllowAny, ]
-#     queryset = CharmDeco.objects.all()
-
-
-# class DecoSelectListAPIView(ListAPIView):
-#     serializer_class = DecoSelectListSerializer
-#     permission_classes = [AllowAny, ]
-#     queryset = Deco.objects.all()
-
-
 class PatternSelectListAPIView(ListAPIView):
-    serializer_class = PatternSelectListSerializer
     permission_classes = [AllowAny, ]
+    serializer_class = PatternSelectListSerializer
     queryset = Pattern.objects.all()
 
 
 class BagIllustCombineAPIView(GenericAPIView):
+    """
+    [DEPRECATED]
+    """
     queryset = BagIllustration.objects.all()
     permission_classes = [AllowAny, ]
     serializer_class = BagIllustCombineSerializer
