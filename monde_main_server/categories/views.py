@@ -21,13 +21,10 @@ class TypeSelectListAPIView(ListAPIView):
 
 
 class HandBagCategoriesViewSetV1(viewsets.GenericViewSet):
-    # queryset = TypeTag.objects.filter(is_handbag=True)
     permission_classes = [AllowAny, ]
-    # serializer_class = ShapeSelectListSerializer
 
     def get_serializer_class(self):
         if self.action == 'shape':
-            print('---')
             return ShapeSelectListSerializer
         elif self.action == 'charmdeco':
             return CharmDecoSelectListSerializer
@@ -35,7 +32,6 @@ class HandBagCategoriesViewSetV1(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['GET'])
     def shape(self, request):
-        print('---')
         queryset = Shape.objects.filter(type__is_handbag=True)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -47,14 +43,50 @@ class HandBagCategoriesViewSetV1(viewsets.GenericViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class BigShoulderCategoriesViewSet(viewsets.GenericViewSet):
-    pass
+class MiniBagCategoriesViewSet(viewsets.GenericViewSet):
+    permission_classes = [AllowAny, ]
+
+    def get_serializer_class(self):
+        if self.action == 'shape':
+            return ShapeSelectListSerializer
+        elif self.action == 'charmdeco':
+            return CharmDecoSelectListSerializer
+        return super(MiniBagCategoriesViewSet, self).get_serializer_class()
+
+    @action(detail=False, methods=['GET'])
+    def shape(self, request):
+        queryset = Shape.objects.filter(type__is_mini=True)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['GET'])
+    def charmdeco(self, request):
+        queryset = CharmDeco.objects.filter(type__is_mini=True)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# class ShapeSelectListAPIView(ListAPIView):
-#     serializer_class = ShapeSelectListSerializer
-#     permission_classes = [AllowAny, ]
-#     queryset = Shape.objects.all()
+class CrossBagCategoriesViewSet(viewsets.GenericViewSet):
+    permission_classes = [AllowAny, ]
+
+    def get_serializer_class(self):
+        if self.action == 'shape':
+            return ShapeSelectListSerializer
+        elif self.action == 'charmdeco':
+            return CharmDecoSelectListSerializer
+        return super(CrossBagCategoriesViewSet, self).get_serializer_class()
+
+    @action(detail=False, methods=['GET'])
+    def shape(self, request):
+        queryset = Shape.objects.filter(type__is_cross=True)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['GET'])
+    def charmdeco(self, request):
+        queryset = CharmDeco.objects.filter(type__is_cross=True)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ColorSelectListAPIView(ListAPIView):

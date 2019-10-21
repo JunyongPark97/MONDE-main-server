@@ -3,10 +3,13 @@ from django.urls import path, include
 from rest_framework.routers import SimpleRouter
 
 from categories.views import ColorSelectListAPIView, HandBagCategoriesViewSetV1, \
-    PatternSelectListAPIView, BagIllustCombineAPIView, TypeSelectListAPIView
+    PatternSelectListAPIView, BagIllustCombineAPIView, TypeSelectListAPIView, MiniBagCategoriesViewSet, \
+    CrossBagCategoriesViewSet
 
 router = SimpleRouter()
 router.register('handbag', HandBagCategoriesViewSetV1, base_name='handbag')
+router.register('minibag', MiniBagCategoriesViewSet, base_name='handbag')
+router.register('crossbag', CrossBagCategoriesViewSet, base_name='handbag')
 
 urlpatterns = [
     url(r'', include(router.urls)),

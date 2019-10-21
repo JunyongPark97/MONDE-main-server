@@ -29,11 +29,13 @@ class Shape(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # def __unicode__(self):
-    #     return self.name
-    #
-    # def __str__(self):
-    #     return self.name
+    def __unicode__(self):
+        if self.name:
+            return self.name
+
+    def __str__(self):
+        if self.name:
+            return self.name
 
 
 class CharmDeco(models.Model):
@@ -45,8 +47,9 @@ class CharmDeco(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # def __unicode__(self):
-    #     return self.name
+    def __unicode__(self):
+        if self.name:
+            return self.name
 
 
 class Color(models.Model):
