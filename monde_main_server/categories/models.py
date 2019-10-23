@@ -22,10 +22,12 @@ class TypeTag(models.Model):
 
 class Shape(models.Model):
     type = models.ForeignKey(TypeTag, null=True, on_delete=models.CASCADE, related_name='shape')
+    order = models.PositiveIntegerField(unique=True, null=True, help_text="보내주는 순서")
     image = models.ImageField(upload_to=category_upload_dir)
     description = models.CharField(max_length=100, help_text='설명', null=True)
     name = models.CharField(max_length=100, help_text='실제 가방 shape name', null=True)
     active = models.BooleanField(default=False)
+    detail = models.NullBooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -38,12 +40,30 @@ class Shape(models.Model):
             return self.name
 
 
-class CharmDeco(models.Model):
-    type = models.ForeignKey(TypeTag, null=True, on_delete=models.CASCADE, related_name='charm_deco')
+class Charm(models.Model):
+    type = models.ForeignKey(TypeTag, null=True, on_delete=models.CASCADE, related_name='charms')
+    order = models.PositiveIntegerField(unique=True, null=True, help_text="보내주는 순서")
     image = models.ImageField(upload_to=category_upload_dir)
     name = models.CharField(max_length=100, null=True)
     description = models.CharField(max_length=100, null=True)
     active = models.BooleanField(default=False)
+    detail = models.NullBooleanField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __unicode__(self):
+        if self.name:
+            return self.name
+
+
+class Deco(models.Model):
+    type = models.ForeignKey(TypeTag, null=True, on_delete=models.CASCADE, related_name='decos')
+    order = models.PositiveIntegerField(unique=True, null=True, help_text="보내주는 순서")
+    image = models.ImageField(upload_to=category_upload_dir)
+    name = models.CharField(max_length=100, null=True)
+    description = models.CharField(max_length=100, null=True)
+    active = models.BooleanField(default=False)
+    detail = models.NullBooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -54,6 +74,7 @@ class CharmDeco(models.Model):
 
 class Color(models.Model):
     image = models.ImageField(upload_to=category_upload_dir)
+    order = models.PositiveIntegerField(unique=True, null=True, help_text="보내주는 순서")
     name = models.CharField(max_length=100)
     active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -71,6 +92,7 @@ class Type(models.Model):
     type(handle) illustration 저장하는 모델
     """
     image = models.ImageField(upload_to=category_upload_dir)
+    order = models.PositiveIntegerField(unique=True, null=True, help_text="보내주는 순서")
     name = models.CharField(max_length=100)
     active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -99,6 +121,7 @@ class Type(models.Model):
 
 class Pattern(models.Model):
     image = models.ImageField(upload_to=category_upload_dir)
+    order = models.PositiveIntegerField(unique=True, null=True, help_text="보내주는 순서")
     name = models.CharField(max_length=100)
     active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -118,8 +141,8 @@ class BagIllustration(models.Model):
     shape = models.ForeignKey(Shape, related_name="bag_illustrations", null=True, blank=True, on_delete=models.SET_NULL)
     color = models.ForeignKey(Color, related_name="bag_illustrations", null=True, blank=True, on_delete=models.SET_NULL)
     handle = models.ForeignKey(Type, related_name="bag_illustrations", null=True, blank=True, on_delete=models.SET_NULL)
-    charm_deco = models.ForeignKey(CharmDeco, related_name="bag_illustrations", null=True, blank=True, on_delete=models.SET_NULL)
-    # deco = models.ForeignKey(Deco, related_name="bag_illustrations", null=True, blank=True, on_delete=models.SET_NULL)
+    charm = models.ForeignKey(Charm, related_name="bag_illustrations", null=True, blank=True, on_delete=models.SET_NULL)
+    deco = models.ForeignKey(Deco, related_name="bag_illustrations", null=True, blank=True, on_delete=models.SET_NULL)
     pattern = models.ForeignKey(Pattern, related_name="bag_illustrations", null=True, blank=True, on_delete=models.SET_NULL)
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
