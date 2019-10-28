@@ -86,3 +86,14 @@ def paginate(page_size=None, ordering=None):
         return _class
 
     return decorator
+
+
+from django.core.paginator import Paginator
+class FixedCountAdminPaginator(Paginator):
+    '''
+    Admin에서 user등 row count가 매우 많은 경우, count를 세는데 걸리는 시간이 오래걸려 페이징 과정에 시간이 오래 걸립니다.
+    이를 줄이기 위해 count를 강제로 500으로 고정함.
+    '''
+    @property
+    def count(self):
+        return 500

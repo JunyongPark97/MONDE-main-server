@@ -6,7 +6,7 @@ from django.utils import timezone
 import random
 
 # User = get_user_model()
-from accounts.models import DeviceInfo
+# from accounts.models import DeviceInfo
 from logs.models import LoginLog
 
 
@@ -23,7 +23,7 @@ def get_client_ip(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
-
+# TODO : FIX ME
 def loginlog_on_login(request, user):
     try:
         user.last_login = timezone.now()
@@ -33,13 +33,13 @@ def loginlog_on_login(request, user):
         print(ip_ad)
         print(request.device_id)
         print(request.device_type)
-        device, _ = DeviceInfo.objects.get_or_create(device_type=request.device_type,
-                                                     device_id=request.device_id)
+        # device, _ = DeviceInfo.objects.get_or_create(device_type=request.device_type,
+        #                                              device_id=request.device_id)
         if hasattr(request, 'android_version'):
             LoginLog.objects.create(
                 user=user,
                 ip_address=ip_ad,
-                device=device,
+                # device=device,
                 client_type=LoginLog.ANDROID,
                 client_user_type=request.client_user_type,
                 app_id=request.app_id,
@@ -49,7 +49,7 @@ def loginlog_on_login(request, user):
             LoginLog.objects.create(
                 user=user,
                 ip_address=get_client_ip(request),
-                device=device,
+                # device=device,
                 client_type=LoginLog.IOS,
                 client_user_type=request.client_user_type,
                 app_id=request.app_id,
