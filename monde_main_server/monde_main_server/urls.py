@@ -3,40 +3,23 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
 
-from accounts.social import FacebookLogin, GoogleLogin
-from accounts.views import index, login, LoginView
-from django.conf import settings
-from django.views.static import serve
+# from accounts.social import FacebookLogin, GoogleLogin
+# from accounts.views import index, login, LoginView
 from django.conf import settings
 from django.conf.urls.static import static
 
+from manage.sites import staff_panel
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
 
-    # all auth
-    url(r'^accounts/',include('allauth.urls')),
+    # Admin
+    url(r'^staff/', staff_panel.urls),
+    url(r'^admin/', admin.site.urls),
 
-    # jwt url
-    url(r'^api/token/',obtain_jwt_token),
-    url(r'^api/token/verify/',verify_jwt_token),
-    url(r'^api/refresh/',refresh_jwt_token),
-
-    # jwt login
-    url(r'^api/v1/rest-auth/login/$', LoginView.as_view(), name='rest_auth_login'),
-    url(r'^api/v1/rest-auth/', include('rest_auth.urls')),
-    url(r'^api/v1/rest-auth/registration/',include('rest_auth.registration.urls')),
-    # social login : 소셜 로그인 성공시 클라이언트에서 access token (and code :fb)를 받아 server 에게 밑의 api로 post 보내면 jwt return
-    url(r'^api/v1/rest-auth/google/$', GoogleLogin.as_view(), name='gg_login'),
-    url(r'^api/v1/rest-auth/facebook/$', FacebookLogin.as_view(), name='fb_login'),
-
-    # knox token login # DEPRECATED
+    # login
     url(r'^api/auth/', include('accounts.urls')),
 
-    # social login test 2
-    url(r'^$', index, name='index'),
-    url(r'^fb-login/$', login, name='login'),
-
-    #ckeditor
+    # ckeditor
     path('ckeditor/', include('ckeditor_uploader.urls')),
 
     # richtextfield
@@ -58,7 +41,16 @@ urlpatterns = [
     url(r'^api/v1/', include('monde.urls')),
 
     # category search select list
-    url(r'^api/v1/category/', include('categories.urls'))
+    url(r'^api/v1/category/', include('categories.urls')),
+
+
+    # all auth [DEPRECATED]
+    url(r'^accounts/', include('allauth.urls')),
+
+    # jwt url [DEPRECATED]
+    url(r'^api/token/', obtain_jwt_token),
+    url(r'^api/token/verify/', verify_jwt_token),
+    url(r'^api/refresh/', refresh_jwt_token),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

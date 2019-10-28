@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from logs.models import ProductViewCount
 from monde.models import Product, ProductCategories
 from search.category_search.serializers import ProductResultSerializer
-from tools.pagination import ProductListPagination
+from manage.pagination import ProductListPagination
 from monde.tools import get_tab_ids
 from user_activities.models import UserProductViewLogs
 from user_activities.serializers import UserProductVisitLogSerializer
@@ -65,8 +65,8 @@ class TabListAPIViewV1(GenericAPIView):
         tab_product = self.get_queryset().filter(id__in=tab_product_ids)
         filter_param = int(request.query_params.get('filter', 1))  # filter 있으면 filter, 없으면 1
         if filter_param == 1:
-            # 인기순
-            tab_queryset = tab_product.order_by('favorite_count__favorite_count')
+            # 인기순 # for test
+            tab_queryset = self.get_queryset()
         # elif filter_param == 2:
         #     # 최신순 DEPRECATED
         #     tab_queryset = tab_product.order_by('updated_at')

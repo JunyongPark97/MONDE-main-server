@@ -1,7 +1,5 @@
 from django.contrib import admin
-from tools.manage.sites import staff_panel
-from tools.manage.tools import superadmin_register
-from notices.models import Notice,  HiddenNotice, EventNotice, FAQ
+from notices.models import Notice, EventNotice, FAQ
 
 
 class HiddenNoticeAdmin(admin.ModelAdmin):

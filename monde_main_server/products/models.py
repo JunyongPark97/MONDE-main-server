@@ -44,6 +44,7 @@ class CrawlerProduct(models.Model):
     price = models.CharField(max_length=50)
     crawled_date = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField(auto_now_add=True, null=True)
+    is_valid = models.IntegerField()
 
     class Meta:
         managed = False

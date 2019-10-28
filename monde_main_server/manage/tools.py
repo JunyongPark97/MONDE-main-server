@@ -1,12 +1,12 @@
 from django.contrib import admin
-from tools.sites import superadmin_panel
+from manage.sites import superadmin_panel
 from ajax_select import make_ajax_form
 import re
 from django.core.exceptions import PermissionDenied
 from django.contrib.admin.utils import label_for_field
 
 # superadmin을 위한 helper function
-from tools.steam_csv import StreamCSV
+from manage.steam_csv import StreamCSV
 
 
 def superadmin_register(model, user_fields=None, **kwargs):

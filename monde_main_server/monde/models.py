@@ -20,8 +20,8 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     db_id = models.PositiveIntegerField(unique=True, help_text="for sync")
-    image = models.ImageField()
-    origin_url = models.URLField()
+    image = models.ImageField(help_text='s3 이미지')
+    origin_url = models.URLField(help_text='상품 이미지 url')
     order = models.IntegerField()
     product = models.OneToOneField(Product, related_name='product_image', on_delete=models.CASCADE, help_text='onetoone으로 바꿈')
 

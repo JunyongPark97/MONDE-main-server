@@ -34,19 +34,19 @@ class HandBagCategoriesViewSetV1(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['GET'])
     def shape(self, request):
-        queryset = Shape.objects.filter(type__is_handbag=True)
+        queryset = Shape.objects.filter(type__is_handbag=True).order_by('order')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'])
     def charm(self, request):
-        queryset = Charm.objects.filter(type__is_handbag=True)
+        queryset = Charm.objects.filter(type__is_handbag=True).order_by('order')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'])
     def deco(self, request):
-        queryset = Deco.objects.filter(type__is_handbag=True)
+        queryset = Deco.objects.filter(type__is_handbag=True).order_by('order')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -65,19 +65,19 @@ class MiniBagCategoriesViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['GET'])
     def shape(self, request):
-        queryset = Shape.objects.filter(type__is_mini=True)
+        queryset = Shape.objects.filter(type__is_mini=True).order_by('order')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'])
     def charm(self, request):
-        queryset = Charm.objects.filter(type__is_handbag=True)
+        queryset = Charm.objects.filter(type__is_handbag=True).order_by('order')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'])
     def deco(self, request):
-        queryset = Deco.objects.filter(type__is_handbag=True)
+        queryset = Deco.objects.filter(type__is_handbag=True).order_by('order')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -96,19 +96,19 @@ class CrossBagCategoriesViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['GET'])
     def shape(self, request):
-        queryset = Shape.objects.filter(type__is_cross=True)
+        queryset = Shape.objects.filter(type__is_cross=True).order_by('order')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'])
     def charm(self, request):
-        queryset = Charm.objects.filter(type__is_handbag=True)
+        queryset = Charm.objects.filter(type__is_handbag=True).order_by('order')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'])
     def deco(self, request):
-        queryset = Deco.objects.filter(type__is_handbag=True)
+        queryset = Deco.objects.filter(type__is_handbag=True).order_by('order')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -127,19 +127,19 @@ class BigShoulderCategoriesViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['GET'])
     def shape(self, request):
-        queryset = Shape.objects.filter(type__is_big_shoulder=True)
+        queryset = Shape.objects.filter(type__is_big_shoulder=True).order_by('order')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'])
     def charm(self, request):
-        queryset = Charm.objects.filter(type__is_handbag=True)
+        queryset = Charm.objects.filter(type__is_handbag=True).order_by('order')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'])
     def deco(self, request):
-        queryset = Deco.objects.filter(type__is_handbag=True)
+        queryset = Deco.objects.filter(type__is_handbag=True).order_by('order')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -158,19 +158,19 @@ class ClutchBagCategoriesViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['GET'])
     def shape(self, request):
-        queryset = Shape.objects.filter(type__is_clutch=True)
+        queryset = Shape.objects.filter(type__is_clutch=True).order_by('order')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'])
     def charm(self, request):
-        queryset = Charm.objects.filter(type__is_handbag=True)
+        queryset = Charm.objects.filter(type__is_handbag=True).order_by('order')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'])
     def deco(self, request):
-        queryset = Deco.objects.filter(type__is_handbag=True)
+        queryset = Deco.objects.filter(type__is_handbag=True).order_by('order')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -189,19 +189,19 @@ class BackPackCategoriesViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['GET'])
     def shape(self, request):
-        queryset = Shape.objects.filter(type__is_backpack=True)
+        queryset = Shape.objects.filter(type__is_backpack=True).order_by('order')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'])
     def charm(self, request):
-        queryset = Charm.objects.filter(type__is_handbag=True)
+        queryset = Charm.objects.filter(type__is_handbag=True).order_by('order')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'])
     def deco(self, request):
-        queryset = Deco.objects.filter(type__is_handbag=True)
+        queryset = Deco.objects.filter(type__is_handbag=True).order_by('order')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

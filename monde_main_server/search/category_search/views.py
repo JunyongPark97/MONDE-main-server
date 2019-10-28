@@ -6,7 +6,7 @@ from monde.models import ProductCategories
 from search.category_search.serializers import CategorySearchRequestSerializer, ProductResultSerializer
 from search.category_search.tools import get_searched_data
 
-from tools.pagination import ProductListPagination
+from manage.pagination import ProductListPagination
 
 
 class CategorySearchViewSetV1(viewsets.GenericViewSet, mixins.CreateModelMixin):

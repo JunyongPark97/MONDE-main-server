@@ -1,5 +1,6 @@
 from django.contrib import admin
-from categories.models import Shape, BagIllustration, Color, Type, Pattern, TypeTag, Charm, Deco
+from categories.models import Shape, Color, Type, Pattern, TypeTag, Charm, Deco
+from manage.sites import staff_panel
 
 
 class CategoryInline(admin.ModelAdmin):
@@ -11,18 +12,18 @@ class TypeTagInline(admin.ModelAdmin):
 
 
 class ByTypeInline(admin.ModelAdmin):
-    list_display = ['id', 'name', 'description', 'get_shape_tagname','active']
+    list_display = ['id', 'detail', 'name', 'order', 'description', 'get_shape_tagname', 'active']
 
     @staticmethod
     def get_shape_tagname(shape):
         return shape.type.description
 
 
-admin.site.register(Shape, ByTypeInline)
-admin.site.register(Color, CategoryInline)
-admin.site.register(Type, CategoryInline)
-admin.site.register(TypeTag, TypeTagInline)
-admin.site.register(Deco, ByTypeInline)
-admin.site.register(Charm, ByTypeInline)
-admin.site.register(Pattern, CategoryInline)
-admin.site.register(BagIllustration)
+staff_panel.register(Shape, ByTypeInline)
+staff_panel.register(Color, CategoryInline)
+staff_panel.register(Type, CategoryInline)
+staff_panel.register(TypeTag, TypeTagInline)
+staff_panel.register(Deco, ByTypeInline)
+staff_panel.register(Charm, ByTypeInline)
+staff_panel.register(Pattern, CategoryInline)
+# staff_panel.register(BagIllustration)

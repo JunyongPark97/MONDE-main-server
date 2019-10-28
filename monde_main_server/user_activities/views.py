@@ -9,7 +9,7 @@ from monde.models import Product
 from django.db.models import F
 
 from search.category_search.serializers import ProductResultSerializer
-from tools.pagination import ProductListPagination, FavoriteLogPagination
+from manage.pagination import ProductListPagination, FavoriteLogPagination
 from user_activities.models import UserProductViewLogs, UserProductFavoriteLogs
 from user_activities.serializers import UserProductFavoriteLogSerializer
 

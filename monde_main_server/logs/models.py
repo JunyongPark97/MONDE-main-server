@@ -28,7 +28,21 @@ class LoginLog(models.Model):
     client_type = models.IntegerField(choices=CLIENT_TYPE, null=True, blank=True, db_index=True)
     client_user_type = models.IntegerField(null=True, blank=True, db_index=True)
     app_id = models.CharField(max_length=80, null=True, blank=True, db_index=True)
-    device = models.ForeignKey('accounts.DeviceInfo', related_name='login_logs', null=True, on_delete=models.SET_NULL)
+    # device = models.ForeignKey('accounts.DeviceInfo', related_name='login_logs', null=True, on_delete=models.SET_NULL)
+
+
+class BannedUserLog(models.Model):
+    """
+    강제 퇴장당한 유저를 이유와 함께 기록합니다. / unset banned도 같이 기록
+    """
+
+    class Meta:
+        verbose_name_plural = '사용제한(강퇴) 유저 로그'
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    reason = models.CharField(max_length=100)
+    memo = models.CharField(max_length=500, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 # product view log

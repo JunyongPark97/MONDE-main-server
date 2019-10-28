@@ -2,10 +2,14 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 from monde.models import Product
+from manage.sites import staff_panel
+from manage.pagination import FixedCountAdminPaginator
 
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['shopping_mall', 'get_product_image', 'price', 'name', 'get_color_names', 'shop_url']
+    list_per_page = 20
+    paginator = FixedCountAdminPaginator
 
     @staticmethod
     def get_product_image(product):
@@ -32,6 +36,6 @@ class ProductAdmin(admin.ModelAdmin):
     shop_url.short_description = "Firm URL"
 
 
-admin.site.register(Product, ProductAdmin)
+staff_panel.register(Product, ProductAdmin)
 
 

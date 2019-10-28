@@ -1,4 +1,4 @@
-from tools.pagination import MondeCursorPagination
+from manage.pagination import MondeCursorPagination
 
 
 class NoticePagination(MondeCursorPagination):

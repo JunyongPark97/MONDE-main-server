@@ -87,7 +87,7 @@ LOCAL_APPS = (
     'accounts',
     'categories',
     'logs',
-    'tools',
+    'manage',
     'notices',
     'products',
     'search',
@@ -174,7 +174,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'accounts.MondeUser'
 
 
 # Internationalization

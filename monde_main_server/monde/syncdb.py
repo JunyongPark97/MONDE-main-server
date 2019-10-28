@@ -99,13 +99,13 @@ def color_sync():
             DBColorSyncLogs.objects.create(db_color_id=co_id, cause=cause)
 
 
-# product_sync()
+product_sync()
 print('..1 ok')
-# product_image_sync()
+product_image_sync()
 print('..2 ok')
-# category_sync()
+category_sync()
 print('..3 ok')
-# color_tab_sync()
+color_tab_sync()
 print('..4 ok')
-# color_sync()
+color_sync()
 print('..5 ok')
