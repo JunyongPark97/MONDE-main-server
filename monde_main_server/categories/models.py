@@ -6,6 +6,9 @@ bagillust_upload_dir = GiveRandomFileName(path='uploads/bag_illust')
 
 
 class TypeTag(models.Model):
+    """
+    타입에 따라 다른 일러스트를 구현하기 위한 모델
+    """
     is_handbag = models.BooleanField(default=False)
     is_big_shoulder = models.BooleanField(default=False)
     is_mini = models.BooleanField(default=False)
@@ -103,20 +106,6 @@ class Type(models.Model):
 
     def __str__(self):
         return self.name
-
-
-# class Deco(models.Model):
-#     image = models.ImageField(upload_to=category_upload_dir)
-#     name = models.CharField(max_length=100)
-#     active = models.BooleanField(default=False)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-#
-#     def __unicode__(self):
-#         return self.name
-#
-#     def __str__(self):
-#         return self.name
 
 
 class Pattern(models.Model):

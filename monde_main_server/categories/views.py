@@ -9,6 +9,10 @@ from categories.serializers import ShapeSelectListSerializer, ColorSelectListSer
     CharmSelectListSerializer, PatternSelectListSerializer, BagIllustCombineSerializer, DecoSelectListSerializer
 from categories.tools import get_filtered_queryset
 
+"""
+일러스트 뿌려줄 때 사용하는 API
+"""
+
 
 class TypeSelectListAPIView(ListAPIView):
     """
@@ -17,7 +21,7 @@ class TypeSelectListAPIView(ListAPIView):
     """
     serializer_class = HandleSelectListSerializer
     permission_classes = [AllowAny, ]
-    queryset = Type.objects.all()
+    queryset = Type.objects.all().order_by('order')
 
 
 class HandBagCategoriesViewSetV1(viewsets.GenericViewSet):
