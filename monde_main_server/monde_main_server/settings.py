@@ -249,7 +249,7 @@ SOCIALACCOUNT_PROVIDERS = {
 
 REST_SESSION_LOGIN = False
 
-REST_USE_JWT = True
+# REST_USE_JWT = True
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -257,7 +257,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'knox.auth.TokenAuthentication'
+        'knox.auth.TokenAuthentication',
     )
 }
 
