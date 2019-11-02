@@ -58,7 +58,7 @@ def get_crossbag_ids(queryset):
     ids = []
     for instance in queryset:
         type_data = instance.type_result
-        if 'cross_bag' in type_data and type_data['shoulder'] > 0.4:
+        if 'cross_bag' in type_data and type_data['cross_bag'] > 0.4:
             ids.append(instance.product_id)
     return ids
 
@@ -67,7 +67,7 @@ def get_shoulder_ids(queryset):
     ids = []
     for instance in queryset:
         type_result = instance.type_result
-        if 'big_shoulder' in type_result and type_result['shoulder'] > 0.4:
+        if 'big_shoulder' in type_result and type_result['big_shoulder'] > 0.4:
             ids.append(instance.product_id)
     return ids
 
