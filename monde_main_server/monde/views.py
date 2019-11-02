@@ -64,7 +64,8 @@ class TabListAPIViewV1(GenericAPIView):
 
         # tab
         tab_product_ids = get_tab_ids(tab_no, categories_queryset)
-        tab_product = self.get_queryset().filter(id__in=tab_product_ids)
+        #tab_product = self.get_queryset().filter(id__in=tab_product_ids)
+        tab_product = self.get_queryset()
 
         # filter
         filter_param = int(request.query_params.get('filter', 1))  # filter 있으면 filter, 없으면 1

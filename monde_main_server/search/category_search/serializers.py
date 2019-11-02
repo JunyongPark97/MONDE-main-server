@@ -59,7 +59,9 @@ class ProductResultSerializer(serializers.ModelSerializer):
     #     return added_url
 
     def get_color_names(self, instance):
-        colors = instance.categories
+        if not instance.categories:
+            return None
+        colors = instance.categories.colors
         if 'null' in colors:
             colors.pop('null')
         if not colors:
