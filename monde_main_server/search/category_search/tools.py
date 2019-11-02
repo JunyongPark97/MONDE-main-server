@@ -15,23 +15,20 @@ def get_data_result(category, instance):
     :return:
     """
     s_data = instance.shape_result
-    h_data = instance.handle_result
     ch_data = instance.charm_result
-    co_data = instance.color_result
+    co_data = instance.colors
     d_data = instance.deco_result
     p_data = instance.pattern_result
     if category == 'shape':
-        return(s_data)
-    elif category == 'handle':
-        return(h_data)
+        return s_data, 9.9
     elif category == 'charm':
-        return(ch_data)
+        return ch_data, 6.2
     elif category == 'color':
-        return(co_data)
+        return co_data, 8.5
     elif category == 'deco':
-        return(d_data)
+        return d_data, 5.7
     elif category == 'pattern':
-        return(p_data)
+        return p_data, 6.7
     return None
 
 
@@ -52,17 +49,21 @@ def product_overlap_count(user_input, instance):
     """
     count = 0
     value = 0
-    weight = 2
+    # weight => shape = color > pattern > charm > deco
 
     for category in user_input.keys():
-        data = get_data_result(category, instance)
+        data, weight = get_data_result(category, instance)
         user_select = user_input[category]
         if user_select in data:
             count += 1
             value += data[user_select] * weight
 
+    if count == 0:
+        pass
+
     result = pass_filter(value, count)
-    return result
+
+    return instance, result
 
 
 def filtered_data(instance, user_input, result_dict):
@@ -79,9 +80,9 @@ def filtered_data(instance, user_input, result_dict):
 
 def get_searched_data(queryset, user_input):
     result_dict = {}
-
+    qs = filter_type(user_input, queryset)
     # generate result : {instance : value}
-    for instance in queryset:  # ProductCategories
+    for instance in qs:  # ProductCategories
         result_dict = filtered_data(instance, user_input, result_dict)
 
     sorted_category_result_list = sorted(result_dict, key=lambda kv: result_dict[kv], reverse=True)

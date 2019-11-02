@@ -1,50 +1,52 @@
 from django.db import models
 import jsonfield
-
+from products.models import CrawlerProduct
 # Create your models here.
 
 
 class Product(models.Model):
+    """
+    mondebro , crawler를 참고하여 sync 맞춘 후 서비스에서 이 모델을 기준으로 사용합니다.
+    """
     db_id = models.PositiveIntegerField(unique=True, help_text="for sync")
     shopping_mall = models.IntegerField()
     name = models.CharField(max_length=100, blank=True, null=True)
     product_url = models.URLField()
+    product_image_url = models.URLField(help_text="상품 이미지 url", null=True)
     price = models.IntegerField(help_text='db로 옮기면서 integer로 바꿈')
-    is_on_sale = models.BooleanField(help_text="color tab에 있던걸 옮겨옴")
+    # is_on_sale = models.BooleanField(help_text="color tab에 있던걸 옮겨옴")
     is_banned = models.BooleanField(default=False)
-    crawler_created_at = models.DateTimeField(blank=True, null=True)
-    crawler_updated_at = models.DateTimeField(blank=True, null=True)
-    create_at = models.DateTimeField(auto_now_add=True)
+    is_best = models.BooleanField()
+    is_valid = models.BooleanField()
+    crawler_created_at = models.DateTimeField(blank=True, null=True, help_text="crawler 와 sync 맞춰야함")
+    crawler_updated_at = models.DateTimeField(blank=True, null=True, help_text="crawler 와 sync 맞춰야함")
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
-class ProductImage(models.Model):
-    db_id = models.PositiveIntegerField(unique=True, help_text="for sync")
-    image = models.ImageField(help_text='s3 이미지')
-    origin_url = models.URLField(help_text='상품 이미지 url')
-    order = models.IntegerField()
-    product = models.OneToOneField(Product, related_name='product_image', on_delete=models.CASCADE, help_text='onetoone으로 바꿈')
+    # @property
+    # def is_valid(self):
+    #     crawler_products = CrawlerProduct.objects.filter(id=self.db_id)
+    #     if not crawler_products.exists():
+    #         return False
+    #     crawler_product = crawler_products.first()
+    #     valid = crawler_product.is_valid
+    #     return valid
+    #
+    # @property
+    # def is_best(self):
+    #     crawler_products = CrawlerProduct.objects.filter(id=self.db_id)
+    #     if not crawler_products.exists():
+    #         return False
+    #     crawler_product = crawler_products.first()
+    #     is_best = crawler_product.is_best
+    #     return is_best
 
 
 class ProductCategories(models.Model):
-    db_id = models.PositiveIntegerField(unique=True, help_text="for sync")
-    shape_result = jsonfield.JSONField()
-    handle_result = jsonfield.JSONField()
-    color_result = jsonfield.JSONField()
+    product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name="categories")
+    shape_result = jsonfield.JSONField()  # detail 포함, cover 포함.
+    type_result = jsonfield.JSONField()
     charm_result = jsonfield.JSONField()
     deco_result = jsonfield.JSONField()
     pattern_result = jsonfield.JSONField()
-    # bag image를 통해 물려있던걸 바로 product와 연결함
-    product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name='product_categories')
-
-
-class ColorTab(models.Model):
-    db_id = models.PositiveIntegerField(unique=True, help_text="for sync")
-    color_tab_name = models.CharField(max_length=50)
-    product = models.ForeignKey(Product, related_name='color_tabs', on_delete=models.CASCADE)
-
-
-class Colors(models.Model):
-    db_id = models.PositiveIntegerField(unique=True, help_text="for sync")
-    color = models.IntegerField()
-    color_tab = models.ForeignKey(ColorTab, related_name='colors', on_delete=models.CASCADE)
+    colors = jsonfield.JSONField()

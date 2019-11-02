@@ -4,7 +4,7 @@ from knox.models import AuthToken
 from rest_framework import status, generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-
+from accounts.tools import loginlog_on_login
 from accounts.models import MondeUser
 from accounts.serializers import UserSerializer, LoginUserSerializer, CreateUserSerializer
 
@@ -34,17 +34,15 @@ class LoginAPI(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        uid = request.data['uid']
-        temp_user = MondeUser.objects.filter(uid=uid).first()
-
-        # TODO : 매번 쿼리하기 부담스러움 & validate()에서 중복됨. 결정해야합니다.
-        if not temp_user:
-            return Response({'message': 'No User'}, status=status.HTTP_204_NO_CONTENT)
 
         if not serializer.is_valid():
             return Response({'message': 'invalid uid'}, status=status.HTTP_204_NO_CONTENT)
 
         user = serializer.validated_data
+
+        # log
+        loginlog_on_login(request=self.request, user=user)
+
         return Response(
             {
                 "user": UserSerializer(

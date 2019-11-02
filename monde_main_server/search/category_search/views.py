@@ -1,29 +1,19 @@
 from rest_framework import viewsets, status, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
 from monde.models import ProductCategories
 from search.category_search.serializers import CategorySearchRequestSerializer, ProductResultSerializer
 from search.category_search.tools import get_searched_data
-
 from manage.pagination import ProductListPagination
 
 
 class CategorySearchViewSetV1(viewsets.GenericViewSet, mixins.CreateModelMixin):
-    queryset = ProductCategories.objects.all()
+    queryset = ProductCategories.objects.filter(product__is_valid=True).select_related('product')
     permission_classes = [IsAuthenticated, ]
     pagination_class = ProductListPagination
     serializer_class = CategorySearchRequestSerializer
 
-    # def get_serializer_class(self):
-    #     if self.action == 'create':
-    #         return CategorySearchRequestSerializer
-    #     elif self.action == 'visit':
-    #         return UserProductVisitLogSerializer
-    #     return super(CategorySearchViewSetV1, self).get_serializer_class()
-
     def create(self, request, *args, **kwargs):
-
         serializer = self.get_serializer(data=request.data)
 
         if not serializer.is_valid():
@@ -34,10 +24,6 @@ class CategorySearchViewSetV1(viewsets.GenericViewSet, mixins.CreateModelMixin):
         # category search
         categories = search_request.categories
         searched_product = get_searched_data(self.get_queryset(), categories) # list 형태, ordered
-
-        # ordering
-        # preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(searched_product_ids)])
-        # searched_product = self.get_queryset().filter(pk__in=searched_product_ids).order_by(preserved)
 
         # PageNumberPagination
         paginator = self.pagination_class()

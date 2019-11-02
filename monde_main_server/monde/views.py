@@ -53,7 +53,7 @@ class ProductVisitAPIView(CreateAPIView):
 
 
 class TabListAPIViewV1(GenericAPIView):
-    queryset = Product.objects.all().select_related('product_categories', 'favorite_count')
+    queryset = Product.objects.all().select_related('favorite_count', 'view_count', 'categories')
     serializer_class = ProductResultSerializer
     permission_classes = [AllowAny, ]
     pagination_class = ProductListPagination
@@ -61,15 +61,19 @@ class TabListAPIViewV1(GenericAPIView):
     def get(self, request, *args, **kwargs):
         tab_no = self.kwargs['tab_no']
         categories_queryset = ProductCategories.objects.all()
+
+        # tab
         tab_product_ids = get_tab_ids(tab_no, categories_queryset)
         tab_product = self.get_queryset().filter(id__in=tab_product_ids)
+
+        # filter
         filter_param = int(request.query_params.get('filter', 1))  # filter 있으면 filter, 없으면 1
         if filter_param == 1:
             # 인기순 # for test
             tab_queryset = self.get_queryset()
-        # elif filter_param == 2:
-        #     # 최신순 DEPRECATED
-        #     tab_queryset = tab_product.order_by('updated_at')
+        elif filter_param == 2:
+            # 최신순 DEPRECATED ?
+            tab_queryset = tab_product.order_by('crawler_updated_at')
         elif filter_param == 2:
             # 저가순
             tab_queryset = tab_product.order_by('price')

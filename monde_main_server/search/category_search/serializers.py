@@ -17,9 +17,9 @@ class ProductResultSerializer(serializers.ModelSerializer):
     """
     검색 또는 필터링 된 product 를 list 형태로 보여주기 위한 serializer 입니다.
     """
-    image_url = serializers.SerializerMethodField()
+    # image_url = serializers.SerializerMethodField()
     color_names = serializers.SerializerMethodField()
-    colors = serializers.SerializerMethodField()
+    # colors = serializers.SerializerMethodField()
     is_favorite = serializers.SerializerMethodField()
     view_count = serializers.SerializerMethodField()
 
@@ -29,11 +29,11 @@ class ProductResultSerializer(serializers.ModelSerializer):
                   'name',
                   'is_favorite',
                   'product_url',
-                  'image_url',
+                  'product_image_url',
                   'price',
-                  'is_on_sale',
+                  # 'is_on_sale',
                   'color_names',
-                  'colors',
+                  # 'colors',
                   'view_count']
 
 
@@ -48,31 +48,32 @@ class ProductResultSerializer(serializers.ModelSerializer):
             return False
         return True
 
-    def get_image_url(self, product):
-        product_image = product.product_image
-        if not product_image:
-            return None
-        url_tail = product_image.image.name
-        # TODO : Why bag_image.url isn't url?
-        main_url = 'https://monde-web-crawler.s3.amazonaws.com/'
-        added_url = main_url + url_tail
-        return added_url
+    # def get_image_url(self, product):
+    #     product_image = product.product_image
+    #     if not product_image:
+    #         return None
+    #     url_tail = product_image.image.name
+    #     # TODO : Why bag_image.url isn't url?
+    #     main_url = 'https://monde-web-crawler.s3.amazonaws.com/'
+    #     added_url = main_url + url_tail
+    #     return added_url
 
     def get_color_names(self, instance):
-        color_names = []
-        for color_tab in instance.color_tabs.all():
-            # 실제 판매중인 상품 색상명
-            color_names.append(color_tab.color_tab_name)
-        return color_names
+        colors = instance.categories
+        if 'null' in colors:
+            colors.pop('null')
+        if not colors:
+            return None
+        return colors
 
-    def get_colors(self, instance):
-        color_list = []
-        for color_tab in instance.color_tabs.all():
-            #TODO : 유효성 검증 필요
-            colors = color_tab.colors.all()
-            for color in colors:
-                color_list.append(color.color)
-        return color_list
+    # def get_colors(self, instance):
+    #     color_list = []
+    #     for color_tab in instance.color_tabs.all():
+    #         #TODO : 유효성 검증 필요
+    #         colors = color_tab.colors.all()
+    #         for color in colors:
+    #             color_list.append(color.color)
+    #     return color_list
 
     # Temp
     def get_view_count(self, instance):

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from notices.models import Notice, EventNotice, FAQ
+from manage.sites import staff_panel
 
 
 class HiddenNoticeAdmin(admin.ModelAdmin):
@@ -30,6 +31,6 @@ class TargetPopupNoticeReceiverAdmin(admin.ModelAdmin):
         return obj.notice_id
 
 
-admin.site.register(EventNotice, EventNoticeAdmin)
-admin.site.register(Notice, BaseNoticeAdmin)
-admin.site.register(FAQ, FAQNoticeAdmin)
+staff_panel.register(EventNotice, EventNoticeAdmin)
+staff_panel.register(Notice, BaseNoticeAdmin)
+staff_panel.register(FAQ, FAQNoticeAdmin)
