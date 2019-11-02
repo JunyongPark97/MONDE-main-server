@@ -81,6 +81,7 @@ def filtered_data(instance, user_input, result_dict):
 def get_searched_data(queryset, user_input):
     result_dict = {}
     qs = filter_type(user_input, queryset)
+
     # generate result : {instance : value}
     for instance in qs:  # ProductCategories
         result_dict = filtered_data(instance, user_input, result_dict)

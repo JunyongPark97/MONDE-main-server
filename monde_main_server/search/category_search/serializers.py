@@ -36,7 +36,6 @@ class ProductResultSerializer(serializers.ModelSerializer):
                   # 'colors',
                   'view_count']
 
-
     def get_is_favorite(self, instance):
         user = self.context['request'].user
         if user.is_anonymous:
@@ -59,14 +58,18 @@ class ProductResultSerializer(serializers.ModelSerializer):
     #     return added_url
 
     def get_color_names(self, instance):
-        if not instance.categories:
-            return None
-        colors = instance.categories.colors
-        if 'null' in colors:
-            colors.pop('null')
-        if not colors:
-            return None
-        return colors
+        # TODO: FIX ME (temp code for QA)
+        try:
+            # instance.categories
+            colors = instance.categories.colors
+            if 'null' in colors:
+                colors.pop('null')
+            if not colors:
+                return None
+            return colors
+        except:
+            print(instance)
+            pass
 
     # def get_colors(self, instance):
     #     color_list = []
@@ -119,7 +122,7 @@ class SampleListSerializer(serializers.ModelSerializer):
     def get_image_url(self, product):
         image = product.bag_images.all().last()
         url = image.bag_image.url
-        #TODO : Why bag_image.url isn't url?
+        # TODO : Why bag_image.url isn't url?
         main_url = 'https://monde-web-crawler.s3.amazonaws.com/'
         added_url = main_url + url
         return added_url
@@ -127,7 +130,7 @@ class SampleListSerializer(serializers.ModelSerializer):
     def get_colors(self, instance):
         color_list = []
         for color_tab in instance.color_tabs.all():
-            #실제 판매중인 상품 색상명
+            # 실제 판매중인 상품 색상명
             color_list.append(color_tab.colors)
         return color_list
 

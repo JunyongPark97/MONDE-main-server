@@ -62,6 +62,7 @@ class TabListAPIViewV1(GenericAPIView):
         tab_no = self.kwargs['tab_no']
         categories_queryset = ProductCategories.objects.all()
 
+        # TODO: FIX ME (temp code for QA)
         # tab
         tab_product_ids = get_tab_ids(tab_no, categories_queryset)
         #tab_product = self.get_queryset().filter(id__in=tab_product_ids)
