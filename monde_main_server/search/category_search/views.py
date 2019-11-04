@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from monde.models import ProductCategories
 from search.category_search.serializers import CategorySearchRequestSerializer, ProductResultSerializer
-from search.category_search.tools import get_searched_data
+from search.category_search.tools import search
 from manage.pagination import ProductListPagination
 
 
@@ -22,8 +22,9 @@ class CategorySearchViewSetV1(viewsets.GenericViewSet, mixins.CreateModelMixin):
         search_request = serializer.save()  # 검색 요청 저장 : CategorySearchRequest
 
         # category search
-        categories = search_request.categories
-        searched_product = get_searched_data(self.get_queryset(), categories) # list 형태, ordered
+        user_input = search_request.categories
+        print(user_input)
+        searched_product = search(user_input, self.get_queryset())  # list 형태, ordered
 
         # PageNumberPagination
         paginator = self.pagination_class()

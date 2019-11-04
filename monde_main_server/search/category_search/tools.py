@@ -32,6 +32,12 @@ def get_data_result(category, instance):
     return None
 
 
+def filter_type(user_input, queryset):
+    types = user_input.pop('type')
+    qs = queryset.filter(type_result__contains=types)
+    return qs
+
+
 def pass_filter(value, count):
     """
     filter 역할
@@ -70,22 +76,20 @@ def filtered_data(instance, user_input, result_dict):
     """
     결과값을 dict형태로 바꾸는 함수
     """
-    result = product_overlap_count(user_input, instance)
+    i, result = product_overlap_count(user_input, instance)
     if result != 0:
-        result_dict[instance] = result
+        result_dict[i] = result
     else:
         pass
     return result_dict
 
 
-def get_searched_data(queryset, user_input):
-    result_dict = {}
+def search(user_input, queryset):
     qs = filter_type(user_input, queryset)
-
-    # generate result : {instance : value}
-    for instance in qs:  # ProductCategories
-        result_dict = filtered_data(instance, user_input, result_dict)
-
+    result_dict = {}
+    for q in qs:
+        result_dict = filtered_data(q, user_input, result_dict)
+    print(result_dict)
     sorted_category_result_list = sorted(result_dict, key=lambda kv: result_dict[kv], reverse=True)
     sorted_product = list(map(lambda x: x.product, sorted_category_result_list))
     return sorted_product
