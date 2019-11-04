@@ -23,7 +23,6 @@ class CategorySearchViewSetV1(viewsets.GenericViewSet, mixins.CreateModelMixin):
 
         # category search
         user_input = search_request.categories
-        print(user_input)
         searched_product = search(user_input, self.get_queryset())  # list 형태, ordered
 
         # PageNumberPagination

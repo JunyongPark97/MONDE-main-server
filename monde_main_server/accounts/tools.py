@@ -14,8 +14,6 @@ def get_client_ip(request):
     """
     request 의 ip 주소를 식별하는 함수입니다.
     """
-    print(request.META)
-    print(request.META.get('HTTP_X_FORWARDED_FOR'))
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
         ip = x_forwarded_for.split(',')[0]
@@ -27,13 +25,11 @@ def get_client_ip(request):
 # TODO : FIX ME
 def loginlog_on_login(request, user):
     ip_ad = get_client_ip(request)
-    print(ip_ad)
     try:
         user.last_login = timezone.now()
         user.save()
         ip_ad = get_client_ip(request)
         print('ok')
-        print(ip_ad)
         # print(request.device_id)
         # print(request.device_type)
         # device, _ = DeviceInfo.objects.get_or_create(device_type=request.device_type,

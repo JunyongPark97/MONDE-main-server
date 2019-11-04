@@ -2,6 +2,9 @@ from rest_framework import serializers
 from monde.models import Product
 from products.models import CrawlerProduct
 from search.category_search.models import CategorySearchRequest
+import requests
+from io import BytesIO
+from PIL import Image
 
 
 class CategorySearchRequestSerializer(serializers.ModelSerializer):
@@ -22,6 +25,7 @@ class ProductResultSerializer(serializers.ModelSerializer):
     # colors = serializers.SerializerMethodField()
     is_favorite = serializers.SerializerMethodField()
     view_count = serializers.SerializerMethodField()
+    image_size = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -34,7 +38,23 @@ class ProductResultSerializer(serializers.ModelSerializer):
                   # 'is_on_sale',
                   'color_names',
                   # 'colors',
-                  'view_count']
+                  'view_count',
+                  'image_size']
+
+    def get_image_size(self, instance):
+        url = instance.product_image_url
+        byteImgIO = BytesIO()
+        resp = requests.get(url)
+        byteImg = Image.open(BytesIO(resp.content))
+        byteImg.save(byteImgIO, "JPEG")
+        byteImgIO.seek(0)
+        byteImg = byteImgIO.read()
+        dataBytesIO = BytesIO(byteImg)
+        image = Image.open(dataBytesIO)
+        image = image.convert('RGB')
+        width, height = image.size
+        return width, height
+
 
     def get_is_favorite(self, instance):
         user = self.context['request'].user
