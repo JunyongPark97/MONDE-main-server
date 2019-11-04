@@ -19,5 +19,6 @@ urlpatterns = [
     path('color/', ColorSelectListAPIView.as_view()),
     path('type/', TypeSelectListAPIView.as_view()),
     path('pattern/', PatternSelectListAPIView.as_view()),
-    path('result/',BagIllustCombineAPIView.as_view())
+    # path('result/',BagIllustCombineAPIView.as_view())
+
 ]

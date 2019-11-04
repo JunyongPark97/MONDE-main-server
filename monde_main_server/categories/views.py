@@ -21,7 +21,7 @@ class TypeSelectListAPIView(ListAPIView):
     """
     serializer_class = HandleSelectListSerializer
     permission_classes = [AllowAny, ]
-    queryset = Type.objects.all().order_by('order')
+    queryset = Type.objects.filter(active=True).order_by('order')
 
 
 class HandBagCategoriesViewSetV1(viewsets.GenericViewSet):
