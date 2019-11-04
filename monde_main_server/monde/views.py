@@ -1,4 +1,4 @@
-from django.db.models import F, Sum
+from django.db.models import F, Sum, Value as V
 from knox.auth import TokenAuthentication
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, CreateAPIView
@@ -64,11 +64,9 @@ class TabListAPIViewV1(GenericAPIView):
         tab_no = self.kwargs['tab_no']
         categories_queryset = ProductCategories.objects.all()
 
-        # TODO: FIX ME (temp code for QA)
         # tab
         tab_product_ids = get_tab_ids(tab_no, categories_queryset)
         tab_product = self.get_queryset().filter(id__in=tab_product_ids)
-        # tab_product = self.get_queryset()
 
         # filter
         filter_param = int(request.query_params.get('filter', 1))  # filter 있으면 filter, 없으면 1
@@ -118,22 +116,25 @@ class TabListAPIViewV1(GenericAPIView):
 
     def _filtered_qs(self, queryset, num):
         best_qs = queryset.filter(shopping_mall=num, is_best=True)
-        best_ids = self._best_ids(best_qs)
-        qs = queryset.exclude(id__in=best_ids) \
-            .annotate(famous=Sum(
-                                (F('favorite_count__favorite_count') * 1.5),
-                                (F('view_count__view_count') * 1)
-                                )).order_by('famous')
-        filtered_qs = best_qs.union(qs)
+        best_ids = self._ids(best_qs)
+        qs = queryset.exclude(id__in=best_ids).annotate(favorite=Coalesce('favorite_count__favorite_count', V(0)))\
+                     .annotate(view=Coalesce('view_count__view_count', V(0)))\
+                     .annotate(total=Sum(F('favorite') * 1.5 + F('view') * 1))\
+            .order_by('total')
+        if best_qs.exists():
+            filtered_qs = best_qs.union(qs)
+        else:
+            filtered_qs = qs
         return filtered_qs
 
     def _order_famous(self, queryset):
-        qs = queryset.annotate(famous=Sum(
-            Coalesce((F('favorite_count__favorite_count') * 1.5), 0),
-            Coalesce((F('view_count__view_count') * 1), 0))).order_by('famous')
+        qs = queryset.annotate(favorite=Coalesce('favorite_count__favorite_count', V(0)))\
+                     .annotate(view=Coalesce('view_count__view_count', V(0)))\
+                     .annotate(total=Sum(F('favorite') * 1.5 + F('view') * 1))\
+            .order_by('total')
         return qs
 
-    def _best_ids(self, qs):
+    def _ids(self, qs):
         ids = qs.values_list('id', flat=True)
         ids = list(ids)
         return ids
