@@ -20,7 +20,7 @@ def get_tab_ids(tab_no, categories_queryset):
         return shoulder_ids
 
     elif tab_no == 4:
-        # 클러치백 & 미니백
+        # 클러치백
         clutch_ids = get_clutch_ids(categories_queryset)
         # clutch_products = queryset.filter(pk__in=clutch_ids)
         return clutch_ids
@@ -107,4 +107,7 @@ def other_ids(queryset):
 
 
 def filter_by_famous(queryset):
-    queryset.favorite_count
+    queryset.annotate(famous=Sum(
+        (F('favorite_count__favorite_count') * 1.5), (F('view_count__view_count') * 1)
+    )).order_by('famous')
+

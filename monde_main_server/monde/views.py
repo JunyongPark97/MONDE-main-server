@@ -1,4 +1,4 @@
-from django.db.models import F
+from django.db.models import F, Sum
 from knox.auth import TokenAuthentication
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, CreateAPIView
@@ -11,6 +11,7 @@ from manage.pagination import ProductListPagination
 from monde.tools import get_tab_ids
 from user_activities.models import UserProductViewLogs
 from user_activities.serializers import UserProductVisitLogSerializer
+import datetime
 
 
 class ProductVisitAPIView(CreateAPIView):
@@ -65,14 +66,14 @@ class TabListAPIViewV1(GenericAPIView):
         # TODO: FIX ME (temp code for QA)
         # tab
         tab_product_ids = get_tab_ids(tab_no, categories_queryset)
-        #tab_product = self.get_queryset().filter(id__in=tab_product_ids)
-        tab_product = self.get_queryset()
+        tab_product = self.get_queryset().filter(id__in=tab_product_ids)
+        # tab_product = self.get_queryset()
 
         # filter
         filter_param = int(request.query_params.get('filter', 1))  # filter 있으면 filter, 없으면 1
         if filter_param == 1:
             # 인기순 # for test
-            tab_queryset = self.get_queryset()
+            tab_queryset = self._best_product_by_day(tab_product)
         elif filter_param == 2:
             # 최신순 DEPRECATED ?
             tab_queryset = tab_product.order_by('crawler_updated_at')
@@ -91,3 +92,49 @@ class TabListAPIViewV1(GenericAPIView):
         paginated_response = paginator.get_paginated_response(serializer.data)
 
         return paginated_response
+
+    def _best_product_by_day(self, queryset):
+        today = datetime.datetime.now().day
+        if today % 6 == 0:
+            # luzzibag
+            qs = self._filtered_qs(queryset, 1)
+            return qs
+        elif today % 6 == 1:
+            # mclanee
+            qs = self._filtered_qs(queryset, 10)
+            return qs
+        elif today % 6 == 2:
+            # jade
+            qs = self._filtered_qs(queryset, 3)
+            return qs
+        elif today % 6 == 3:
+            # pinkbag
+            qs = self._filtered_qs(queryset, 12)
+            return qs
+        else:
+            qs = self._order_famous(queryset)
+            return qs
+
+    def _filtered_qs(self, queryset, num):
+        best_qs = queryset.filter(shopping_mall=num, is_best=True)
+        best_ids = self._best_ids(best_qs)
+        qs = queryset.exclude(id__in=best_ids) \
+            .annotate(famous=Sum(
+                                (F('favorite_count__favorite_count') * 1.5),
+                                (F('view_count__view_count') * 1)
+                                )).order_by('famous')
+        filtered_qs = best_qs.union(qs)
+        return filtered_qs
+
+    def _order_famous(self, queryset):
+        qs = queryset.annotate(famous=Sum(
+            (F('favorite_count__favorite_count') * 1.5),
+            (F('view_count__view_count') * 1)
+        )).order_by('famous')
+        return qs
+
+    def _best_ids(self, qs):
+        ids = qs.values_list('id', flat=True)
+        ids = list(ids)
+        return ids
+

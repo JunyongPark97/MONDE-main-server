@@ -30,3 +30,34 @@ class SpanningForeignKey(ForeignKey):
                     'field': self.rel.field_name, 'value': value,
                 },  # 'pk' is included for backwards compatibility
             )
+
+# shopping mall
+
+    LUZZIBAG = 1
+    PAU = 2
+    JADE = 3
+    BANAMALL = 4
+    BEGINNING = 5
+    BNBURDE = 6
+    WCONCEPT = 7  # is_best x
+    GABANGPOP = 8  # is_best x
+    BAGSHOES = 9
+    MCLANEE = 10
+    MJADE = 11
+    PINKBAG = 12
+    WHOSBAG = 13
+    SITE_CHOICES = (
+        (LUZZIBAG, 'luzzibag'),
+        (PAU, 'paris and you'),
+        (JADE, 'jade'),
+        (BANAMALL, 'banabana mall'),
+        (BEGINNING, 'beginning'),
+        (BNBURDE, 'bnburde'),
+        (WCONCEPT, 'wconcept'),
+        (GABANGPOP, 'gabangpop'),
+        (BAGSHOES, 'bagshoes'),
+        (MCLANEE, 'mclanee'),
+        (MJADE, 'mjade'),
+        (PINKBAG, 'pinkbag'),
+        (WHOSBAG, 'whosbag'),
+    )
