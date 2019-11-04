@@ -25,7 +25,7 @@ class ProductResultSerializer(serializers.ModelSerializer):
     # colors = serializers.SerializerMethodField()
     is_favorite = serializers.SerializerMethodField()
     view_count = serializers.SerializerMethodField()
-    image_size = serializers.SerializerMethodField()
+    # image_size = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -39,21 +39,22 @@ class ProductResultSerializer(serializers.ModelSerializer):
                   'color_names',
                   # 'colors',
                   'view_count',
-                  'image_size']
+                  # 'image_size'
+                  ]
 
-    def get_image_size(self, instance):
-        url = instance.product_image_url
-        byteImgIO = BytesIO()
-        resp = requests.get(url)
-        byteImg = Image.open(BytesIO(resp.content))
-        byteImg.save(byteImgIO, "JPEG")
-        byteImgIO.seek(0)
-        byteImg = byteImgIO.read()
-        dataBytesIO = BytesIO(byteImg)
-        image = Image.open(dataBytesIO)
-        image = image.convert('RGB')
-        width, height = image.size
-        return width, height
+    # def get_image_size(self, instance):
+    #     url = instance.product_image_url
+    #     byteImgIO = BytesIO()
+    #     resp = requests.get(url)
+    #     byteImg = Image.open(BytesIO(resp.content))
+    #     byteImg.save(byteImgIO, "JPEG")
+    #     byteImgIO.seek(0)
+    #     byteImg = byteImgIO.read()
+    #     dataBytesIO = BytesIO(byteImg)
+    #     image = Image.open(dataBytesIO)
+    #     image = image.convert('RGB')
+    #     width, height = image.size
+    #     return width, height
 
 
     def get_is_favorite(self, instance):
@@ -66,16 +67,6 @@ class ProductResultSerializer(serializers.ModelSerializer):
         if favorite_log.is_hidden:
             return False
         return True
-
-    # def get_image_url(self, product):
-    #     product_image = product.product_image
-    #     if not product_image:
-    #         return None
-    #     url_tail = product_image.image.name
-    #     # TODO : Why bag_image.url isn't url?
-    #     main_url = 'https://monde-web-crawler.s3.amazonaws.com/'
-    #     added_url = main_url + url_tail
-    #     return added_url
 
     def get_color_names(self, instance):
         # TODO: FIX ME (temp code for QA)
@@ -90,15 +81,6 @@ class ProductResultSerializer(serializers.ModelSerializer):
         except:
             print(instance)
             pass
-
-    # def get_colors(self, instance):
-    #     color_list = []
-    #     for color_tab in instance.color_tabs.all():
-    #         #TODO : 유효성 검증 필요
-    #         colors = color_tab.colors.all()
-    #         for color in colors:
-    #             color_list.append(color.color)
-    #     return color_list
 
     # Temp
     def get_view_count(self, instance):
