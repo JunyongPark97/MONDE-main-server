@@ -76,7 +76,7 @@ def get_clutch_ids(queryset):
     ids = []
     for instance in queryset:
         type_result = instance.type_result
-        if 'clutch' in type_result and type_result['clutch_bag'] > 0.5:
+        if 'clutch_bag' in type_result and type_result['clutch_bag'] > 0.5:
             ids.append(instance.product_id)
     return ids
 
