@@ -7,11 +7,11 @@ from categories.views import ColorSelectListAPIView, HandBagCategoriesViewSetV1,
     CrossBagCategoriesViewSet, BigShoulderCategoriesViewSet, ClutchBagCategoriesViewSet, BackPackCategoriesViewSet
 
 router = SimpleRouter()
-router.register('handbag', HandBagCategoriesViewSetV1, base_name='handbag')
-router.register('minibag', MiniBagCategoriesViewSet, base_name='handbag')
-router.register('crossbag', CrossBagCategoriesViewSet, base_name='handbag')
-router.register('bigshoulderbag', BigShoulderCategoriesViewSet, base_name='handbag')
-router.register('clutchbag', ClutchBagCategoriesViewSet, base_name='handbag')
+router.register('hand_bag', HandBagCategoriesViewSetV1, base_name='handbag')
+router.register('mini_bag', MiniBagCategoriesViewSet, base_name='handbag')
+router.register('cross_bag', CrossBagCategoriesViewSet, base_name='handbag')
+router.register('big_shoulder', BigShoulderCategoriesViewSet, base_name='handbag')
+router.register('clutch_bag', ClutchBagCategoriesViewSet, base_name='handbag')
 router.register('backpack', BackPackCategoriesViewSet, base_name='handbag')
 
 urlpatterns = [

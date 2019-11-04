@@ -15,7 +15,7 @@ class CategorySearchViewSetV1(viewsets.GenericViewSet, mixins.CreateModelMixin):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-
+        print(request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
