@@ -73,7 +73,7 @@ class TabListAPIViewV1(GenericAPIView):
         if filter_param == 1:
             # 인기순 # for test
             tab_queryset = self._best_product_by_day(tab_product)
-        elif filter_param == 2:
+        elif filter_param == 4:
             # 최신순 DEPRECATED ?
             tab_queryset = tab_product.order_by('crawler_updated_at')
         elif filter_param == 2:

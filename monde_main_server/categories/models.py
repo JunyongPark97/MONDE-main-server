@@ -60,6 +60,9 @@ class Charm(models.Model):
 
 
 class Deco(models.Model):
+    """
+    [DEPRECATED]
+    """
     type = models.ForeignKey(TypeTag, null=True, on_delete=models.CASCADE, related_name='decos')
     order = models.PositiveIntegerField(unique=True, null=True, help_text="보내주는 순서")
     image = models.ImageField(upload_to=category_upload_dir)
@@ -77,6 +80,7 @@ class Deco(models.Model):
 
 class Color(models.Model):
     image = models.ImageField(upload_to=category_upload_dir)
+    thumb_nail = models.ImageField(upload_to=category_upload_dir, null=True)
     order = models.PositiveIntegerField(unique=True, null=True, help_text="보내주는 순서")
     name = models.CharField(max_length=100)
     active = models.BooleanField(default=False)
@@ -110,6 +114,7 @@ class Type(models.Model):
 
 class Pattern(models.Model):
     image = models.ImageField(upload_to=category_upload_dir)
+    thumb_nail = models.ImageField(upload_to=category_upload_dir, null=True)
     order = models.PositiveIntegerField(unique=True, null=True, help_text="보내주는 순서")
     name = models.CharField(max_length=100)
     active = models.BooleanField(default=False)
