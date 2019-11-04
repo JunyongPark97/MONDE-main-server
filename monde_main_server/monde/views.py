@@ -12,6 +12,7 @@ from monde.tools import get_tab_ids
 from user_activities.models import UserProductViewLogs
 from user_activities.serializers import UserProductVisitLogSerializer
 import datetime
+from django.db.models.functions import Coalesce
 
 
 class ProductVisitAPIView(CreateAPIView):
@@ -128,9 +129,8 @@ class TabListAPIViewV1(GenericAPIView):
 
     def _order_famous(self, queryset):
         qs = queryset.annotate(famous=Sum(
-            (F('favorite_count__favorite_count') * 1.5),
-            (F('view_count__view_count') * 1)
-        )).order_by('famous')
+            Coalesce((F('favorite_count__favorite_count') * 1.5), 0),
+            Coalesce((F('view_count__view_count') * 1), 0))).order_by('famous')
         return qs
 
     def _best_ids(self, qs):
