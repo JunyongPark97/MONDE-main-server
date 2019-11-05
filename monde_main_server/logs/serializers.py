@@ -8,6 +8,4 @@ class UserFeedbackSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserFeedback
-        fields = ['user', 'satisfaction', 'opinion']
-
-
+        fields = ['user', 'satisfaction', 'opinion', 'search_id']

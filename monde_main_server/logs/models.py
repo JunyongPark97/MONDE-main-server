@@ -74,4 +74,5 @@ class UserFeedback(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="feedbacks")
     satisfaction = models.PositiveIntegerField(default=4)
     opinion = models.TextField(max_length=300, null=True, blank=True)
+    search_id = models.PositiveIntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
