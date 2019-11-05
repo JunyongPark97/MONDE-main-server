@@ -43,6 +43,9 @@ urlpatterns = [
     # category search select list
     url(r'^api/v1/category/', include('categories.urls')),
 
+    # user feedback (search result)
+    url(r'^api/v1/', include('logs.urls')),
+
 
     # all auth [DEPRECATED]
     url(r'^accounts/', include('allauth.urls')),

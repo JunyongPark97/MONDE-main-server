@@ -67,29 +67,11 @@ class DBProductSyncLogs(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-class DBProductImageSyncLogs(models.Model):
-    db_product_image_id = models.IntegerField()
-    cause = models.CharField(max_length=200)
+class UserFeedback(models.Model):
+    """
+    검새 결과 피드백 저장 모델입니다.
+    """
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="feedbacks")
+    satisfaction = models.PositiveIntegerField(default=4)
+    opinion = models.TextField(max_length=300, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-
-class DBCategorySyncLogs(models.Model):
-    db_category_id = models.IntegerField()
-    cause = models.CharField(max_length=200)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-
-class DBColorTabSyncLogs(models.Model):
-    db_colortab_id = models.IntegerField()
-    cause = models.CharField(max_length=200)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-
-class DBColorSyncLogs(models.Model):
-    db_color_id = models.IntegerField()
-    cause = models.CharField(max_length=200)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
