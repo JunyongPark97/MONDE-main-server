@@ -7,8 +7,7 @@ sys.path.append(BASE_DIR)
 os.environ['DJANGO_SETTINGS_MODULE'] = 'monde_main_server.settings'
 django.setup()
 
-from logs.models import DBProductSyncLogs, DBProductImageSyncLogs, DBCategorySyncLogs, DBColorTabSyncLogs, \
-    DBColorSyncLogs
+from logs.models import DBProductSyncLogs
 from products.models import *
 from mondebro.models import *
 from monde.models import *
@@ -49,6 +48,15 @@ def create_product(db_id, product, c_product):
                                                          'deco_result': categories.deco_result,
                                                          'pattern_result': categories.pattern_result,
                                                          'colors': colors})
+    image_info = product.image_info
+    width = image_info.width
+    height = image_info.height
+
+    # 1:1관계를 유자히기 위해 product 만 같으면 update, 새로 생성되면 create 하도록 만듬
+    ProductImageInfo.objects.update_or_create(product=p,
+                                              defaults={'width': width,
+                                                        'height': height})
+
 
 start = time.time()
 product_sync()

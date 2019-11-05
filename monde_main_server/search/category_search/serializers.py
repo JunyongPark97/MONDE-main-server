@@ -20,12 +20,11 @@ class ProductResultSerializer(serializers.ModelSerializer):
     """
     검색 또는 필터링 된 product 를 list 형태로 보여주기 위한 serializer 입니다.
     """
-    # image_url = serializers.SerializerMethodField()
     color_names = serializers.SerializerMethodField()
     # colors = serializers.SerializerMethodField()
     is_favorite = serializers.SerializerMethodField()
-    view_count = serializers.SerializerMethodField()
-    # image_size = serializers.SerializerMethodField()
+    image_size = serializers.SerializerMethodField()
+    # category_search_id = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -35,27 +34,25 @@ class ProductResultSerializer(serializers.ModelSerializer):
                   'product_url',
                   'product_image_url',
                   'price',
-                  # 'is_on_sale',
                   'color_names',
                   # 'colors',
-                  'view_count',
-                  # 'image_size'
+                  'image_size',
+                  # 'category_search_id',
                   ]
 
-    # def get_image_size(self, instance):
-    #     url = instance.product_image_url
-    #     byteImgIO = BytesIO()
-    #     resp = requests.get(url)
-    #     byteImg = Image.open(BytesIO(resp.content))
-    #     byteImg.save(byteImgIO, "JPEG")
-    #     byteImgIO.seek(0)
-    #     byteImg = byteImgIO.read()
-    #     dataBytesIO = BytesIO(byteImg)
-    #     image = Image.open(dataBytesIO)
-    #     image = image.convert('RGB')
-    #     width, height = image.size
-    #     return width, height
+    def get_image_size(self, instance):
+        print(instance.id)
+        image_info = instance.image_info
+        width = image_info.width
+        height = image_info.height
+        return width, height
 
+    # def get_category_search_id(self, instance):
+    #     if 'category_search_id' in self.context:
+    #         ids = self.context['category_search_id']
+    #         return ids
+    #     else:
+    #         return None
 
     def get_is_favorite(self, instance):
         user = self.context['request'].user
@@ -71,25 +68,15 @@ class ProductResultSerializer(serializers.ModelSerializer):
     def get_color_names(self, instance):
         # TODO: FIX ME (temp code for QA)
         try:
-            # instance.categories
             colors = instance.categories.colors
-            if 'null' in colors:
-                colors.pop('null')
             if not colors:
                 return None
+            if 'null' in colors:
+                colors.pop('null')
             return colors
         except:
             print(instance)
             pass
-
-    # Temp
-    def get_view_count(self, instance):
-        try:
-            views = instance.view_count
-            return views.view_count
-        except:
-            pass
-        return None
 
 
 class SampleListSerializer(serializers.ModelSerializer):

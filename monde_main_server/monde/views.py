@@ -55,7 +55,8 @@ class ProductVisitAPIView(CreateAPIView):
 
 
 class TabListAPIViewV1(GenericAPIView):
-    queryset = Product.objects.all().select_related('favorite_count', 'view_count', 'categories')
+    queryset = Product.objects.filter(is_valid=True, image_info__isnull=False).\
+        select_related('favorite_count', 'view_count', 'categories', 'image_info')
     serializer_class = ProductResultSerializer
     permission_classes = [AllowAny, ]
     pagination_class = ProductListPagination

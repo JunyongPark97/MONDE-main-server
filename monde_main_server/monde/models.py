@@ -23,23 +23,11 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # @property
-    # def is_valid(self):
-    #     crawler_products = CrawlerProduct.objects.filter(id=self.db_id)
-    #     if not crawler_products.exists():
-    #         return False
-    #     crawler_product = crawler_products.first()
-    #     valid = crawler_product.is_valid
-    #     return valid
-    #
-    # @property
-    # def is_best(self):
-    #     crawler_products = CrawlerProduct.objects.filter(id=self.db_id)
-    #     if not crawler_products.exists():
-    #         return False
-    #     crawler_product = crawler_products.first()
-    #     is_best = crawler_product.is_best
-    #     return is_best
+
+class ProductImageInfo(models.Model):
+    product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name="image_info")
+    width = models.IntegerField()
+    height = models.IntegerField()
 
 
 class ProductCategories(models.Model):

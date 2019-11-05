@@ -8,14 +8,15 @@ from manage.pagination import ProductListPagination
 
 
 class CategorySearchViewSetV1(viewsets.GenericViewSet, mixins.CreateModelMixin):
-    queryset = ProductCategories.objects.filter(product__is_valid=True).select_related('product')
+    queryset = ProductCategories.objects.filter(product__is_valid=True, product__image_info__isnull=False).\
+        select_related('product', 'product__image_info')
     permission_classes = [IsAuthenticated, ]
     pagination_class = ProductListPagination
     serializer_class = CategorySearchRequestSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        print(request.data)
+
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -29,7 +30,11 @@ class CategorySearchViewSetV1(viewsets.GenericViewSet, mixins.CreateModelMixin):
         paginator = self.pagination_class()
         paginated_queryset = paginator.paginate_queryset(searched_product, request)
         serializer = ProductResultSerializer(paginated_queryset, many=True, context={'request': request})
-        paginated_response = paginator.get_paginated_response(serializer.data)
+        combined_data = {'search_id': search_request.id, 'data': serializer.data}
+
+        # TODO : FIX ME! => category search request save once! => seperate save, list? / serializer seperate shop, search?
+        paginated_response = paginator.get_paginated_response(combined_data)
+        # paginated_response = paginator.get_paginated_response(serializer.data)
 
         return paginated_response
 

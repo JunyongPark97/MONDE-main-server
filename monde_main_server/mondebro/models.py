@@ -57,6 +57,16 @@ class ProductManager(models.Model):
         db_table = 'bro_manager_productmanager'
 
 
+class ImageInfo(models.Model):
+    product = models.OneToOneField(ProductMaster, on_delete=models.CASCADE, related_name="image_info")
+    width = models.IntegerField()
+    height = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'bro_manager_productimageinfo'
+
+
 class Categories(models.Model):
     master = models.OneToOneField(ProductMaster, on_delete=models.CASCADE, related_name="categories")
     shape_result = jsonfield.JSONField() # detail 포함, cover 포함.
