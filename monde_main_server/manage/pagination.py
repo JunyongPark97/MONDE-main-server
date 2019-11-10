@@ -19,11 +19,7 @@ def _reverse_ordering(ordering_tuple):
 
 
 class ProductListPagination(PageNumberPagination):
-<<<<<<< Updated upstream
-    page_size = 30  # 한페이지에 담기는 개수
-=======
     page_size = 50  # 한페이지에 담기는 개수
->>>>>>> Stashed changes
 
     def get_next_page_num(self):
         if not self.page.has_next():
