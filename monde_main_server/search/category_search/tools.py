@@ -64,8 +64,8 @@ def product_overlap_count(user_input, instance):
             count += 1
             value += data[user_select] * weight
 
-    if count == 0:
-        pass
+    if count != len(user_input):
+        return instance, 0
 
     result = pass_filter(value, count)
 
@@ -91,4 +91,4 @@ def search(user_input, queryset):
         result_dict = filtered_data(q, user_input, result_dict)
     sorted_category_result_list = sorted(result_dict, key=lambda kv: result_dict[kv], reverse=True)
     sorted_product = list(map(lambda x: x.product, sorted_category_result_list))
-    return sorted_product
+    return sorted_product[:101]

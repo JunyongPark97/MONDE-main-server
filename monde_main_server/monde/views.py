@@ -79,7 +79,9 @@ class TabListAPIViewV1(GenericAPIView):
             tab_queryset = tab_product.order_by('crawler_updated_at')
         elif filter_param == 2:
             # 저가순
+            print('저가순')
             tab_queryset = tab_product.order_by('price')
+            # print(tab_product)
         elif filter_param == 3:
             # 고가순
             tab_queryset = tab_product.order_by('-price')

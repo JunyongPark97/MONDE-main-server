@@ -41,7 +41,7 @@ class ProductResultSerializer(serializers.ModelSerializer):
                   ]
 
     def get_image_size(self, instance):
-        print(instance.id)
+        # print(instance.id)
         image_info = instance.image_info
         width = image_info.width
         height = image_info.height

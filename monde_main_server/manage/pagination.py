@@ -19,7 +19,7 @@ def _reverse_ordering(ordering_tuple):
 
 
 class ProductListPagination(PageNumberPagination):
-    page_size = 20  # 한페이지에 담기는 개수
+    page_size = 30  # 한페이지에 담기는 개수
 
     def get_next_page_num(self):
         if not self.page.has_next():
@@ -33,18 +33,11 @@ class ProductListPagination(PageNumberPagination):
         page_number = self.page.previous_page_number()
         return page_number
 
-    # TODO : FIX ME => seperate search & shop?
     def get_paginated_response(self, data):
-        if 'search_id' in data:
-            c_id = data['search_id']
-            data = data['data']
-        else:
-            c_id = None
         return Response(OrderedDict([
              ('current', self.page.number),
              ('next', self.get_next_page_num()),
              ('previous', self.get_prev_page_num()),
-             ('category_search_id', c_id),
              ('products', data)
          ]))
 

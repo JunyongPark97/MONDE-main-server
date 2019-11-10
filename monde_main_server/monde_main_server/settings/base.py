@@ -19,7 +19,7 @@ from corsheaders.defaults import default_headers
 
 from monde_main_server.loader import load_credential
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 # Quick-start development settings - unsuitable for production
@@ -116,7 +116,7 @@ ROOT_URLCONF = 'monde_main_server.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'DIRS': [os.path.join(BASE_DIR, '../../../templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -130,22 +130,12 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'monde_main_server.wsgi.application'
+WSGI_APPLICATION = 'monde_main_server.wsgi.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'monde',
-        'HOST': 'choco-database.ckanfuynig82.ap-northeast-2.rds.amazonaws.com',
-        'USER': load_credential("MONDE_DATABASE_USERNAME",""),
-        'PASSWORD': load_credential("MONDE_DATABASE_PASSWORD",""),
-        'OPTIONS':{
-            'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
-            }
-    },
     'web_crawler': {
         'ENGINE': 'django.db.backends.mysql',
         'HOST': 'choco-database.ckanfuynig82.ap-northeast-2.rds.amazonaws.com',
@@ -269,14 +259,12 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'knox.auth.TokenAuthentication',
     )
 }
 
 REST_AUTH_SERIALIZERS = {
     'LOGIN_SERIALIZER': 'accounts.serializers.LoginSerializer',
-    # 'TOKEN_SERIALIZER': 'path.to.custom.TokenSerializer',
     'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserSerializer'
 }
 

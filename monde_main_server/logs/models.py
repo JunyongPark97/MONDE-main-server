@@ -1,6 +1,6 @@
 from django.db import models
 from monde.models import Product
-from monde_main_server import settings
+from monde_main_server.settings import base
 from products.models import CrawlerProduct
 
 
@@ -22,7 +22,7 @@ class LoginLog(models.Model):
     )
 
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='login_logs', null=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey(base.AUTH_USER_MODEL, related_name='login_logs', null=True, on_delete=models.SET_NULL)
     ip_address = models.CharField(max_length=40, db_index=True)
     version = models.IntegerField(null=True, blank=True, db_index=True)
     # client_type = models.IntegerField(choices=CLIENT_TYPE, null=True, blank=True, db_index=True)
@@ -39,7 +39,7 @@ class BannedUserLog(models.Model):
     class Meta:
         verbose_name_plural = '사용제한(강퇴) 유저 로그'
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(base.AUTH_USER_MODEL, on_delete=models.CASCADE)
     reason = models.CharField(max_length=100)
     memo = models.CharField(max_length=500, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -71,7 +71,7 @@ class UserFeedback(models.Model):
     """
     검새 결과 피드백 저장 모델입니다.
     """
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="feedbacks")
+    user = models.ForeignKey(base.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="feedbacks")
     satisfaction = models.PositiveIntegerField(default=4)
     opinion = models.TextField(max_length=300, null=True, blank=True)
     search_id = models.PositiveIntegerField(null=True, blank=True)

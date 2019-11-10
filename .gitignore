@@ -115,3 +115,4 @@ media/
 */local.py
 secret.json
 .idea
+.config_secret
