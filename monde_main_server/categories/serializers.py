@@ -15,8 +15,8 @@ class ColorSelectListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Color
-        fields = ['id', 'image', 'name', 'thumb_nail']
-        read_only_fields = ['image', 'name', 'thumb_nail']
+        fields = ['id', 'image', 'name', 'thumb_nail', 'selected_image']
+        read_only_fields = ['image', 'name', 'thumb_nail', 'selected_image']
 
 
 class HandleSelectListSerializer(serializers.ModelSerializer):
@@ -31,8 +31,8 @@ class CharmSelectListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Charm
-        fields = ['id', 'image', 'name', 'detail']
-        read_only_fields = ['image', 'name', 'detail']
+        fields = ['id', 'image', 'name', 'detail', 'thumb_nail', 'selected_image']
+        read_only_fields = ['image', 'name', 'detail', 'thumb_nail', 'selected_image']
 
 
 class DecoSelectListSerializer(serializers.ModelSerializer):
@@ -47,8 +47,8 @@ class PatternSelectListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Pattern
-        fields = ['id', 'image', 'name', 'thumb_nail']
-        read_only_fields = ['image', 'name', 'thumb_nail']
+        fields = ['id', 'image', 'name', 'thumb_nail', 'selected_image']
+        read_only_fields = ['image', 'name', 'thumb_nail', 'selected_image']
 
 
 class BagIllustCombineSerializer(serializers.ModelSerializer):
