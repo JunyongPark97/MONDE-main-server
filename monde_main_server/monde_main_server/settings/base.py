@@ -269,6 +269,8 @@ REST_AUTH_SERIALIZERS = {
 
 REST_KNOX = {
     'TOKEN_TTL': None,
+    'USER_SERIALIZER': 'accounts.serializers.LoginUserSerializer',
+    'AUTO_REFRESH': False,
 }
 
 # JWT_AUTH = {
