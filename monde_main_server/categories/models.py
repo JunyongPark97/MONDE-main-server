@@ -27,6 +27,7 @@ class Shape(models.Model):
     type = models.ForeignKey(TypeTag, null=True, on_delete=models.CASCADE, related_name='shape')
     order = models.PositiveIntegerField(unique=True, null=True, help_text="보내주는 순서")
     image = models.ImageField(upload_to=category_upload_dir)
+    selected_image = models.ImageField(upload_to=category_upload_dir, null=True, blank=True)
     description = models.CharField(max_length=100, help_text='설명', null=True)
     name = models.CharField(max_length=100, help_text='실제 가방 shape name', null=True)
     active = models.BooleanField(default=False)
@@ -47,6 +48,7 @@ class Charm(models.Model):
     type = models.ForeignKey(TypeTag, null=True, on_delete=models.CASCADE, related_name='charms')
     order = models.PositiveIntegerField(unique=True, null=True, help_text="보내주는 순서")
     image = models.ImageField(upload_to=category_upload_dir)
+    selected_image = models.ImageField(upload_to=category_upload_dir, null=True, blank=True)
     name = models.CharField(max_length=100, null=True)
     description = models.CharField(max_length=100, null=True)
     active = models.BooleanField(default=False)
@@ -66,6 +68,7 @@ class Deco(models.Model):
     type = models.ForeignKey(TypeTag, null=True, on_delete=models.CASCADE, related_name='decos')
     order = models.PositiveIntegerField(unique=True, null=True, help_text="보내주는 순서")
     image = models.ImageField(upload_to=category_upload_dir)
+    selected_image = models.ImageField(upload_to=category_upload_dir, null=True, blank=True)
     name = models.CharField(max_length=100, null=True)
     description = models.CharField(max_length=100, null=True)
     active = models.BooleanField(default=False)
@@ -81,6 +84,7 @@ class Deco(models.Model):
 class Color(models.Model):
     image = models.ImageField(upload_to=category_upload_dir)
     thumb_nail = models.ImageField(upload_to=category_upload_dir, null=True)
+    selected_image = models.ImageField(upload_to=category_upload_dir, null=True, blank=True)
     order = models.PositiveIntegerField(unique=True, null=True, help_text="보내주는 순서")
     name = models.CharField(max_length=100)
     active = models.BooleanField(default=False)
@@ -114,7 +118,8 @@ class Type(models.Model):
 
 class Pattern(models.Model):
     image = models.ImageField(upload_to=category_upload_dir)
-    thumb_nail = models.ImageField(upload_to=category_upload_dir, null=True)
+    thumb_nail = models.ImageField(upload_to=category_upload_dir, null=True, blank=True)
+    selected_image = models.ImageField(upload_to=category_upload_dir, null=True, blank=True)
     order = models.PositiveIntegerField(unique=True, null=True, help_text="보내주는 순서")
     name = models.CharField(max_length=100)
     active = models.BooleanField(default=False)

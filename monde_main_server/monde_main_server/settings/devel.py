@@ -12,19 +12,24 @@ INSTALLED_APPS += ('debug_toolbar',)
 
 MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware',] + MIDDLEWARE
 
-
-DATABASES = {
+DATABASES_DEV = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'monde',
-        'HOST': 'choco-database.ckanfuynig82.ap-northeast-2.rds.amazonaws.com',
+        'HOST': load_credential("DATABASE_HOST", ""),
         'USER': load_credential("DEV_MONDE_DATABASE_USERNAME", ""),
         'PASSWORD': load_credential("DEV_MONDE_DATABASE_PASSWORD", ""),
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             }
-    }
+    },
 }
+
+DATABASES.update(DATABASES_DEV)
+
+INTERNAL_IPS = ('127.0.0.1',)
+STATIC_URL = '/static/'
+
 
 AWS_REGION = 'ap-northeast-2'
 AWS_STORAGE_BUCKET_NAME = 'monde-server-storages'
@@ -37,8 +42,8 @@ AWS_S3_SECURE_URLS = True  # https
 
 # Static Setting
 STATICFILES_LOCATION = 'static'
-STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
-STATICFILES_STORAGE = 'monde_main_server.storages.StaticStorage'
+# STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
+# STATICFILES_STORAGE = 'monde_main_server.storages.StaticStorage'
 
 # Media Setting
 MEDIAFIELS_LOCATION = 'media'

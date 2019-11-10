@@ -135,22 +135,22 @@ WSGI_APPLICATION = 'monde_main_server.wsgi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 DATABASES = {
-    'web_crawler': {
-        'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'choco-database.ckanfuynig82.ap-northeast-2.rds.amazonaws.com',
-        'NAME': 'web_crawler',
-        'USER': load_credential("WEB_CRAWLER_DATABASE_USERNAME",""),
-        'PASSWORD': load_credential('WEB_CRAWLER_DATABASE_PASSWORD'),
-        'OPTIONS':{
-            'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
-            }
-    },
     'mondebro': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'choco-database.ckanfuynig82.ap-northeast-2.rds.amazonaws.com',
+        'HOST': load_credential("DATABASE_HOST", ""),
         'NAME': 'mondebro',
         'USER': load_credential("MONDEBRO_DATABASE_USERNAME", ""),
         'PASSWORD': load_credential('MONDEBRO_DATABASE_PASSWORD', ""),
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
+    },
+    'web_crawler': {
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': load_credential("DATABASE_HOST", ""),
+        'NAME': 'web_crawler',
+        'USER': load_credential("WEB_CRAWLER_DATABASE_USERNAME",""),
+        'PASSWORD': load_credential('WEB_CRAWLER_DATABASE_PASSWORD'),
         'OPTIONS':{
             'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
             }
@@ -267,14 +267,18 @@ REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'accounts.serializers.UserSerializer'
 }
 
-JWT_AUTH = {
-    'JWT_SECRET_KEY': SECRET_KEY,
-    'JWT_ALGORITHM': 'HS256', # JWT 암호화에 사용하는 알고리즘 저장
-    'JWT_VERIFY': True,
-    'JWT_ALLOW_REFRESH': True, # JWT 토큰을 갱신할 수 있게 할지 여부 결정
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7), # JWT 토큰의 유효기간
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28), # JWT 토큰 갱신 유효기간
+REST_KNOX = {
+    'TOKEN_TTL': None,
 }
+
+# JWT_AUTH = {
+#     'JWT_SECRET_KEY': SECRET_KEY,
+#     'JWT_ALGORITHM': 'HS256', # JWT 암호화에 사용하는 알고리즘 저장
+#     'JWT_VERIFY': True,
+#     'JWT_ALLOW_REFRESH': True, # JWT 토큰을 갱신할 수 있게 할지 여부 결정
+#     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7), # JWT 토큰의 유효기간
+#     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28), # JWT 토큰 갱신 유효기간
+# }
 
 # CSRF_COOKIE_SECURE = True
 
@@ -310,16 +314,7 @@ CKEDITOR_CONFIGS = {
 
 
 ########## STATIC & MEDIA SETTINGS
-# if DEBUG:
-# STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage' # Local, 즉 DEBUG=True 일 경우 pipeline 사용
-#
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# else:
-    # AWS Setting
+# AWS Setting
 AWS_REGION = 'ap-northeast-2'
 AWS_STORAGE_BUCKET_NAME = 'monde-server-storages'
 AWS_QUERYSTRING_AUTH = False
@@ -329,12 +324,12 @@ AWS_SECRET_ACCESS_KEY = load_credential('AWS_SECRET_ACCESS_KEY',"")
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_SECURE_URLS = True  # https
 
-    # Static Setting
+# Static Setting
 STATICFILES_LOCATION = 'static'
 STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
 STATICFILES_STORAGE = 'monde_main_server.storages.StaticStorage'
 
-    # Media Setting
+# Media Setting
 MEDIAFIELS_LOCATION = 'media'
 MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFIELS_LOCATION)
 MEDIAFILES_LOCATION = 'media'

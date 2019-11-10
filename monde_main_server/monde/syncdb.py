@@ -4,7 +4,7 @@ import django
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
-os.environ['DJANGO_SETTINGS_MODULE'] = 'monde_main_server.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'monde_main_server.settings.main'
 django.setup()
 
 from logs.models import DBProductSyncLogs
@@ -19,7 +19,7 @@ import time
 def product_sync():
     for product in ProductMaster.objects.filter(ready_for_service=True):
         db_id = product.db_id
-        c_product = CrawlerProduct.objects.get(pk=db_id)
+        c_product = CrawlerProduct.objects.filter(pk=db_id).last()
         try:
             create_product(db_id, product, c_product)
         except Exception as e:
@@ -37,8 +37,9 @@ def create_product(db_id, product, c_product):
                                                       'is_best': product.is_best,
                                                       'is_valid': product.is_valid,
                                                       'price': product.price,
-                                                      'crawler_created_at': c_product.crawled_date,
-                                                      'crawler_updated_at': c_product.updated_at})
+                                                      # 'crawler_created_at': c_product.crawled_date,
+                                                      # 'crawler_updated_at': c_product.updated_at
+                                                      })
     categories = product.categories
     colors = product.colors.colors
     ProductCategories.objects.update_or_create(product=p,

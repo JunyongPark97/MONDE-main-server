@@ -16,7 +16,7 @@ class Product(models.Model):
     price = models.IntegerField(help_text='db로 옮기면서 integer로 바꿈')
     # is_on_sale = models.BooleanField(help_text="color tab에 있던걸 옮겨옴")
     is_banned = models.BooleanField(default=False)
-    is_best = models.BooleanField()
+    is_best = models.BooleanField(default=False)
     is_valid = models.BooleanField()
     crawler_created_at = models.DateTimeField(blank=True, null=True, help_text="crawler 와 sync 맞춰야함")
     crawler_updated_at = models.DateTimeField(blank=True, null=True, help_text="crawler 와 sync 맞춰야함")

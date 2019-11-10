@@ -72,7 +72,7 @@ class UserFeedback(models.Model):
     검새 결과 피드백 저장 모델입니다.
     """
     user = models.ForeignKey(base.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="feedbacks")
-    satisfaction = models.PositiveIntegerField(default=4)
+    satisfaction = models.DecimalField(decimal_places=2, max_digits=4)
     opinion = models.TextField(max_length=300, null=True, blank=True)
     search_id = models.PositiveIntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
