@@ -48,6 +48,7 @@ class Charm(models.Model):
     type = models.ForeignKey(TypeTag, null=True, on_delete=models.CASCADE, related_name='charms')
     order = models.PositiveIntegerField(unique=True, null=True, help_text="보내주는 순서")
     image = models.ImageField(upload_to=category_upload_dir)
+    thumb_nail = models.ImageField(upload_to=category_upload_dir, null=True)
     selected_image = models.ImageField(upload_to=category_upload_dir, null=True, blank=True)
     name = models.CharField(max_length=100, null=True)
     description = models.CharField(max_length=100, null=True)
