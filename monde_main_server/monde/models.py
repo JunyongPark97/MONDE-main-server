@@ -1,15 +1,14 @@
 from django.db import models
 import jsonfield
 from products.models import CrawlerProduct
-# Create your models here.
-
+from products.helper import SITE_CHOICES
 
 class Product(models.Model):
     """
     mondebro , crawler를 참고하여 sync 맞춘 후 서비스에서 이 모델을 기준으로 사용합니다.
     """
     db_id = models.PositiveIntegerField(unique=True, help_text="for sync")
-    shopping_mall = models.IntegerField()
+    shopping_mall = models.IntegerField(choices=SITE_CHOICES)
     name = models.CharField(max_length=100, blank=True, null=True)
     product_url = models.URLField()
     product_image_url = models.URLField(help_text="상품 이미지 url", null=True)
