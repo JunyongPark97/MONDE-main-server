@@ -29,7 +29,10 @@ class CategorySearchViewSetV1(viewsets.GenericViewSet, mixins.CreateModelMixin):
         # category search
         searched_product = search(user_input, self.get_queryset())  # list 형태, ordered
         serializer = ProductResultSerializer(searched_product, many=True, context={'request': request})
-        combined_data = OrderedDict([('search_id', search_id), ('data', serializer.data)])
+        if serializer.data:
+            combined_data = OrderedDict([('search_id', search_id), ('products', serializer.data)])
+        else:
+            combined_data = OrderedDict([('search_id', search_id), ('products', [])])
 
         return Response(combined_data, status=status.HTTP_201_CREATED)
 
