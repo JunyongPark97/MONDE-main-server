@@ -22,6 +22,9 @@ class TypeTag(models.Model):
     def __str__(self):
         return self.description
 
+    class Meta:
+        verbose_name_plural = '타입구분'
+
 
 class Shape(models.Model):
     type = models.ForeignKey(TypeTag, null=True, on_delete=models.CASCADE, related_name='shape')
@@ -43,6 +46,9 @@ class Shape(models.Model):
         if self.name:
             return self.name
 
+    class Meta:
+        verbose_name_plural = '[일러스트] - Shape'
+
 
 class Charm(models.Model):
     type = models.ForeignKey(TypeTag, null=True, on_delete=models.CASCADE, related_name='charms')
@@ -60,6 +66,9 @@ class Charm(models.Model):
     def __unicode__(self):
         if self.name:
             return self.name
+
+    class Meta:
+        verbose_name_plural = '[일러스트] - Charm'
 
 
 class Deco(models.Model):
@@ -98,6 +107,9 @@ class Color(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name_plural = '[일러스트] - Color'
+
 
 class Type(models.Model):
     """
@@ -116,6 +128,9 @@ class Type(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name_plural = '[일러스트] - Type'
+
 
 class Pattern(models.Model):
     image = models.ImageField(upload_to=category_upload_dir)
@@ -132,6 +147,9 @@ class Pattern(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name_plural = '[일러스트] - Pattern'
 
 
 class BagIllustration(models.Model):

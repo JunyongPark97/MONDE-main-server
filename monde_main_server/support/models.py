@@ -31,6 +31,7 @@ class Official(models.Model):
 
     class Meta:
         ordering = ['-version']
+        verbose_name_plural = '약관'
 
 
 class MondeSupport(models.Model):
@@ -56,3 +57,6 @@ class MondeSupport(models.Model):
     attached_file = models.ImageField(upload_to=contact_upload_dir, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_answered = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name_plural = '문의'

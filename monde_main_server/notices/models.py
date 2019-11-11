@@ -22,6 +22,9 @@ class Notice(models.Model):
     def __unicode__(self):
         return self.title
 
+    class Meta:
+        verbose_name_plural = '공지사항'
+
 
 class FAQ(models.Model):
     """
@@ -46,6 +49,9 @@ class FAQ(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    class Meta:
+        verbose_name_plural = '자주묻는 질문'
 
 
 class HiddenNotice(models.Model):
