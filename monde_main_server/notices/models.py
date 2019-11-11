@@ -1,6 +1,5 @@
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
-# from djrichtextfield.models import RichTextField
 from django.db import models
 from notices.tools import GiveRandomFileName
 
@@ -28,10 +27,22 @@ class FAQ(models.Model):
     """
     자주 묻는 질문/답변입니다.
     """
+    APP_FUNC = 1
+    APP_ERR = 2
+    ORDERING = 3
+    OTHERS = 10
+    GROUP_CHOICES = (
+        (APP_FUNC, '앱 기능 관련'),
+        (APP_ERR, '오류 관련'),
+        (ORDERING, '주문 배송 관련'),
+        (OTHERS, '기타')
+    )
+
     title = models.CharField(max_length=40)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    group = models.IntegerField(choices=GROUP_CHOICES, default=1)
 
     def __unicode__(self):
         return self.title

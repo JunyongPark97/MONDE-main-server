@@ -31,10 +31,12 @@ urlpatterns = [
     # notice
     url(r'^api/v1/notice/', include('notices.urls')),
 
+    # support
+    url(r'^api/v1/', include('support.urls')),
+
     # category search
     url(r'^api/v1/category/', include('search.category_search.urls')),
 
-    # TODO : url pattern 정리
     # recent view, favorite
     url(r'^api/v1/', include('user_activities.urls')),
     # visit

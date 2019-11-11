@@ -3,6 +3,7 @@ import jsonfield
 from products.models import CrawlerProduct
 from products.helper import SITE_CHOICES
 
+
 class Product(models.Model):
     """
     mondebro , crawler를 참고하여 sync 맞춘 후 서비스에서 이 모델을 기준으로 사용합니다.

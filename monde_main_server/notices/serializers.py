@@ -9,19 +9,12 @@ User = get_user_model()
 
 
 class NoticeSerializer(serializers.ModelSerializer):
-    content = serializers.SerializerMethodField()
+    # content = serializers.SerializerMethodField()
 
     class Meta:
         model = Notice
         fields = ('id', 'title', 'content', 'important', 'created_at', 'updated_at')
         read_only_field = ('title', 'content', 'created_at', 'updated_at')
-
-    def get_content(self, obj):
-        request = self.context['request']
-        token = ''
-        if request.user is not None and hasattr(request.user, 'auth_token'):
-            token = request.user.auth_token.pk
-        return obj.content.replace('##USER_TOKEN##', token)
 
 
 class FAQSerializer(serializers.ModelSerializer):

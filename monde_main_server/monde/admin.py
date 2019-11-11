@@ -27,7 +27,6 @@ class ProductAdmin(admin.ModelAdmin):
 
     # TODO: FIX ME
     def get_search_results(self, request, queryset, search_term):
-        print(search_term)
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
         try:
             search_term_as_str = str(search_term)

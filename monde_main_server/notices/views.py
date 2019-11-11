@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 from django.http import HttpResponse
 from django.utils import timezone
-from rest_framework import viewsets, mixins, serializers
+from rest_framework import viewsets, mixins, serializers, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -41,11 +41,31 @@ class FAQViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = FAQSerializer
 
     def list(self, request, *args, **kwargs):
-        print('---')
         """
         FAQ list API입니다.
         """
-        return super(FAQViewSet, self).list(request, *args, **kwargs)
+
+        # filter
+        filter_param = int(request.query_params.get('filter', 1))
+
+        if filter_param == 2:
+            # 앱 기능 관련
+            queryset = self.get_queryset().filter(group=1)
+        elif filter_param == 3:
+            # 앱 오류 관련
+            queryset = self.get_queryset().filter(group=2)
+        elif filter_param == 4:
+            # 주문,배송 관련
+            queryset = self.get_queryset().filter(group=3)
+        elif filter_param == 5:
+            # 기타
+            queryset = self.get_queryset().filter(group=10)
+        else:
+            queryset = self.get_queryset()
+
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
         """

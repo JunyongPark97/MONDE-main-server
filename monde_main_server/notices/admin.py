@@ -3,20 +3,9 @@ from notices.models import Notice, EventNotice, FAQ
 from manage.sites import staff_panel
 
 
-class HiddenNoticeAdmin(admin.ModelAdmin):
-    list_display = ['key', 'title']
-
-
-class BasePopupNoticeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'active', ]
-
-
-class EventNoticeAdmin(admin.ModelAdmin):
-    list_display = ['title', 'due_date', ]
-
-
 class FAQNoticeAdmin(admin.ModelAdmin):
-    list_display = ['title', 'updated_at', ]
+    list_display = ['group', 'title', 'updated_at']
+    list_filter = ['group']
 
 
 class BaseNoticeAdmin(admin.ModelAdmin):
@@ -31,6 +20,5 @@ class TargetPopupNoticeReceiverAdmin(admin.ModelAdmin):
         return obj.notice_id
 
 
-staff_panel.register(EventNotice, EventNoticeAdmin)
 staff_panel.register(Notice, BaseNoticeAdmin)
 staff_panel.register(FAQ, FAQNoticeAdmin)

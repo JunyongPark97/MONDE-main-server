@@ -96,7 +96,7 @@ LOCAL_APPS = (
     'versions',
     'test',
     'monde',
-    'mondebro'
+    'mondebro',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

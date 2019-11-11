@@ -1,50 +1,17 @@
 from django.db import models
 from django.conf import settings
-from ckeditor.fields import RichTextField
+from monde_main_server.settings import base
+from ckeditor_uploader.fields import RichTextUploadingField
 from versions.models import Version
+from notices.tools import GiveRandomFileName
 
-
-class FAQ(models.Model):
-    """
-    자주 묻는 질문/답변입니다.
-    """
-    title = models.CharField(max_length=40)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __unicode__(self):
-        return self.title
-
-
-# Loading message
-def updateVersion():
-    obj, created = Version.objects.get_or_create(
-        name='loading_messages', defaults={'name': 'loading_messages'})
-    if not created:
-        obj.version += 1
-        obj.save()
-
-
-class LoadingMessage(models.Model):
-    """
-    앱을 시작할 때 하나씩 보여주는 loading message입니다.
-    """
-    title = models.CharField(max_length=40)
-    user_type = models.IntegerField(default=0, help_text="all User")
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    expired_at = models.DateTimeField(null=True, blank=True)
-
-    def __unicode__(self):
-        return "[%d]%s,만료일:%s" % (self.user_type, self.title, self.expired_at)
-
-    def save(self):
-        updateVersion()
-        super(LoadingMessage, self).save()
+contact_upload_dir = GiveRandomFileName(path='support/contact')
 
 
 class Official(models.Model):
+    """
+    이용약관, 개인정보처방침에 관한 모델입니다.
+    """
     USE_TERM = 0
     PERSONAL_INFORMATION_USE_TERM = 1
     COMPANY_INFO = 2
@@ -55,7 +22,7 @@ class Official(models.Model):
     )
     official_type = models.IntegerField(choices=TYPES)
     version = models.IntegerField(default=0)
-    content = RichTextField()
+    content = RichTextUploadingField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -67,13 +34,25 @@ class Official(models.Model):
 
 
 class MondeSupport(models.Model):
-    CONTACT = 0
+    """
+    문의하기 모델입니다.
+    """
+    INQUIRY = 0
+    SUGGEST = 1
+    REPORT = 2
+    OTEHRS = 10
+    TYPES = (
+        (INQUIRY, '문의'),
+        (SUGGEST, '제안'),
+        (REPORT, '오류신고'),
+        (OTEHRS, '기타'),
+    )
 
-    contact_type = models.IntegerField(default=CONTACT)
-    name = models.CharField(max_length=10)
+    user = models.ForeignKey(base.AUTH_USER_MODEL, related_name="supports", on_delete=models.CASCADE)
+    contact_type = models.IntegerField(choices=TYPES)
+    name = models.CharField(max_length=10, null=True, blank=True)
     email = models.CharField(max_length=50)
     message = models.TextField(blank=True)
-    business_name = models.CharField(max_length=30, blank=True)
-    phone = models.CharField(max_length=20, blank=True)
+    attached_file = models.ImageField(upload_to=contact_upload_dir, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_answered = models.BooleanField(default=False)
