@@ -22,6 +22,9 @@ django-ajax-selects = "*"
 environment = "*"
 djangorestframework-jwt = "*"
 django-debug-toolbar = "*"
+django-rest-swagger = "*"
+# django-wpadmin = "*"
+# django-grappelli = "*"
 
 [requires]
 python_version = "3.7"

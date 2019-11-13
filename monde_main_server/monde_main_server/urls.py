@@ -10,11 +10,18 @@ from django.conf.urls.static import static
 
 from manage.sites import staff_panel
 
+from rest_framework_swagger.views import get_swagger_view
+
+schema_view = get_swagger_view(title='Pastbin API')
+
 urlpatterns = [
 
     # Admin
     url(r'^staff/', staff_panel.urls),
     url(r'^admin/', admin.site.urls),
+
+    # grappelli
+    # path('grappelli/', include('grappelli.urls')),
 
     # login
     url(r'^api/auth/', include('accounts.urls')),
@@ -22,8 +29,11 @@ urlpatterns = [
     # ckeditor
     path('ckeditor/', include('ckeditor_uploader.urls')),
 
+    # swagger
+    url(r'^$', schema_view),
+
     # richtextfield
-    path('djrichtextfield/', include('djrichtextfield.urls')),
+    # path('djrichtextfield/', include('djrichtextfield.urls')),
 
     # client test
     url(r'^',include('test.urls')),
