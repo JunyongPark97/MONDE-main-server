@@ -67,6 +67,9 @@ THIRD_PARTY_APPS = (
     'rest_auth',
     'rest_auth.registration',
 
+    # 'wpadmin',
+    # 'grappelli',
+
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -79,14 +82,16 @@ THIRD_PARTY_APPS = (
     'ckeditor',
     'ckeditor_uploader',
 
-    'djrichtextfield'
+    'rest_framework_swagger',
+
+    # 'djrichtextfield'
 )
 
 LOCAL_APPS = (
     'monde_main_server',
-    'accounts',
     'categories',
     'logs',
+    'accounts',
     'manage',
     'notices',
     'products',
@@ -116,8 +121,8 @@ ROOT_URLCONF = 'monde_main_server.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, '../../../templates')],
-        'APP_DIRS': True,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        # 'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -126,9 +131,14 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
             ],
+            'loaders': [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+            ],
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'monde_main_server.wsgi.wsgi.application'
 
@@ -202,7 +212,6 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-
 # django-allauth
 # -------------------------------------
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
@@ -259,7 +268,8 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'knox.auth.TokenAuthentication',
-    )
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
 REST_AUTH_SERIALIZERS = {
@@ -294,6 +304,58 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SITE_ID = 2
 
 
+########## STATIC & MEDIA SETTINGS
+# STATIC_URL = '/static/'
+
+AWS_REGION = 'ap-northeast-2'
+AWS_STORAGE_BUCKET_NAME = 'monde-server-storages'
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_HOST = 's3.%s.amazonaws.com' % AWS_REGION
+AWS_ACCESS_KEY_ID = load_credential('DEV_AWS_ACCESS_KEY_ID', "")
+AWS_SECRET_ACCESS_KEY = load_credential('DEV_AWS_SECRET_ACCESS_KEY', "")
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_SECURE_URLS = True  # https
+
+# Static Setting
+STATICFILES_LOCATION = 'static'
+STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
+STATICFILES_STORAGE = 'monde_main_server.storages.StaticStorage'
+
+
+# Media Setting
+MEDIAFIELS_LOCATION = 'media'
+MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFIELS_LOCATION)
+MEDIAFILES_LOCATION = 'media'
+DEFAULT_FILE_STORAGE = 'monde_main_server.storages.MediaStorage'
+
+# See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
+
+# See: http://django-compressor.readthedocs.io/en/latest/
+# COMPRESS_ENABLED = False
+# COMPRESS_URL = STATIC_URL
+########## END STATIC % MEDIA CONFIGURATION
+
+
+########## START SWAGGER CONFIGURATION
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        },
+        'is_authenticated': True,
+    },
+    'USE_SESSION_AUTH': True
+}
+LOGIN_URL = 'staff:login'
+LOGOUT_URL = 'staff:logout'
+########## END SWAGGER CONFIGURATION
+
 ########## CKEDITOR CONFIGURATION
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
@@ -315,39 +377,36 @@ CKEDITOR_CONFIGS = {
 ########## END CKEDITOR CONFIGURATION
 
 
-########## STATIC & MEDIA SETTINGS
-# AWS Setting
-AWS_REGION = 'ap-northeast-2'
-AWS_STORAGE_BUCKET_NAME = 'monde-server-storages'
-AWS_QUERYSTRING_AUTH = False
-AWS_S3_HOST = 's3.%s.amazonaws.com' % AWS_REGION
-AWS_ACCESS_KEY_ID = load_credential('AWS_ACCESS_KEY_ID',"")
-AWS_SECRET_ACCESS_KEY = load_credential('AWS_SECRET_ACCESS_KEY',"")
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-AWS_S3_SECURE_URLS = True  # https
+########## WPADMIN SETTING
+# http://django-wp-admin.readthedocs.org/en/master/configuration.html#creating-custom-menus
 
-# Static Setting
-STATICFILES_LOCATION = 'static'
-STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
-STATICFILES_STORAGE = 'monde_main_server.storages.StaticStorage'
-
-# Media Setting
-MEDIAFIELS_LOCATION = 'media'
-MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFIELS_LOCATION)
-MEDIAFILES_LOCATION = 'media'
-DEFAULT_FILE_STORAGE = 'monde_main_server.storages.MediaStorage'
-
-
-# See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
-STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-]
-
-# See: http://django-compressor.readthedocs.io/en/latest/
-# COMPRESS_ENABLED = False
-# COMPRESS_URL = STATIC_URL
-########## END STATIC % MEDIA CONFIGURATION
+WPADMIN = {
+    'superadmin': {
+        'admin_site': 'manage.sites.superadmin_panel',
+        'title': 'Monde Superadmin',
+        'menu': {
+            'top': 'manage.menus.AdminTopMenu',
+            'left': 'manage.menus.AdminLeftMenu',
+        },
+        'dashboard': {
+            'breadcrumbs': True,
+        },
+        'custom_style': STATIC_URL + 'wpadmin/css/themes/sunrise.css',
+    },
+    'staff': {
+        'admin_site': 'manage.sites.staff_panel',
+        'title': 'Monde Staff',
+        'menu': {
+            'top': 'manage.menus.StaffTopMenu',
+            'left': 'manage.menus.StaffLeftMenu',
+        },
+        'dashboard': {
+            'breadcrumbs': True,
+        },
+        'custom_style': STATIC_URL + 'wpadmin/css/themes/ocean.css',
+    }
+}
+########## END WPADMIN SETTING
 
 
 ########## CORS SETTINGS
