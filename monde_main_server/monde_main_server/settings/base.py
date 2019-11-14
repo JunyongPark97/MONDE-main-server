@@ -140,7 +140,7 @@ TEMPLATES = [
 ]
 
 
-WSGI_APPLICATION = 'monde_main_server.wsgi.wsgi.application'
+WSGI_APPLICATION = 'monde_main_server.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
