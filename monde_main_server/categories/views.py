@@ -20,12 +20,12 @@ class TypeSelectListAPIView(ListAPIView):
     Type(Handle) 선택시 사용하는 일러스트와 이름을 return합니다.
     """
     serializer_class = HandleSelectListSerializer
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
     queryset = Type.objects.filter(active=True).order_by('order')
 
 
 class HandBagCategoriesViewSetV1(viewsets.GenericViewSet):
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
 
     def get_serializer_class(self):
         if self.action == 'shape':
@@ -56,7 +56,7 @@ class HandBagCategoriesViewSetV1(viewsets.GenericViewSet):
 
 
 class MiniBagCategoriesViewSet(viewsets.GenericViewSet):
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
 
     def get_serializer_class(self):
         if self.action == 'shape':
@@ -87,7 +87,7 @@ class MiniBagCategoriesViewSet(viewsets.GenericViewSet):
 
 
 class CrossBagCategoriesViewSet(viewsets.GenericViewSet):
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
 
     def get_serializer_class(self):
         if self.action == 'shape':
@@ -118,7 +118,7 @@ class CrossBagCategoriesViewSet(viewsets.GenericViewSet):
 
 
 class BigShoulderCategoriesViewSet(viewsets.GenericViewSet):
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
 
     def get_serializer_class(self):
         if self.action == 'shape':
@@ -149,7 +149,7 @@ class BigShoulderCategoriesViewSet(viewsets.GenericViewSet):
 
 
 class ClutchBagCategoriesViewSet(viewsets.GenericViewSet):
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
 
     def get_serializer_class(self):
         if self.action == 'shape':
@@ -214,13 +214,13 @@ class BackPackCategoriesViewSet(viewsets.GenericViewSet):
 
 
 class ColorSelectListAPIView(ListAPIView):
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
     serializer_class = ColorSelectListSerializer
     queryset = Color.objects.all()
 
 
 class PatternSelectListAPIView(ListAPIView):
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsAuthenticated, ]
     serializer_class = PatternSelectListSerializer
     queryset = Pattern.objects.all()
 
