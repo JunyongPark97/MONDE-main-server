@@ -1,7 +1,23 @@
 from django.db import models
 import jsonfield
+from notices.tools import GiveRandomFileName
 from products.models import CrawlerProduct
 from products.helper import SITE_CHOICES
+mainpage_upload_dir = GiveRandomFileName(path='uploads/mainpage_image')
+
+
+class MainPageImage(models.Model):
+    order = models.PositiveIntegerField(unique=True)
+    active = models.BooleanField(default=True)
+    image = models.ImageField(upload_to=mainpage_upload_dir)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def image_url(self):
+        if not self.image:
+            return None
+        return self.image.url
 
 
 class Product(models.Model):

@@ -44,24 +44,25 @@ class FAQViewSet(viewsets.ReadOnlyModelViewSet):
         """
         FAQ list API입니다.
         """
+        queryset = self.get_queryset()
 
         # filter
-        filter_param = int(request.query_params.get('filter', 1))
-
-        if filter_param == 2:
-            # 앱 기능 관련
-            queryset = self.get_queryset().filter(group=1)
-        elif filter_param == 3:
-            # 앱 오류 관련
-            queryset = self.get_queryset().filter(group=2)
-        elif filter_param == 4:
-            # 주문,배송 관련
-            queryset = self.get_queryset().filter(group=3)
-        elif filter_param == 5:
-            # 기타
-            queryset = self.get_queryset().filter(group=10)
-        else:
-            queryset = self.get_queryset()
+        # filter_param = int(request.query_params.get('filter', 1))
+        #
+        # if filter_param == 2:
+        #     # 앱 기능 관련
+        #     queryset = self.get_queryset().filter(group=1)
+        # elif filter_param == 3:
+        #     # 앱 오류 관련
+        #     queryset = self.get_queryset().filter(group=2)
+        # elif filter_param == 4:
+        #     # 주문,배송 관련
+        #     queryset = self.get_queryset().filter(group=3)
+        # elif filter_param == 5:
+        #     # 기타
+        #     queryset = self.get_queryset().filter(group=10)
+        # else:
+        #     queryset = self.get_queryset()
 
         serializer = self.get_serializer(queryset, many=True)
 

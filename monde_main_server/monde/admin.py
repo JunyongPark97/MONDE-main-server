@@ -1,11 +1,20 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django.utils.html import format_html
-from monde.models import Product, ProductCategories
+from monde.models import Product, ProductCategories, MainPageImage
 from manage.sites import staff_panel
 from manage.pagination import FixedCountAdminPaginator
 from django.utils.html import format_html
 from django.db.models import Q
+
+
+class MainPageImageAdmin(admin.ModelAdmin):
+    list_display = ['order', 'get_image', 'created_at', 'active']
+
+    def get_image(self, obj):
+        if obj.image:
+            return mark_safe('<img src="%s" width=100px "/>' % obj.image.url)
+        return None
 
 
 class CategoriesInline(admin.TabularInline):
@@ -67,5 +76,6 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 staff_panel.register(Product, ProductAdmin)
+staff_panel.register(MainPageImage, MainPageImageAdmin)
 
 

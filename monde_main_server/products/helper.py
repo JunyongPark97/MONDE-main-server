@@ -33,18 +33,19 @@ class SpanningForeignKey(ForeignKey):
 
 # shopping mall
 
-LUZZIBAG = 1
+
+LUZZIBAG = 1  # is_best -
 PAU = 2
-JADE = 3
+JADE = 3  # is_best -
 BANAMALL = 4
-BEGINNING = 5
-BNBURDE = 6
+BEGINNING = 5  # is_best -
+BNBURDE = 6  # is_best -
 WCONCEPT = 7  # is_best x
 GABANGPOP = 8  # is_best x
 BAGSHOES = 9
-MCLANEE = 10
+MCLANEE = 10  # is_best -
 MJADE = 11
-PINKBAG = 12
+PINKBAG = 12  # is_best -
 WHOSBAG = 13
 SITE_CHOICES = (
     (LUZZIBAG, 'luzzibag'),

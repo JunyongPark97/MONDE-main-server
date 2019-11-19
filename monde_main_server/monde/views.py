@@ -1,11 +1,12 @@
-from django.db.models import F, Sum, Value as V
+from django.db.models import F, Sum, Q, Value as V
 from knox.auth import TokenAuthentication
 from rest_framework import status
-from rest_framework.generics import GenericAPIView, CreateAPIView
+from rest_framework.generics import GenericAPIView, CreateAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from logs.models import ProductViewCount
-from monde.models import Product, ProductCategories
+from monde.models import Product, ProductCategories, MainPageImage
+from monde.serializers import MainPageImageSerializer
 from search.category_search.serializers import ProductResultSerializer
 from manage.pagination import ProductListPagination
 from monde.tools import get_tab_ids
@@ -13,6 +14,17 @@ from user_activities.models import UserProductViewLogs
 from user_activities.serializers import UserProductVisitLogSerializer
 import datetime
 from django.db.models.functions import Coalesce
+
+
+class MondeMainListAPIView(ListAPIView):
+    permission_classes = [AllowAny, ]
+    queryset = MainPageImage.objects.all()
+    serializer_class = MainPageImageSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset().order_by('order')
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ProductVisitAPIView(CreateAPIView):
@@ -75,7 +87,7 @@ class TabListAPIViewV1(GenericAPIView):
             # 인기순 # for test
             tab_queryset = self._best_product_by_day(tab_product)
         elif filter_param == 4:
-            # 최신순 DEPRECATED ?
+            # 최신순 DEPRECATED
             tab_queryset = tab_product.order_by('crawler_updated_at')
         elif filter_param == 2:
             # 저가순
@@ -103,7 +115,7 @@ class TabListAPIViewV1(GenericAPIView):
             return qs
         elif today % 6 == 1:
             # mclanee
-            qs = self._filtered_qs(queryset, 10)
+            qs = self._filtered_qs(queryset, 10, 5)
             return qs
         elif today % 6 == 2:
             # jade
@@ -111,18 +123,21 @@ class TabListAPIViewV1(GenericAPIView):
             return qs
         elif today % 6 == 3:
             # pinkbag
-            qs = self._filtered_qs(queryset, 12)
+            qs = self._filtered_qs(queryset, 12, 6)
             return qs
         else:
             qs = self._order_famous(queryset)
             return qs
 
-    def _filtered_qs(self, queryset, num):
-        best_qs = queryset.filter(shopping_mall=num, is_best=True)
+    def _filtered_qs(self, queryset, num, num2=None):
+        if num2:
+            best_qs = queryset.filter(Q(shopping_mall=num) | Q(shopping_mall=num2)).filter(is_best=True)
+        else:
+            best_qs = queryset.filter(shopping_mall=num, is_best=True)
         best_ids = self._ids(best_qs)
         qs = queryset.exclude(id__in=best_ids).annotate(favorite=Coalesce('favorite_count__favorite_count', V(0)))\
-                     .annotate(view=Coalesce('view_count__view_count', V(0)))\
-                     .annotate(total=Sum(F('favorite') * 1.5 + F('view') * 1))\
+            .annotate(view=Coalesce('view_count__view_count', V(0)))\
+            .annotate(total=Sum(F('favorite') * 1.5 + F('view') * 1))\
             .order_by('total')
         if best_qs.exists():
             filtered_qs = best_qs.union(qs)
