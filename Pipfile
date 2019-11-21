@@ -25,8 +25,8 @@ django-debug-toolbar = "*"
 django-rest-swagger = "*"
 # django-wpadmin = "*"
 # django-grappelli = "*"
+#nginx = "*"
 uwsgi = "*"
-nginx = "*"
 
 [requires]
 python_version = "3.7"
