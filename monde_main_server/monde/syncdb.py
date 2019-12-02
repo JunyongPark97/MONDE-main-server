@@ -8,7 +8,6 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'monde_main_server.settings.main'
 django.setup()
 
 from logs.models import DBProductSyncLogs
-from products.models import *
 from mondebro.models import *
 from monde.models import *
 from django.db import transaction

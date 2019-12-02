@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from logs.models import ProductViewCount
 from monde.models import Product, ProductCategories, MainPageImage
 from monde.serializers import MainPageImageSerializer
+from monde.syncdb import product_sync
 from search.category_search.serializers import ProductResultSerializer
 from manage.pagination import ProductListPagination
 from monde.tools import get_tab_ids
@@ -14,6 +15,14 @@ from user_activities.models import UserProductViewLogs
 from user_activities.serializers import UserProductVisitLogSerializer
 import datetime
 from django.db.models.functions import Coalesce
+
+
+class SyncDBAPIView(GenericAPIView):
+    permission_classes = [IsAuthenticated,]
+
+    def post(self, request, *args, **kwargs):
+        product_sync()
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class MondeMainListAPIView(ListAPIView):
