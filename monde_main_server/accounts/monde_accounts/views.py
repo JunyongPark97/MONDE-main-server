@@ -20,7 +20,6 @@ class RegistrationAPI(generics.GenericAPIView):
     serializer_class = CreateUserSerializer
 
     def post(self, request, *args, **kwargs):
-        print(request.data["username"])
         if len(request.data["username"]) < 6 or len(request.data["password"]) < 4:
             body = {"message": "short field"}
             return Response(body, status=status.HTTP_400_BAD_REQUEST)
@@ -42,7 +41,6 @@ class LoginAPI(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        print(request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
         return Response(

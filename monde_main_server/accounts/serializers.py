@@ -25,7 +25,6 @@ class LoginUserSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         super(LoginUserSerializer, self).validate(attrs)
-        print(attrs)
         uid = attrs.get('uid')
         if uid is None:
             return

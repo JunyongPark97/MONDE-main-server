@@ -29,7 +29,7 @@ def loginlog_on_login(request, user):
         user.last_login = timezone.now()
         user.save()
         ip_ad = get_client_ip(request)
-        print('ok')
+        # print('ok')
         # print(request.device_id)
         # print(request.device_type)
         # device, _ = DeviceInfo.objects.get_or_create(device_type=request.device_type,

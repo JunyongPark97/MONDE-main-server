@@ -11,7 +11,6 @@ from logs.models import DBProductSyncLogs
 from mondebro.models import *
 from monde.models import *
 from django.db import transaction
-import time
 
 
 @transaction.atomic
@@ -58,7 +57,7 @@ def create_product(db_id, product, c_product):
                                                         'height': height})
 
 
-start = time.time()
-product_sync()
-print("time :", time.time()-start)
-print('..1 ok')
+# start = time.time()
+# product_sync()
+# print("time :", time.time()-start)
+# print('..1 ok')
