@@ -26,6 +26,8 @@ django-rest-swagger = "*"
 # django-grappelli = "*"
 #nginx = "*"
 uwsgi = "*"
+awsebcli = "*"
+awscli = "*"
 
 [requires]
 python_version = "3.7"
