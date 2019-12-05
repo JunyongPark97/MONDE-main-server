@@ -18,7 +18,7 @@ RUN \
 # install some packages for python/django/nginx/supervisor
 RUN apt-get update
 RUN apt-get install -y build-essential git
-RUN apt-get install -y python python-dev python-setuptools
+# RUN apt-get install -y python python-dev python-setuptools
 
 # install mysql_config
 RUN apt-get install -y default-libmysqlclient-dev
