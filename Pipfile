@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-django = "*"
+django = "==2.2.5"
 pillow = "*"
 django-rest-auth = "*"
 django-allauth = "*"
@@ -26,8 +26,7 @@ django-rest-swagger = "*"
 # django-grappelli = "*"
 #nginx = "*"
 uwsgi = "*"
-awsebcli = "*"
-awscli = "*"
+
 
 [requires]
 python_version = "3.7"
