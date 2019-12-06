@@ -1,28 +1,30 @@
 import datetime
 import os, sys
-
+import requests
 from .base import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['...amazon.om']
+########## HOST CONFIGURATION
+ALLOWED_HOSTS = [
+    'monde-dev.ap-northeast-2.elasticbeanstalk.com',
+    '15.164.101.147',
+]
+
+# https://www.vincit.fi/en/blog/deploying-django-elastic-beanstalk-https-redirects-functional-health-checks/
+if os.getenv('SERVER_SOFTWARE', '').startswith('ElasticBeanstalk'):
+    from django.core.exceptions import ImproperlyConfigured
+    try:
+        def get_ec2_hostname():
+            ipconfig = 'http://169.254.169.254/latest/meta-data/local-ipv4'
+            return requests.get(ipconfig, timeout=10).text
+        ALLOWED_HOSTS.append(get_ec2_hostname())
+    except:
+        raise ImproperlyConfigured("You have to be running on AWS to use AWS settings")
+########## END HOST CONFIGURATION
 
 SECRET_KEY = load_credential("SECRET_KEY", "")
 
-DATABASES_PROD = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'monde_prod',
-        'HOST': load_credential("DATABASE_HOST", ""),
-        'USER': load_credential("PROD_MONDE_DATABASE_USERNAME", ""),
-        'PASSWORD': load_credential("PROD_MONDE_DATABASE_PASSWORD", ""),
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            }
-    },
-}
-
-DATABASES.update(DATABASES_PROD)
 
 # AWS_REGION = 'ap-northeast-2'
 # AWS_STORAGE_BUCKET_NAME = 'monde-server-storages'
