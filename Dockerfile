@@ -41,7 +41,7 @@ RUN chown -R www-data:www-data /code
 
 # setup nginx config
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-RUN ln -s /code/nginx-app.conf /etc/nginx/sites-enabled/
+COPY nginx-app.conf /etc/nginx/sites-enabled/default
 RUN ln -s /code/supervisor-app.conf /etc/supervisor/conf.d/
 
 WORKDIR /code
