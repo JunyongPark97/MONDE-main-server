@@ -40,8 +40,11 @@ ADD . /code/
 RUN chown -R www-data:www-data /code
 
 # setup nginx config
+# install nginx
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-COPY nginx-app.conf /etc/nginx/sites-enabled/default
+RUN rm /etc/nginx/sites-enabled/default
+RUN chown -R www-data:www-data /var/lib/nginx
+RUN ln -s /code/nginx-app.conf /etc/nginx/sites-enabled/
 RUN ln -s /code/supervisor-app.conf /etc/supervisor/conf.d/
 
 WORKDIR /code
