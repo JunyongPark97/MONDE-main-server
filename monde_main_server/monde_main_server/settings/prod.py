@@ -10,6 +10,7 @@ ALLOWED_HOSTS = [
     'monde-dev.ap-northeast-2.elasticbeanstalk.com',
     'monde-prod.ap-northeast-2.elasticbeanstalk.com',
     '15.164.101.147',
+    # '127.0.0.1'#temp
 ]
 
 # https://www.vincit.fi/en/blog/deploying-django-elastic-beanstalk-https-redirects-functional-health-checks/
