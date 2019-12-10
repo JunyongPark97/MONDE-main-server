@@ -9,32 +9,6 @@ from monde_main_server.loader import load_credential
 # https://stackoverflow.com/questions/10664244/django-how-to-manage-development-and-production-settings
 # https://dayone.me/20Tcz1k
 ENV_SETTINGS_MODE = (os.getenv('SETTINGS_MODE', 'devel'))
-# if ENV_SETTINGS_MODE == 'prod':
-#     from monde_main_server.settings.prod import *
-# if ENV_SETTINGS_MODE == 'devel':
-#     from monde_main_server.settings.devel import *
-# if ENV_SETTINGS_MODE == '':
-#     print('setting the SETTINGS_MODE')
-
-# temp
-########## HOST CONFIGURATION
-ALLOWED_HOSTS = [
-    'monde-dev.ap-northeast-2.elasticbeanstalk.com',
-    '15.164.101.147',
-]
-
-# https://www.vincit.fi/en/blog/deploying-django-elastic-beanstalk-https-redirects-functional-health-checks/
-if os.getenv('SERVER_SOFTWARE', '').startswith('ElasticBeanstalk'):
-    from django.core.exceptions import ImproperlyConfigured
-    try:
-        def get_ec2_hostname():
-            ipconfig = 'http://169.254.169.254/latest/meta-data/local-ipv4'
-            return requests.get(ipconfig, timeout=10).text
-        ALLOWED_HOSTS.append(get_ec2_hostname())
-    except:
-        raise ImproperlyConfigured("You have to be running on AWS to use AWS settings")
-########## END HOST CONFIGURATION
-
 
 
 # 기본적인 locale 에 대한 값을 설정한다.
