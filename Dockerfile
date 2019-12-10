@@ -55,6 +55,8 @@ RUN pipenv install mysqlclient --skip-lock
 # setting virtualenv
 RUN export replacement=`pipenv --venv` && sed -i -e 's@pyhome@'"$replacement"'@' /code/uwsgi.ini
 
+# env variable
+ENV SETTINGS_MODE "prod"
 
 EXPOSE 80 22
 CMD ["supervisord", "-n"]

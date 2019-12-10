@@ -8,6 +8,7 @@ DEBUG = False
 ########## HOST CONFIGURATION
 ALLOWED_HOSTS = [
     'monde-dev.ap-northeast-2.elasticbeanstalk.com',
+    'monde-prod.ap-northeast-2.elasticbeanstalk.com',
     '15.164.101.147',
 ]
 
@@ -23,7 +24,6 @@ if os.getenv('SERVER_SOFTWARE', '').startswith('ElasticBeanstalk'):
         raise ImproperlyConfigured("You have to be running on AWS to use AWS settings")
 ########## END HOST CONFIGURATION
 
-SECRET_KEY = load_credential("SECRET_KEY", "")
 
 AWS_ACCESS_KEY_ID = load_credential('PROD_AWS_ACCESS_KEY_ID', "")
 AWS_SECRET_ACCESS_KEY = load_credential('PROD_AWS_SECRET_ACCESS_KEY', "")

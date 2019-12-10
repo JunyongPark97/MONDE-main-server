@@ -10,6 +10,7 @@ from monde_main_server.loader import load_credential
 # https://dayone.me/20Tcz1k
 ENV_SETTINGS_MODE = (os.getenv('SETTINGS_MODE', 'devel'))
 
+SECRET_KEY = load_credential("SECRET_KEY", "")
 
 # 기본적인 locale 에 대한 값을 설정한다.
 SERVICE_LOCALE = os.getenv('SERVICE_LOCALE', None)
@@ -58,10 +59,10 @@ else:
         DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.mysql',
-                'NAME': 'monde',
+                'NAME': 'monde_prod',
                 'HOST': load_credential("DATABASE_HOST", ""),
-                'USER': load_credential("DEV_MONDE_DATABASE_USERNAME", ""),
-                'PASSWORD': load_credential("DEV_MONDE_DATABASE_PASSWORD", ""),
+                'USER': load_credential("PROD_MONDE_DATABASE_USERNAME", ""),
+                'PASSWORD': load_credential("PROD_MONDE_DATABASE_PASSWORD", ""),
                 'OPTIONS': {
                     'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
                 }
@@ -83,22 +84,25 @@ else:
             },
         }
 
-# other database의 경우, deploy 위치에 상관없이 공통적으로 사용합니다.
-DATABASES['mondebro'] = {
-    'ENGINE': 'django.db.backends.mysql',
-    'HOST': load_credential("DATABASE_HOST", ""),
-    'NAME': 'mondebro',
-    'USER': load_credential("MONDEBRO_DATABASE_USERNAME", ""),
-    'PASSWORD': load_credential('MONDEBRO_DATABASE_PASSWORD', ""),
-    'OPTIONS': {'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"}
-}
-DATABASES['mondebro'] = {
-       'ENGINE': 'django.db.backends.mysql',
-        'HOST': load_credential("DATABASE_HOST", ""),
-        'NAME': 'web_crawler',
-        'USER': load_credential("WEB_CRAWLER_DATABASE_USERNAME",""),
-        'PASSWORD': load_credential('WEB_CRAWLER_DATABASE_PASSWORD'),
-        'OPTIONS':{
-            'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
-            }
-    }
+# # other database의 경우, deploy 위치에 상관없이 공통적으로 사용합니다.
+# DATABASES
+# DATABASES['mondebro'] = {
+#     'ENGINE': 'django.db.backends.mysql',
+#     'HOST': load_credential("DATABASE_HOST", ""),
+#     'NAME': 'mondebro',
+#     'USER': load_credential("MONDEBRO_DATABASE_USERNAME", ""),
+#     'PASSWORD': load_credential('MONDEBRO_DATABASE_PASSWORD', ""),
+#     'OPTIONS': {
+#         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+#     }
+# }
+# DATABASES['web_crawler'] = {
+#        'ENGINE': 'django.db.backends.mysql',
+#         'HOST': load_credential("DATABASE_HOST", ""),
+#         'NAME': 'web_crawler',
+#         'USER': load_credential("WEB_CRAWLER_DATABASE_USERNAME",""),
+#         'PASSWORD': load_credential('WEB_CRAWLER_DATABASE_PASSWORD'),
+#         'OPTIONS':{
+#             'init_command':"SET sql_mode='STRICT_TRANS_TABLES'",
+#             }
+#     }
