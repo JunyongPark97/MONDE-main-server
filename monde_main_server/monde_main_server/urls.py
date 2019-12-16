@@ -10,9 +10,7 @@ from django.conf.urls.static import static
 
 from manage.sites import staff_panel
 
-from rest_framework_swagger.views import get_swagger_view
 
-schema_view = get_swagger_view(title='Pastbin API')
 
 urlpatterns = [
 
@@ -28,9 +26,6 @@ urlpatterns = [
 
     # ckeditor
     path('ckeditor/', include('ckeditor_uploader.urls')),
-
-    # swagger
-    url(r'^$', schema_view),
 
     # richtextfield
     # path('djrichtextfield/', include('djrichtextfield.urls')),
@@ -71,8 +66,15 @@ urlpatterns = [
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
+
     import debug_toolbar
+    from rest_framework_swagger.views import get_swagger_view
+
+    schema_view = get_swagger_view(title='Pastbin API')
+
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
+        # swagger
+        url(r'^$', schema_view),
 
     ] + urlpatterns

@@ -10,6 +10,7 @@ from monde_main_server.loader import load_credential
 # https://dayone.me/20Tcz1k
 ENV_SETTINGS_MODE = (os.getenv('SETTINGS_MODE', 'devel'))
 
+###############*****
 SECRET_KEY = load_credential("SECRET_KEY", "")
 
 # 기본적인 locale 에 대한 값을 설정한다.

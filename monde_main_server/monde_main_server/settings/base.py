@@ -338,22 +338,6 @@ STATICFILES_FINDERS = [
 ########## END STATIC % MEDIA CONFIGURATION
 
 
-########## START SWAGGER CONFIGURATION
-SWAGGER_SETTINGS = {
-    'SECURITY_DEFINITIONS': {
-        'api_key': {
-            'type': 'apiKey',
-            'in': 'header',
-            'name': 'Authorization'
-        },
-        'is_authenticated': True,
-    },
-    'USE_SESSION_AUTH': True
-}
-LOGIN_URL = 'staff:login'
-LOGOUT_URL = 'staff:logout'
-########## END SWAGGER CONFIGURATION
-
 ########## CKEDITOR CONFIGURATION
 CKEDITOR_UPLOAD_PATH = "uploads/"
 

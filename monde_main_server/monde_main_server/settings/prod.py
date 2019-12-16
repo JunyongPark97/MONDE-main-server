@@ -3,14 +3,14 @@ import os, sys
 import requests
 from .base import *
 
-DEBUG = False
+DEBUG = True
 
 ########## HOST CONFIGURATION
 ALLOWED_HOSTS = [
     'monde-dev.ap-northeast-2.elasticbeanstalk.com',
     'monde-prod.ap-northeast-2.elasticbeanstalk.com',
     '15.164.101.147',
-    '172.31.37.218'
+    '172.31.37.218',
     # '127.0.0.1'#temp
 ]
 
